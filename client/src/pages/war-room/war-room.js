@@ -1,11 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-}));
+import Table from "../../components/Table";
 
 class WarRoom extends React.Component {
   constructor(props) {
@@ -13,10 +7,9 @@ class WarRoom extends React.Component {
   }
 
   render() {
-    // const classes = useStyles();
     return (
       <div>
-        War Room
+        <Table/>
       </div>
     );
   }

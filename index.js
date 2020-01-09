@@ -611,7 +611,7 @@ function generateShuttleId(){
   }
   return toReturn;
 }
-const port = process.env.PORT || 3000; //environment variable
+const port = process.env.PORT || 5000; //environment variable
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

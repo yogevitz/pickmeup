@@ -97,10 +97,15 @@ export default function Table() {
 
   return (
     <MaterialTable
-      title="Editable Example"
+      title=""
       columns={state.columns}
       data={state.data}
       icons={tableIcons}
+      options={{
+        pageSize: 10,
+        toolbar: true,
+        paging: true
+      }}
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {

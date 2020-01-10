@@ -6,7 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import {Container} from "@material-ui/core";
+import Container from "@material-ui/core/Container";
+import CardHeader from "@material-ui/core/CardHeader";
+import Card from "@material-ui/core/Card";
 import WarRoom from "./pages/war-room";
 import Shuttles from "./pages/shuttles";
 import Supervisors from "./pages/supervisors";
@@ -74,39 +76,42 @@ export default function NavTabs() {
   return (
     <div className={classes.root}>
       <Container fixed>
-        <AppBar position="static">
-          <Tabs
-            variant="fullWidth"
-            value={value}
-            onChange={handleChange}
-            aria-label="Shuttles System"
-          >
-            <LinkTab label="War Room" href="/" {...a11yProps(0)} />
-            <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
-            <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
-            <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
-            <LinkTab label="Statistics" href="/statistics" {...a11yProps(4)} />
-            <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          <WarRoom/>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Shuttles/>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Supervisors/>
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <Riders/>
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <Statistics/>
-        </TabPanel>
-        <TabPanel value={value} index={5}>
-          <Settings/>
-        </TabPanel>
+        <Card>
+          <CardHeader title={'Shuttles System'} />
+          <AppBar position="static">
+            <Tabs
+              variant="fullWidth"
+              value={value}
+              onChange={handleChange}
+              aria-label="Shuttles System"
+            >
+              <LinkTab label="War Room" href="/" {...a11yProps(0)} />
+              <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
+              <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
+              <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
+              <LinkTab label="Statistics" href="/statistics" {...a11yProps(4)} />
+              <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            <WarRoom/>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Shuttles/>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <Supervisors/>
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <Riders/>
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <Statistics/>
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <Settings/>
+          </TabPanel>
+        </Card>
       </Container>
     </div>
   );

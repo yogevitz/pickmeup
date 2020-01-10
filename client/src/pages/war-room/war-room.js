@@ -9,7 +9,7 @@ class WarRoom extends React.Component {
   render() {
     return (
       <div>
-        <Table/>
+        War Room
       </div>
     );
   }

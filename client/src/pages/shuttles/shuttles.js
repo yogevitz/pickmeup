@@ -64,8 +64,7 @@ class Shuttles extends React.Component {
               destination: 'Mishmar Hanegev',
             },
           ]}
-        >
-        </Table>
+        />
       </div>
     );
   }

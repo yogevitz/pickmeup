@@ -79,9 +79,7 @@ class Supervisors extends React.Component {
               email: 'eli@gmail.com',
             },
           ]}
-        >
-        </Table>
-
+        />
       </div>
     );
   }

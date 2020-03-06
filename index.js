@@ -11,6 +11,12 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = uri1 = "mongodb://localhost:27017/PickMeUp'";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Connect to the db
 MongoClient.connect(uri, function (err, db) {
 
@@ -52,7 +58,7 @@ app.get("/getRider/:riderId", (req, res) => {
     console.log("Called find()");
   });
 
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 
@@ -83,7 +89,7 @@ app.get("/getShuttle/:shuttleId", (req, res) => {
     console.log("Called find()");
   });
 
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 
@@ -115,7 +121,7 @@ app.get("/getSupervisor/:supervisorName", (req, res) => {
     console.log("Called find()");
   });
 
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 });
@@ -135,7 +141,7 @@ app.get("/getAllShuttles", (req, res) => {
     db.collection('Shuttles').find({}).toArray(function(err, docs) {
       // Print the documents returned
 
-      res.status(200).send(docs)
+      res.status(200).send(docs);
 
 
       // Close the DB
@@ -145,7 +151,7 @@ app.get("/getAllShuttles", (req, res) => {
     console.log("Called find()");
   });
 
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 });
@@ -155,7 +161,7 @@ app.get("/getAllShuttles", (req, res) => {
 //------//
 app.get("/getAllRiders", (req, res) => {
   console.log("Got GET Request");
-  uri1 = "mongodb://localhost:27017/PickMeUp'"
+  uri1 = "mongodb://localhost:27017/PickMeUp'";
   MongoClient.connect(uri1,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -164,14 +170,14 @@ app.get("/getAllRiders", (req, res) => {
     // Find some documents in our collection
     db.collection('Riders').find({}).toArray(function(err, docs) {
       // Print the documents returned
-      res.status(200).send(docs)
+      res.status(200).send(docs);
       // Close the DB
       client.close();
     });
     // Declare success
     console.log("Called find()");
   });
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 
@@ -181,7 +187,7 @@ app.get("/getAllRiders", (req, res) => {
 //------//
 app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
   console.log("Got GET Request");
-  shuttleId1 = req.params.shuttleID
+  shuttleId1 = req.params.shuttleID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -191,7 +197,7 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
     db.collection('ShutteleRiders').find({shuttleId:shuttleId1}).toArray(function(err, docs) {
       // Print the documents returned
 
-      res.status(200).send(docs)
+      res.status(200).send(docs);
 
 
       // Close the DB
@@ -201,7 +207,7 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
     console.log("Called find()");
   });
 
-  riderId = req.params.riderId
+  riderId = req.params.riderId;
 
   client.close();
 });
@@ -210,7 +216,7 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
 //------//
 app.get("/getPassword/:userId", (req, res) => {
   console.log("Got GET Request");
-  userId1 = req.params.userId
+  userId1 = req.params.userId;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -220,7 +226,7 @@ app.get("/getPassword/:userId", (req, res) => {
     db.collection('Users').find({userId:userId1}).toArray(function(err, docs) {
       // Print the documents returned
 
-      res.status(200).send(docs)
+      res.status(200).send(docs);
 
 
       // Close the DB
@@ -240,7 +246,7 @@ app.get("/getPassword/:userId", (req, res) => {
 
 //------//
 app.post("/api/createShuttle", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   usernames = [ { id: 0, name: "user0" } ];
   const Shuttle = {
     ShuttleId: generateShuttleId(),
@@ -260,7 +266,7 @@ app.post("/api/createShuttle", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Shuttle Created!")
+    res.status(200).send(" Shuttle Created!");
     // Close the DB
     client.close();
   });
@@ -272,7 +278,7 @@ app.post("/api/createShuttle", (req, res) => {
 
 //------//
 app.post("/api/setShuttle", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const Shuttle = {
     ShuttleId: req.body.ShuttleId,
     Destination: req.body.Destination,
@@ -284,7 +290,7 @@ app.post("/api/setShuttle", (req, res) => {
     assert.equal(null, err);
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
-    console.log(Shuttle.ShuttleId)
+    console.log(Shuttle.ShuttleId);
     // Find some documents in our collection
     try{
       db.collection('Shuttles').updateOne(
@@ -299,7 +305,7 @@ app.post("/api/setShuttle", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Shuttle Changed!")
+    res.status(200).send(" Shuttle Changed!");
     // Close the DB
     client.close();
   });
@@ -312,7 +318,7 @@ app.post("/api/setShuttle", (req, res) => {
 
 
 app.post("/api/createRider", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const Rider = {
     riderId: req.body.riderId,
     FirstName: req.body.FirstName,
@@ -327,7 +333,7 @@ app.post("/api/createRider", (req, res) => {
     assert.equal(null, err);
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
-    console.log(Rider.riderId)
+    console.log(Rider.riderId);
     // Find some documents in our collection
     try{
       db.collection('Riders').insertOne(Rider);
@@ -335,7 +341,7 @@ app.post("/api/createRider", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Rider Created!")
+    res.status(200).send(" Rider Created!");
     // Close the DB
     client.close();
   });
@@ -346,7 +352,7 @@ app.post("/api/createRider", (req, res) => {
 
 //------//
 app.post("/api/setRider", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const Rider = {
     riderId: req.body.riderId,
     FirstName: req.body.FirstName,
@@ -377,7 +383,7 @@ app.post("/api/setRider", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Rider Changed!")
+    res.status(200).send(" Rider Changed!");
     // Close the DB
     client.close();
   });
@@ -388,7 +394,7 @@ app.post("/api/setRider", (req, res) => {
 
 //------//
 app.post("/api/assignRider", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const RiderOnSuttle = {
     riderId: req.body.riderId,
     ShuttleId: req.body.ShuttleId,
@@ -408,7 +414,7 @@ app.post("/api/assignRider", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Rider assinged to Shuttle!")
+    res.status(200).send(" Rider assinged to Shuttle!");
     // Close the DB
     client.close();
   });
@@ -419,7 +425,7 @@ app.post("/api/assignRider", (req, res) => {
 
 //------//
 app.post("/api/createSupervisor", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const Supervisor = {
     SupervisorId: req.body.SupervisorId,
     FirstName: req.body.FirstName,
@@ -441,7 +447,7 @@ app.post("/api/createSupervisor", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Supervisor Created!")
+    res.status(200).send(" Supervisor Created!");
     // Close the DB
     client.close();
   });
@@ -452,7 +458,7 @@ app.post("/api/createSupervisor", (req, res) => {
 
 //------//
 app.post("/api/setSupervisor", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const Supervisor = {
     SupervisorId: req.body.SupervisorId,
     FirstName: req.body.FirstName,
@@ -483,7 +489,7 @@ app.post("/api/setSupervisor", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Supervisor Changed!")
+    res.status(200).send(" Supervisor Changed!");
     // Close the DB
     client.close();
   });
@@ -494,7 +500,7 @@ app.post("/api/setSupervisor", (req, res) => {
 
 //------//
 app.post("/api/assignSupervisor", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
   const SupervisorOnSuttle = {
     SupervisorId: req.body.SupervisorId,
     ShuttleId: req.body.ShuttleId,
@@ -514,7 +520,7 @@ app.post("/api/assignSupervisor", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" supervisor assinged to Shuttle!")
+    res.status(200).send(" supervisor assinged to Shuttle!");
     // Close the DB
     client.close();
   });
@@ -526,7 +532,7 @@ app.post("/api/assignSupervisor", (req, res) => {
 
 //------//
 app.post("/api/updatePassword", (req, res) => {
-  console.log("got new post request")
+  console.log("got new post request");
 
   const User = {
     userId: req.body.userId,
@@ -561,7 +567,7 @@ app.post("/api/updatePassword", (req, res) => {
       res.status(400).send(e)
     }
     // Print the documents returned
-    res.status(200).send(" Rider Changed!")
+    res.status(200).send(" Rider Changed!");
     // Close the DB
     client.close();
   });

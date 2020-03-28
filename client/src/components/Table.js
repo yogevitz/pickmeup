@@ -102,11 +102,11 @@ class Table extends React.Component {
   };
 
   render() {
-    const { columns } = this.props;
+    const { columns, title } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable
-        title=""
+        title={title}
         columns={columns}
         data={data}
         icons={tableIcons}

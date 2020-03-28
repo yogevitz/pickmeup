@@ -54,6 +54,7 @@ class Riders extends React.Component {
     return (
       <div>
         <Table
+          title="Riders"
           columns={columns}
           data={riders}
           handleAdd={this.handleAdd}

@@ -53,6 +53,7 @@ class Supervisors extends React.Component {
     return (
       <div>
         <Table
+          title="Supervisors"
           columns={columns}
           data={supervisors}
           handleAdd={this.handleAdd}

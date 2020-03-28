@@ -53,6 +53,7 @@ class Shuttles extends React.Component {
     return (
       <div>
         <Table
+          title="Shuttles"
           columns={columns}
           data={shuttles}
           handleAdd={this.handleAdd}

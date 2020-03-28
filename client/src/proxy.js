@@ -19,3 +19,13 @@ export async function getShuttle(shuttleId) {
   const { data } = await client.get( `/getShuttle/${shuttleId}`);
   return data;
 }
+
+export async function createSupervisor(body) {
+  const { data } = await client.post(`/api/createSupervisor`, body);
+  return data;
+}
+
+export async function setSupervisor(body) {
+  const { data } = await client.post(`/api/setSupervisor`, body);
+  return data;
+}

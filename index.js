@@ -138,7 +138,7 @@ app.get("/getSupervisor/:SupervisorID", (req, res) => {
     // Find some documents in our collection
     db.collection('Supervisors').find({SupervisorID:SupervisorID}).toArray(function(err, docs) {
       // Print the documents returned
-      console.log(docs.length)
+      console.log(docs.length);
       docs.forEach(function(docs) {
         res.status(200).send(docs)
       });
@@ -225,7 +225,7 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
     // Find some documents in our collection
     db.collection('ShuttleRiders').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
-      console.log("found "+ docs.length + " riders in the shuttle")
+      console.log("found "+ docs.length + " riders in the shuttle");
       res.status(200).send(docs);
 
 
@@ -452,7 +452,7 @@ app.post("/api/assignRider", (req, res) => {
 //------//
 app.post("/api/createSupervisor", (req, res) => {
   console.log("got new post request");
-  var sid1 = parseInt(req.body.sid)
+  var sid1 = parseInt(req.body.sid);
   const Supervisor = {
     supervisorID:generateSupervisorId(),
     name: req.body.name,
@@ -485,7 +485,7 @@ app.post("/api/createSupervisor", (req, res) => {
 app.post("/api/setSupervisor", (req, res) => {
   console.log("got new post request");
   const Supervisor = {
-    SupervisorID: req.body.SupervisorID,
+    supervisorID: req.body.supervisorID,
     name: req.body.name,
     sid:req.body.sid,
     phone : req.body.phone,
@@ -498,10 +498,10 @@ app.post("/api/setSupervisor", (req, res) => {
     var db = client.db('PickMeUp');
 
     // Find some documents in our collection
-      console.log(Supervisor.SupervisorID)
+    console.log(Supervisor.supervisorID);
     try{
       db.collection('Supervisors').updateOne(
-          {"SupervisorID" : Supervisor.SupervisorID},
+          {"supervisorID" : Supervisor.supervisorID},
 
           { $set:
                   Supervisor

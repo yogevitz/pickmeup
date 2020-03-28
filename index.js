@@ -101,6 +101,32 @@ app.get("/getShuttle/:shuttleID", (req, res) => {
 
 
 //------//
+app.get("/getAllSupervisors", (req, res) => {
+  console.log("Got GET Request");
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+  {
+    assert.equal(null, err);
+    console.log("Successfully connected to server");
+    var db = client.db('PickMeUp');
+    // Find some documents in our collection
+    db.collection('Supervisors').find({}).toArray(function(err, docs) {
+      // Print the documents returned
+
+      res.status(200).send(docs);
+
+
+      // Close the DB
+      client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+  });
+  client.close();
+});
+
+
+
+//------//
 app.get("/getSupervisor/:SupervisorID", (req, res) => {
   console.log("Got GET Request");
   var SupervisorID = req.params.SupervisorID;

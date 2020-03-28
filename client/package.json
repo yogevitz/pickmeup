@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.47",
+    "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.8.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -17,10 +19,10 @@
     "npm": "^6.13.4",
     "or": "^0.2.0",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "^3.4.0",
     "typeface-roboto": "^0.0.75"
   },
   "scripts": {

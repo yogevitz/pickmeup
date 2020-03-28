@@ -15,8 +15,8 @@ export async function getAllRiders() {
   return data;
 }
 
-export async function getShuttle(shuttleId) {
-  const { data } = await client.get( `/getShuttle/${shuttleId}`);
+export async function getShuttle(shuttleID) {
+  const { data } = await client.get( `/getShuttle/${shuttleID}`);
   return data;
 }
 
@@ -27,5 +27,15 @@ export async function createSupervisor(body) {
 
 export async function setSupervisor(body) {
   const { data } = await client.post(`/api/setSupervisor`, body);
+  return data;
+}
+
+export async function createShuttle(body) {
+  const { data } = await client.post(`/api/createShuttle`, body);
+  return data;
+}
+
+export async function setShuttle(body) {
+  const { data } = await client.post(`/api/setShuttle`, body);
   return data;
 }

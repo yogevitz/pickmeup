@@ -71,7 +71,7 @@ app.get("/getRider/:sid", (req, res) => {
 app.get("/getShuttle/:shuttleID", (req, res) => {
   console.log("Got GET Request");
   console.log(req.params.shuttleID);
-  var shuttleID = req.params.shuttleId;
+  var shuttleID = req.params.shuttleID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -273,14 +273,12 @@ app.get("/getPassword/:userID", (req, res) => {
 //------//
 app.post("/api/createShuttle", (req, res) => {
   console.log("got new post request");
-  usernames = [ { id: 0, name: "user0" } ];
   const Shuttle = {
     shuttleID: generateShuttleId(),
     destination: req.body.destination,
     contactName: req.body.contactName,
-    contactPhone:req.body.contactPhone,
-    name:req.body.name
-
+    contactPhone: req.body.contactPhone,
+    name: req.body.name
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -288,9 +286,9 @@ app.post("/api/createShuttle", (req, res) => {
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
     // Find some documents in our collection
-    try{
+    try {
       db.collection('Shuttles').insertOne(Shuttle);
-    }catch(e){
+    } catch(e){
       res.status(400).send(e)
     }
     // Print the documents returned

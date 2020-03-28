@@ -8,7 +8,7 @@ class Shuttles extends React.Component {
     this.getShuttles();
     this.state = {
       columns: [
-        { title: 'ID', field: 'id', type: 'numeric' },
+        { title: 'ID', field: 'shuttleId' },
         { title: 'Name', field: 'name' },
         { title: 'Contact Name', field: 'contactName' },
         { title: 'Contact Phone', field: 'contactPhone' },

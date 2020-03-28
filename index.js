@@ -67,16 +67,17 @@ app.get("/getRider/:riderId", (req, res) => {
 
 
 //------//
-app.get("/getShuttle/:shuttleId", (req, res) => {
+app.get("/getShuttle/:shuttleID", (req, res) => {
   console.log("Got GET Request");
-  var shuttleId = req.params.shuttleId;
+  console.log(req.params.shuttleID);
+  var shuttleID = req.params.shuttleId;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
     // Find some documents in our collection
-    db.collection('Shuttles').find({Name:shuttleId}).toArray(function(err, docs) {
+    db.collection('Shuttles').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
       docs.forEach(function(doc) {
         res.status(200).send(doc)
@@ -187,14 +188,14 @@ app.get("/getAllRiders", (req, res) => {
 //------//
 app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
   console.log("Got GET Request");
-  shuttleId1 = req.params.shuttleID;
+  shuttleID = req.params.shuttleID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
     // Find some documents in our collection
-    db.collection('ShutteleRiders').find({shuttleId:shuttleId1}).toArray(function(err, docs) {
+    db.collection('ShutteleRiders').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
 
       res.status(200).send(docs);
@@ -249,9 +250,11 @@ app.post("/api/createShuttle", (req, res) => {
   console.log("got new post request");
   usernames = [ { id: 0, name: "user0" } ];
   const Shuttle = {
-    ShuttleId: generateShuttleId(),
-    Destination: req.body.Destination,
-    Name:req.body.Name
+    shuttleID: generateShuttleId(),
+    destination: req.body.destination,
+    contactName: req.body.contactName,
+    contactPhone:req.body.contactPhone,
+    name:req.body.name
 
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -279,10 +282,12 @@ app.post("/api/createShuttle", (req, res) => {
 //------//
 app.post("/api/setShuttle", (req, res) => {
   console.log("got new post request");
-  const Shuttle = {
-    ShuttleId: req.body.ShuttleId,
-    Destination: req.body.Destination,
-    Name:req.body.Name
+  const shuttle = {
+    shuttleID: req.body.shuttleID,
+    destination: req.body.destination,
+    contactName: req.body.contactName,
+    contactPhone: req.body.contactPhone,
+    name:req.body.name
 
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -290,15 +295,14 @@ app.post("/api/setShuttle", (req, res) => {
     assert.equal(null, err);
     console.log("Successfully connected to server");
     var db = client.db('PickMeUp');
-    console.log(Shuttle.ShuttleId);
+    console.log(shuttle.shuttleID);
     // Find some documents in our collection
     try{
       db.collection('Shuttles').updateOne(
-          {"ShuttleId" : Shuttle.ShuttleId},
+          {"shuttleID" : shuttle.shuttleID},
 
           { $set:
-                {"ShuttleId" : Shuttle.ShuttleId ,Destination : Shuttle.Destination,Name: Shuttle.Name}
-
+                shuttle
           }
       );
     }catch(e){
@@ -320,13 +324,11 @@ app.post("/api/setShuttle", (req, res) => {
 app.post("/api/createRider", (req, res) => {
   console.log("got new post request");
   const Rider = {
-    riderId: req.body.riderId,
-    FirstName: req.body.FirstName,
-    LastName:req.body.LastName,
-    ParentName : req.body.ParentName,
-    ParentEmail : req.body.ParentEmail,
-    ParentPhone : req.body.ParentPhone,
-    Location : req.body.Location
+    name: req.body.name,
+    sid: req.body.sid,
+    parentName : req.body.parentName,
+    parentEmail : req.body.parentEmail,
+    parentPhone : req.body.parentPhone
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -354,14 +356,11 @@ app.post("/api/createRider", (req, res) => {
 app.post("/api/setRider", (req, res) => {
   console.log("got new post request");
   const Rider = {
-    riderId: req.body.riderId,
-    FirstName: req.body.FirstName,
-    LastName:req.body.LastName,
-    ParentName : req.body.ParentName,
-    ParentPhone : req.body.ParentPhone,
-    ParentEmail : req.body.ParentEmail,
-    Location : req.body.Location
-
+    riderID: req.body.riderID,
+    name: req.body.name,
+    parentName : req.body.parentName,
+    parentPhone : req.body.parentPhone,
+    parentEmail : req.body.parentEmail
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -395,12 +394,14 @@ app.post("/api/setRider", (req, res) => {
 //------//
 app.post("/api/assignRider", (req, res) => {
   console.log("got new post request");
-  const RiderOnSuttle = {
-    riderId: req.body.riderId,
-    ShuttleId: req.body.ShuttleId,
-    Time:req.body.Time,
-    Date : req.body.Date
+  const riderShuttle = {
+    riderID : req.body.riderID,
+    shuttleID: req.body.shuttleID,
+    date: req.body.date,
+    direction : req.body.direction
+
   };
+  console.log(req.body.shuttleID + " idan");
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -409,7 +410,7 @@ app.post("/api/assignRider", (req, res) => {
 
     // Find some documents in our collection
     try{
-      db.collection('ShuttleRiders').insertOne(RiderOnSuttle);
+      db.collection('ShuttleRiders').insertOne(riderShuttle);
     }catch(e){
       res.status(400).send(e)
     }
@@ -427,13 +428,11 @@ app.post("/api/assignRider", (req, res) => {
 app.post("/api/createSupervisor", (req, res) => {
   console.log("got new post request");
   const Supervisor = {
-    SupervisorId: req.body.SupervisorId,
-    FirstName: req.body.FirstName,
-    LastName:req.body.LastName,
-    ParentName : req.body.ParentName,
-    ParentEmail : req.body.ParentEmail,
-    ParentPhone : req.body.ParentPhone,
-    Location : req.body.Location
+    supervisorID:generateSupervisorId(),
+    name: req.body.name,
+    sid: req.body.sid,
+    phone:req.body.phone,
+    email : req.body.email
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -460,14 +459,11 @@ app.post("/api/createSupervisor", (req, res) => {
 app.post("/api/setSupervisor", (req, res) => {
   console.log("got new post request");
   const Supervisor = {
-    SupervisorId: req.body.SupervisorId,
-    FirstName: req.body.FirstName,
-    LastName:req.body.LastName,
-    ParentName : req.body.ParentName,
-    ParentPhone : req.body.ParentPhone,
-    ParentEmail : req.body.ParentEmail,
-    Location : req.body.Location
-
+    SupervisorID: req.body.SupervisorID,
+    name: req.body.name,
+    sid:req.body.sid,
+    phone : req.body.phone,
+    email : req.body.email
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -502,10 +498,10 @@ app.post("/api/setSupervisor", (req, res) => {
 app.post("/api/assignSupervisor", (req, res) => {
   console.log("got new post request");
   const SupervisorOnSuttle = {
-    SupervisorId: req.body.SupervisorId,
-    ShuttleId: req.body.ShuttleId,
-    Time:req.body.Time,
-    Date : req.body.Date
+    supervisorID: req.body.supervisorID,
+    shuttleID: req.body.shuttleID,
+    direction:req.body.direction,
+    date : req.body.date
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -605,6 +601,21 @@ app.post("/api/assignSupervisor", (req, res) => {
 
 function generateShuttleId(){
   length = 10;
+  toReturn = "6";
+  for( var i = 0 ; i < length ; i++){
+    var temp = Math.floor(Math.random() * 10);
+    temp = Number(temp);
+    while(temp==0){
+      temp = Math.floor(Math.random() * 10);
+      temp = Number(temp);
+    }
+    toReturn = toReturn +temp.toString();
+  }
+  return toReturn;
+}
+
+function generateSupervisorId(){
+  length = 13;
   toReturn = "6";
   for( var i = 0 ; i < length ; i++){
     var temp = Math.floor(Math.random() * 10);

@@ -21,9 +21,8 @@ class Shuttles extends React.Component {
   }
 
   getShuttles = async () => {
-    const newShuttles = await getAllShuttles();
     this.setState({
-      shuttles: newShuttles
+      shuttles: await getAllShuttles(),
     });
   };
 

@@ -39,3 +39,14 @@ export async function setShuttle(body) {
   const { data } = await client.post(`/api/setShuttle`, body);
   return data;
 }
+
+
+export async function createRider(body) {
+  const { data } = await client.post(`/api/createRider`, body);
+  return data;
+}
+
+export async function setRider(body) {
+  const { data } = await client.post(`/api/setRider`, body);
+  return data;
+}

@@ -55,3 +55,8 @@ export async function getAllShuttleRiders(shuttleID) {
   const { data } = await client.get(`/getAllShuttleRiders/${shuttleID}`);
   return data;
 }
+
+export async function markRider(body) {
+  const { data } = await client.post(`/api/markRider`, body);
+  return data;
+}

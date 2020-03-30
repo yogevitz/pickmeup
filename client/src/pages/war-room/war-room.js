@@ -1,34 +1,40 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { getAllShuttles } from "../../proxy";
+import AttendanceList from '../../components/AttendanceList';
+
+import { getAllShuttleRiders } from "../../proxy";
+
+const columns = [
+  { title: 'Name', field: 'riderName' },
+  { title: 'ID', field: 'riderID' },
+];
 
 class WarRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shuttles: [],
+      shuttlesRiders: [],
+      checked: [],
     };
   }
 
+  getRiderRowData = rider => ({ ...rider, tableData: { checked: rider.mark === '1' } });
+
   async componentWillMount() {
-    const shuttles = await getAllShuttles();
-    this.setState({ shuttles: shuttles });
+    let shuttleRiders = await getAllShuttleRiders(1);
+    shuttleRiders = shuttleRiders.map(this.getRiderRowData);
+    this.setState({ shuttleRiders: shuttleRiders });
   }
 
   render() {
-    const { shuttles } = this.state;
+    const { shuttleRiders } = this.state;
     return (
-      <div>
-        <Autocomplete
-          id="shuttle-select"
-          options={shuttles}
-          getOptionLabel={(option) => option.name}
-          style={{ width: 300 }}
-          renderInput={(params) =>
-            <TextField {...params} label="Shuttle" variant="outlined" />}
-        />
-      </div>
+      <AttendanceList
+        title="Beer Sheva Shuttle 1"
+        columns={columns}
+        selection={true}
+        data={shuttleRiders}
+        onSelectionChange={() => {}}
+      />
     );
   }
 }

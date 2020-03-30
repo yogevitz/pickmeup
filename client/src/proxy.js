@@ -50,3 +50,8 @@ export async function setRider(body) {
   const { data } = await client.post(`/api/setRider`, body);
   return data;
 }
+
+export async function getAllShuttleRiders(shuttleID) {
+  const { data } = await client.get(`/getAllShuttleRiders/${shuttleID}`);
+  return data;
+}

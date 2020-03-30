@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-var assert = require('assert');
+
 const jwt = require("jsonwebtoken");
 let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];

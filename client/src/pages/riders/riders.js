@@ -1,124 +1,65 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from "../../components/Table";
+import { getAllRiders, createRider, setRider } from '../../proxy';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
+const columns = [
+  { title: 'ID', field: 'sid' },
+  { title: 'Name', field: 'name' },
+  { title: 'Parent Name', field: 'parentName' },
+  { title: 'Parent Phone', field: 'parentPhone' },
+  {
+    title: 'Parent Email',
+    field: 'parentEmail',
   },
-}));
+];
 
 class Riders extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      riders: [],
+    };
   }
 
+  async componentWillMount() {
+    const riders = await getAllRiders();
+    this.setState({ riders: riders });
+  }
+
+  handleAdd = async newData => {
+    await createRider(newData);
+    const tmpRiders = this.state.riders;
+    tmpRiders.push(newData);
+    this.setState({ riders: tmpRiders });
+  };
+
+  handleUpdate = async newData => {
+    await setRider(newData);
+    let tmpRiders = this.state.riders;
+    tmpRiders = tmpRiders.filter(_ => _.riderID !== newData.riderID);
+    tmpRiders.push(newData);
+    this.setState({ riders: tmpRiders });
+  };
+
+  handleDelete = async oldData => {
+    // TODO: uncomment once deleteRider is implemented:
+    // await deleteRider(oldData);
+    let tmpRiders = this.state.riders;
+    tmpRiders = tmpRiders.filter(_ => _.riderID !== oldData.riderID);
+    this.setState({ riders: tmpRiders });
+  };
+
   render() {
-    // const classes = useStyles();
+    const { riders } = this.state;
     return (
       <div>
         <Table
-          columns={[
-            { title: 'ID', field: 'id', type: 'numeric' },
-            { title: 'Name', field: 'name' },
-            { title: 'SID', field: 'riderID' },
-            { title: 'Parent Name', field: 'parentName' },
-            { title: 'Parent Phone', field: 'parentPhone' },
-            {
-              title: 'Parent Email',
-              field: 'parentEmail',
-            },
-          ]}
-          data={[
-            {
-              id: 1,
-              name: 'Benjamin Netanyahu',
-              riderID: '204787923',
-              parentName: 'Yoni',
-              parentPhone: '0547806318',
-              parentEmail: 'yoni@gmail.com',
-            },
-            {
-              id: 2,
-              name: 'Benny Gantz',
-              riderID: '319835517',
-              parentName: 'Emanuel',
-              parentPhone: '0543989254',
-              parentEmail: 'emanuel@gmail.com',
-            },
-            {
-              id: 3,
-              name: 'Josh Elgrably',
-              riderID: '315483923',
-              parentName: 'Claudia',
-              parentPhone: '0548332918',
-              parentEmail: 'claudia@gmail.com',
-            },
-            {
-              id: 4,
-              name: 'Omer Perez',
-              riderID: '318819201',
-              parentName: 'Lotem',
-              parentPhone: '0523637687',
-              parentEmail: 'locoloco@gmail.com',
-            },
-            {
-              id: 5,
-              name: 'Idan Koper',
-              riderID: '382724423',
-              parentName: 'Daniel',
-              parentPhone: '0544718732',
-              parentEmail: 'daniel@gmail.com',
-            },
-            {
-              id: 6,
-              name: 'Liron Lillian',
-              riderID: '317628911',
-              parentName: 'Roy',
-              parentPhone: '0541112827',
-              parentEmail: 'roy@gmail.com',
-            },
-            {
-              id: 7,
-              name: 'Shay Lasri',
-              riderID: '311888822',
-              parentName: 'Eli',
-              parentPhone: '0527362722',
-              parentEmail: 'eli@gmail.com',
-            },
-            {
-              id: 8,
-              name: 'Rotem Sela',
-              riderID: '205678687',
-              parentName: 'Lilach',
-              parentPhone: '0526474643',
-              parentEmail: 'lilach@gmail.com',
-            },
-            {
-              id: 9,
-              name: 'Dor Abargel',
-              riderID: '311724423',
-              parentName: 'Itzik',
-              parentPhone: '0524009890',
-              parentEmail: 'itzik@gmail.com',
-            },
-            {
-              id: 10,
-              name: 'Don Omar',
-              riderID: '208908121',
-              parentName: 'Fonsi',
-              parentPhone: '0544981618',
-              parentEmail: 'fonsi@gmail.com',
-            },
-            {
-              id: 11,
-              name: 'David Levi',
-              riderID: '309823214',
-              parentName: 'Moshe',
-              parentPhone: '0542887675',
-              parentEmail: 'moshe@gmail.com',
-            },
-          ]}
+          title="Riders"
+          columns={columns}
+          data={riders}
+          handleAdd={this.handleAdd}
+          handleUpdate={this.handleUpdate}
+          handleDelete={this.handleDelete}
         />
       </div>
     );

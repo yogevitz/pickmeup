@@ -3,6 +3,7 @@ const app = express();
 app.use(express.json());
 var assert = require('assert');
 const jwt = require("jsonwebtoken");
+let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];
 secret = "PickMeUp";
 //-------------connecting to the mongoDB server----------//
@@ -46,7 +47,7 @@ app.get("/getRider/:sid", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Riders').find({sid:sid}).toArray(function(err, docs) {
       // Print the documents returned
@@ -103,12 +104,11 @@ app.get("/getShuttleRiders", (req, res) => {
 app.get("/getShuttle/:shuttleID", (req, res) => {
   console.log("Got GET Request");
   console.log(req.params.shuttleID);
-  var shuttleID = req.params.shuttleId;
-  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
-  {
+  let shuttleID = req.params.shuttleID;
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Shuttles').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
@@ -122,12 +122,33 @@ app.get("/getShuttle/:shuttleID", (req, res) => {
     // Declare success
     console.log("Called find()");
   });
-
-  riderId = req.params.riderId;
-
   client.close();
+});
 
 
+
+//------//
+app.get("/getAllSupervisors", (req, res) => {
+  console.log("Got GET Request");
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+  {
+    assert.equal(null, err);
+    console.log("Successfully connected to server");
+    let db = client.db('PickMeUp');
+    // Find some documents in our collection
+    db.collection('Supervisors').find({}).toArray(function(err, docs) {
+      // Print the documents returned
+
+      res.status(200).send(docs);
+
+
+      // Close the DB
+      client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+  });
+  client.close();
 });
 
 
@@ -135,16 +156,16 @@ app.get("/getShuttle/:shuttleID", (req, res) => {
 //------//
 app.get("/getSupervisor/:SupervisorID", (req, res) => {
   console.log("Got GET Request");
-  var SupervisorID = req.params.SupervisorID;
+  let SupervisorID = req.params.SupervisorID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Supervisors').find({SupervisorID:SupervisorID}).toArray(function(err, docs) {
       // Print the documents returned
-      console.log(docs.length)
+      console.log(docs.length);
       docs.forEach(function(docs) {
         res.status(200).send(docs)
       });
@@ -171,7 +192,7 @@ app.get("/getAllShuttles", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Shuttles').find({}).toArray(function(err, docs) {
       // Print the documents returned
@@ -201,7 +222,7 @@ app.get("/getAllRiders", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Riders').find({}).toArray(function(err, docs) {
       // Print the documents returned
@@ -227,11 +248,11 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('ShuttleRiders').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
-      console.log("found "+ docs.length + " riders in the shuttle")
+      console.log("found "+ docs.length + " riders in the shuttle");
       res.status(200).send(docs);
 
 
@@ -249,11 +270,10 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
 app.get("/getPassword/:userID", (req, res) => {
   console.log("Got GET Request");
   userId1 = req.params.userID;
-  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
-  {
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Users').find({userID:userId1}).toArray(function(err, docs) {
       // Print the documents returned
@@ -285,24 +305,22 @@ app.post("/login", (req, res) => {
 //------//
 app.post("/api/createShuttle", (req, res) => {
   console.log("got new post request");
-  usernames = [ { id: 0, name: "user0" } ];
   const Shuttle = {
-    shuttleID: generateShuttleId(),
+    shuttleID: generateID(10),
     destination: req.body.destination,
     contactName: req.body.contactName,
-    contactPhone:req.body.contactPhone,
-    name:req.body.name
-
+    contactPhone: req.body.contactPhone,
+    name: req.body.name
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
-    try{
+    try {
       db.collection('Shuttles').insertOne(Shuttle);
-    }catch(e){
+    } catch(e){
       res.status(400).send(e)
     }
     // Print the documents returned
@@ -331,7 +349,7 @@ app.post("/api/setShuttle", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     console.log(shuttle.shuttleID);
     // Find some documents in our collection
     try{
@@ -361,18 +379,18 @@ app.post("/api/setShuttle", (req, res) => {
 app.post("/api/createRider", (req, res) => {
   console.log("got new post request");
   const Rider = {
+    riderID: generateID(12),
     name: req.body.name,
     sid: req.body.sid,
-    parentName : req.body.parentName,
-    parentEmail : req.body.parentEmail,
-    parentPhone : req.body.parentPhone
+    parentName: req.body.parentName,
+    parentEmail: req.body.parentEmail,
+    parentPhone: req.body.parentPhone
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
-    console.log(Rider.riderId);
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     try{
       db.collection('Riders').insertOne(Rider);
@@ -403,7 +421,7 @@ app.post("/api/setRider", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
 
     // Find some documents in our collection
     try{
@@ -444,7 +462,7 @@ app.post("/api/assignRider", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
 
     // Find some documents in our collection
     try{
@@ -506,19 +524,18 @@ app.post("/api/markRider", (req, res) => {
 //------//
 app.post("/api/createSupervisor", (req, res) => {
   console.log("got new post request");
-  var sid1 = parseInt(req.body.sid)
+  let sid1 = parseInt(req.body.sid);
   const Supervisor = {
-    supervisorID:generateSupervisorId(),
+    supervisorID: generateID(13),
     name: req.body.name,
     sid: sid1,
-    phone:req.body.phone,
+    phone: req.body.phone,
     email : req.body.email
   };
-  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
-  {
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     // Find some documents in our collection
     try{
       db.collection('Supervisors').insertOne(Supervisor);
@@ -539,7 +556,7 @@ app.post("/api/createSupervisor", (req, res) => {
 app.post("/api/setSupervisor", (req, res) => {
   console.log("got new post request");
   const Supervisor = {
-    SupervisorID: req.body.SupervisorID,
+    supervisorID: req.body.supervisorID,
     name: req.body.name,
     sid:req.body.sid,
     phone : req.body.phone,
@@ -549,13 +566,13 @@ app.post("/api/setSupervisor", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
 
     // Find some documents in our collection
-      console.log(Supervisor.SupervisorID)
+    console.log(Supervisor.supervisorID);
     try{
       db.collection('Supervisors').updateOne(
-          {"SupervisorID" : Supervisor.SupervisorID},
+          {"supervisorID" : Supervisor.supervisorID},
 
           { $set:
                   Supervisor
@@ -587,7 +604,7 @@ app.post("/api/assignSupervisor", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
 
     // Find some documents in our collection
     try{
@@ -619,7 +636,7 @@ app.post("/api/updatePassword", (req, res) => {
   {
     assert.equal(null, err);
     console.log("Successfully connected to server");
-    var db = client.db('PickMeUp');
+    let db = client.db('PickMeUp');
     try{
       db.collection('Users').findOne(
           {"userID" : User.userID}
@@ -785,35 +802,20 @@ app.post("/api/assignSupervisor", (req, res) => {
 });
 //---------HELP FUNCTIONS-------------//
 
-function generateShuttleId(){
-  length = 10;
-  toReturn = "6";
-  for( var i = 0 ; i < length ; i++){
-    var temp = Math.floor(Math.random() * 10);
+function generateID(length) {
+  let toReturn = "6";
+  for (let i = 0; i < length; i++) {
+    let temp = Math.floor(Math.random() * 10);
     temp = Number(temp);
-    while(temp==0){
+    while (temp === 0) {
       temp = Math.floor(Math.random() * 10);
       temp = Number(temp);
     }
-    toReturn = toReturn +temp.toString();
+    toReturn = toReturn + temp.toString();
   }
   return toReturn;
 }
 
-function generateSupervisorId(){
-  length = 13;
-  toReturn = "6";
-  for( var i = 0 ; i < length ; i++){
-    var temp = Math.floor(Math.random() * 10);
-    temp = Number(temp);
-    while(temp==0){
-      temp = Math.floor(Math.random() * 10);
-      temp = Number(temp);
-    }
-    toReturn = toReturn +temp.toString();
-  }
-  return toReturn;
-}
 const port = process.env.PORT || 5000; //environment variable
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

@@ -13,7 +13,7 @@ import WarRoom from "./pages/war-room";
 import Shuttles from "./pages/shuttles";
 import Supervisors from "./pages/supervisors";
 import Riders from "./pages/riders";
-import Statistics from "./pages/statistics";
+import Schedule from "./pages/schedule";
 import Settings from "./pages/settings";
 
 function TabPanel(props) {
@@ -89,7 +89,7 @@ export default function NavTabs() {
               <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
               <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
               <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
-              <LinkTab label="Statistics" href="/statistics" {...a11yProps(4)} />
+              <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} />
               <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
             </Tabs>
           </AppBar>
@@ -106,7 +106,7 @@ export default function NavTabs() {
             <Riders/>
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <Statistics/>
+            <Schedule/>
           </TabPanel>
           <TabPanel value={value} index={5}>
             <Settings/>

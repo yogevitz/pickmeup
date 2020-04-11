@@ -9,6 +9,8 @@ import { getAllShuttleRiders, markRider } from "../../proxy";
 const columns = [
   { title: 'Name', field: 'riderName' },
   { title: 'ID', field: 'riderID' },
+  { title: 'Parent Name', field: 'parentName' },
+  { title: 'Parent Phone', field: 'parentPhone' },
 ];
 
 class WarRoom extends React.Component {

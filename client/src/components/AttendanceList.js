@@ -7,6 +7,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import FirstPage from '@material-ui/icons/FirstPage';
+import Save from '@material-ui/icons/Save';
 import LastPage from '@material-ui/icons/LastPage';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import AddBox from '@material-ui/icons/AddBox';
@@ -15,7 +16,11 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import VerifiedUserOutlinedIcon from '@material-ui/icons/VerifiedUserOutlined';
 import Remove from '@material-ui/icons/Remove';
+import Checkbox from "@material-ui/core/Checkbox";
 
 export default function AttendanceList(props) {
   const [state, setState] = React.useState({});
@@ -28,6 +33,7 @@ export default function AttendanceList(props) {
     Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
     DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
     Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Save: forwardRef((props, ref) => <Save {...props} ref={ref} />),
     Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -41,6 +47,8 @@ export default function AttendanceList(props) {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   };
 
+  const { onApproveChange } = props;
+
   return (
     <MaterialTable
       title={props.title}
@@ -52,7 +60,32 @@ export default function AttendanceList(props) {
         selection: true,
         showTextRowsSelected: false,
       }}
+      actions={[{
+        icon: <SupervisorAccountIcon />,
+        onClick: () => {},
+        position: 'row',
+      }]}
       onSelectionChange={props.onSelectionChange}
+      localization={{
+        header: {
+          actions: <SupervisorAccountIcon />
+        },
+      }}
+      components={{
+        Action: rowProps => (
+          <Checkbox
+            icon={<VerifiedUserOutlinedIcon />}
+            checkedIcon={<VerifiedUserIcon />}
+            onChange={(event) => onApproveChange(event, rowProps)}
+            color="primary"
+            disabled={rowProps.data.tableData.checked}
+            variant="contained"
+            style={{textTransform: 'none'}}
+            size="small"
+            tooltip='Approve'
+          />
+        ),
+      }}
     />
   );
 }

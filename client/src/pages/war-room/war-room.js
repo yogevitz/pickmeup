@@ -48,6 +48,12 @@ class WarRoom extends React.Component {
     }
   };
 
+  onApproveChange = async (event, rowProps) => {
+    const isApproved = event.target.checked;
+    const riderID = rowProps.data.riderID;
+    console.log({ riderID, isApproved });
+  };
+
   getRiderRowData = rider => {
     const checked = rider.mark === '1';
     checked && this.checked.push(rider.riderID);
@@ -80,6 +86,7 @@ class WarRoom extends React.Component {
             selection={true}
             data={shuttleRiders}
             onSelectionChange={this.onSelectionChange}
+            onApproveChange={this.onApproveChange}
           />
         </div>
       </Grid>

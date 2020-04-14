@@ -60,6 +60,56 @@ app.get("/getRider/:sid", (req, res) => {
 
 
 //------//
+app.get("/getUser/:userID", (req, res) => {
+    console.log("Got GET Request");
+    userID = req.params.userID;
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('Users').find({userID:userID}).toArray(function(err, docs) {
+            // Print the documents returned
+            docs.forEach(function(doc) {
+                res.status(200).send(doc)
+            });
+            // Close the DB
+            client.close();
+        });
+        // Declare success
+        console.log("Called find()");
+    });
+    client.close();
+});
+
+
+
+//------//
+app.get("/getAllUsers", (req, res) => {
+    console.log("Got GET Request");
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('Users').find({}).toArray(function(err, docs) {
+            // Print the documents returned
+            docs.forEach(function(doc) {
+                res.status(200).send(doc)
+            });
+            // Close the DB
+            client.close();
+        });
+        // Declare success
+        console.log("Called find()");
+    });
+    client.close();
+});
+
+
+//------//
 app.get("/getLiftRiders", (req, res) => {
     console.log("Got GET Request");
     var shuttleID = req.body.shuttleID;
@@ -382,7 +432,7 @@ app.post("/login", (req, res) => {
 });
 //-------------C R E A T E----------------------//
 //------//
-app.post("/api/createSupervisor", (req, res) => {
+app.post("/createSupervisor", (req, res) => {
     console.log("got new post request");
     let sid1 = parseInt(req.body.sid);
     const Supervisor = {
@@ -412,7 +462,7 @@ app.post("/api/createSupervisor", (req, res) => {
 
 
 //------//
-app.post("/api/createLiftRider", (req, res) => {
+app.post("/createLiftRider", (req, res) => {
     console.log("got new post request");
 
     const LiftRider = {
@@ -474,7 +524,7 @@ app.post("/createLiftSupervisor", (req, res) => {
 
 
 //------//
-app.post("/api/createShuttleRider", (req, res) => {
+app.post("/createShuttleRider", (req, res) => {
   console.log("got new post request");
   const Shuttle = {
     shuttleID: req.body.shuttleID,
@@ -504,7 +554,7 @@ app.post("/api/createShuttleRider", (req, res) => {
 
 
 //------//
-app.post("/api/", (req, res) => {
+app.post("/createShuttle", (req, res) => {
     console.log("got new post request");
     const Shuttle = {
         shuttleID: generateID(10),
@@ -536,7 +586,7 @@ app.post("/api/", (req, res) => {
 
 
 //------//
-app.post("/api/createRider", (req, res) => {
+app.post("/createRider", (req, res) => {
   console.log("got new post request");
   const Rider = {
     riderID:  req.body.riderID,
@@ -568,10 +618,43 @@ app.post("/api/createRider", (req, res) => {
 });
 
 
+//------//
+app.post("/createUser", (req, res) => {
+    console.log("got new post request");
+    const User = {
+        userID:  req.body.userID,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        question:req.body.question,
+        type:req.body.type,
+        answer:req.body.answer
+    };
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        try{
+            db.collection('Users').insertOne(User);
+        }catch(e){
+            res.status(400).send(e)
+        }
+        // Print the documents returned
+        res.status(200).send(" User Created!");
+        // Close the DB
+        client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+});
+
+
 
 //----------------A S S I G N---------------//
 //------//
-app.post("/api/assignRider", (req, res) => {
+app.post("/assignRider", (req, res) => {
   console.log("got new post request");
   const riderShuttle = {
     riderID : req.body.riderID,
@@ -606,7 +689,7 @@ app.post("/api/assignRider", (req, res) => {
 
 
 //------//
-app.post("/api/assignSupervisor", (req, res) => {
+app.post("/assignSupervisor", (req, res) => {
   console.log("got new post request");
   const SupervisorOnSuttle = {
     supervisorID: req.body.supervisorID,
@@ -637,7 +720,7 @@ app.post("/api/assignSupervisor", (req, res) => {
 });
 
 //--------------U P D A T E--------------------//
-app.post("/api/markRider", (req, res) => {
+app.post("/markRider", (req, res) => {
     console.log("got new post request");
     const riderShuttle = {
         riderID : req.body.riderID,
@@ -675,7 +758,7 @@ app.post("/api/markRider", (req, res) => {
 });
 
 //------//
-app.post("/api/updatePassword", (req, res) => {
+app.post("/updatePassword", (req, res) => {
   console.log("got new post request");
 
   const User = {
@@ -720,7 +803,7 @@ app.post("/api/updatePassword", (req, res) => {
 
 //-----------------S E T E R S---------------------//
 //------//
-app.post("/api/setRider", (req, res) => {
+app.post("/setRider", (req, res) => {
     console.log("got new post request");
     const Rider = {
         riderID: req.body.riderID,
@@ -760,8 +843,49 @@ app.post("/api/setRider", (req, res) => {
 });
 
 
+
 //------//
-app.post("/api/setShuttle", (req, res) => {
+app.post("/setUser", (req, res) => {
+    console.log("got new post request");
+    const User = {
+        userID: req.body.userID,
+        password: req.body.password,
+        type : req.body.type,
+        firstName : req.body.firstName,
+        lastName: req.body.lastName,
+        question: req.body.question,
+        answer : req.body.answer
+    };
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+
+        // Find some documents in our collection
+        try{
+            db.collection('Users').updateOne(
+                {"userId" : User.userID},
+
+                { $set:
+                    User
+                }
+            );
+        }catch(e){
+            res.status(400).send(e)
+        }
+        // Print the documents returned
+        res.status(200).send(" User Changed!");
+        // Close the DB
+        client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+});
+
+
+//------//
+app.post("/setShuttle", (req, res) => {
     console.log("got new post request");
     const shuttle = {
         shuttleID: req.body.shuttleID,
@@ -882,7 +1006,7 @@ app.post("/setLiftRiderApproved", (req, res) => {
 
 
 //------//
-app.post("/api/setShuttleRider", (req, res) => {
+app.post("/setShuttleRider", (req, res) => {
     console.log("got new post request");
     const shuttleRider = {
         shuttleID: req.body.shuttleID,
@@ -959,7 +1083,7 @@ app.post("/setLiftSupervisor", (req, res) => {
 
 
 //------//
-app.post("/api/setSupervisor", (req, res) => {
+app.post("/setSupervisor", (req, res) => {
     console.log("got new post request");
     const Supervisor = {
         supervisorID: req.body.supervisorID,
@@ -997,7 +1121,7 @@ app.post("/api/setSupervisor", (req, res) => {
 
 
 //------//
-app.post("/api/setRiderDefultes", (req, res) => {
+app.post("/setRiderDefultes", (req, res) => {
     console.log("got new post request");
     const Rider = {
         sid: req.body.sid,
@@ -1037,7 +1161,7 @@ app.post("/api/setRiderDefultes", (req, res) => {
 
 
 //------//
-app.post("/api/setRiderShuttles", (req, res) => {
+app.post("/setRiderShuttles", (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
     for(var i = 0 ; i < req.body.length ; i ++ ) {
@@ -1077,7 +1201,7 @@ app.post("/api/setRiderShuttles", (req, res) => {
 
 
 //------//
-app.post("/api/removeRiderShuttles", (req, res) => {
+app.post("/removeRiderShuttles", (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
     for(var i = 0 ; i < req.body.length ; i ++ ) {
@@ -1218,6 +1342,32 @@ app.post("/deleteSupervisor", (req, res) => {
 });
 
 
+
+//------//
+app.post("/deleteUser", (req, res) => {
+    console.log("got new post request");
+    MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        var db = client.db('PickMeUp');
+        // Find some documents in our collection
+        try {
+            db.collection('Users').deleteOne(
+                {
+                    "userID":req.body.userID}
+            );
+        } catch (e) {
+            res.status(400).send(e)
+        }
+        client.close();
+    });
+    res.status(200).send("User been deleted!");
+    // Declare success
+    console.log("Called find()");
+});
+
+
+
 //------//
 app.post("/deleteLiftSupervisor", (req, res) => {
     console.log("got new post request");
@@ -1229,7 +1379,7 @@ app.post("/deleteLiftSupervisor", (req, res) => {
         try {
             db.collection('LiftSupervisor').deleteOne(
                 {
-                    "supervisorID":req.body.supervisorID,"shuttleID":req.body.shuttleID,}
+                    "supervisorID":req.body.supervisorID,"shuttleID":req.body.shuttleID,"date":req.body.date,"direction":req.body.direction}
             );
         } catch (e) {
             res.status(400).send(e)

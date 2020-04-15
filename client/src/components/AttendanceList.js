@@ -17,6 +17,8 @@ import Edit from '@material-ui/icons/Edit';
 import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import VerifiedUserOutlinedIcon from '@material-ui/icons/VerifiedUserOutlined';
 import Remove from '@material-ui/icons/Remove';
@@ -74,8 +76,8 @@ export default function AttendanceList(props) {
       components={{
         Action: rowProps => (
           <Checkbox
-            icon={<VerifiedUserOutlinedIcon />}
-            checkedIcon={<VerifiedUserIcon />}
+            icon={<AssignmentTurnedInOutlinedIcon />}
+            checkedIcon={<AssignmentTurnedInIcon />}
             onChange={(event) => onApproveChange(event, rowProps)}
             color="primary"
             disabled={rowProps.data.tableData.checked}

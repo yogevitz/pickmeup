@@ -21,33 +21,33 @@ export async function getShuttle(shuttleID) {
 }
 
 export async function createSupervisor(body) {
-  const { data } = await client.post(`/api/createSupervisor`, body);
+  const { data } = await client.post(`/createSupervisor`, body);
   return data;
 }
 
 export async function setSupervisor(body) {
-  const { data } = await client.post(`/api/setSupervisor`, body);
+  const { data } = await client.post(`/setSupervisor`, body);
   return data;
 }
 
 export async function createShuttle(body) {
-  const { data } = await client.post(`/api/createShuttle`, body);
+  const { data } = await client.post(`/createShuttle`, body);
   return data;
 }
 
 export async function setShuttle(body) {
-  const { data } = await client.post(`/api/setShuttle`, body);
+  const { data } = await client.post(`/setShuttle`, body);
   return data;
 }
 
 
 export async function createRider(body) {
-  const { data } = await client.post(`/api/createRider`, body);
+  const { data } = await client.post(`/createRider`, body);
   return data;
 }
 
 export async function setRider(body) {
-  const { data } = await client.post(`/api/setRider`, body);
+  const { data } = await client.post(`/setRider`, body);
   return data;
 }
 
@@ -57,6 +57,6 @@ export async function getAllShuttleRiders(shuttleID) {
 }
 
 export async function markRider(body) {
-  const { data } = await client.post(`/api/markRider`, body);
+  const { data } = await client.post(`/markRider`, body);
   return data;
 }

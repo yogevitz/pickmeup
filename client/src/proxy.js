@@ -56,6 +56,12 @@ export async function getAllShuttleRiders(shuttleID) {
   return data;
 }
 
+export async function getLiftRiders(params) {
+  const { shuttleID, date, direction } = params;
+  const { data } = await client.get(`/getLiftRiders/${shuttleID}/${date}/${direction}`);
+  return data;
+}
+
 export async function markRider(body) {
   const { data } = await client.post(`/markRider`, body);
   return data;

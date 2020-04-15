@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { getAllShuttleRiders, markRider } from "../../proxy";
+import { getAllShuttleRiders, getLiftRiders, markRider } from "../../proxy";
 
 const columns = [
   { title: 'Name', field: 'riderName' },
@@ -61,7 +61,8 @@ class WarRoom extends React.Component {
   };
 
   update = async () => {
-    let shuttleRiders = await getAllShuttleRiders(1);
+    let shuttleRiders = await getLiftRiders({ shuttleID: '1', date: '15-04-2020', direction: 'Afternoon' });
+    // let shuttleRiders = await getAllShuttleRiders(1);
     shuttleRiders = shuttleRiders.map(this.getRiderRowData);
     this.setState({ shuttleRiders: shuttleRiders });
   };

@@ -123,24 +123,24 @@ app.get("/getAllUsers", (req, res) => {
 
 
 //------//
-app.get("/getLiftRiders", (req, res) => {
+app.get("/getLiftRiders/:shuttleID/:date/:direction", (req, res) => {
     console.log("Got GET Request");
-    const shuttleID = req.body.shuttleID;
-    const date = req.body.date;
-    const direction = req.body.direction;
+    const shuttleID = req.params.shuttleID;
+    const date = req.params.date;
+    const direction = req.params.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
         console.log("Successfully connected to server ");
         var db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('LiftRiders').find({shuttleID:req.body.shuttleID,date:req.body.date,direction:req.body.direction}).toArray(function(err, docs) {
+        db.collection('LiftRiders').find({ shuttleID, date ,direction }).toArray(function(err, docs) {
             // Print the documents returned
-            console.log(docs.length)
-            if(docs.length===0)
-                res.status(200).send([])
+            console.log(docs.length);
+            if (docs.length === 0)
+                res.status(200).send([]);
             else {
-                res.status(200).send(docs)
+                res.status(200).send(docs);
             }
             // Close the DB
             client.close();

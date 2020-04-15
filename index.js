@@ -44,11 +44,14 @@ app.get("/getRider/:sid", (req, res) => {
     let db = client.db('PickMeUp');
     // Find some documents in our collection
     db.collection('Riders').find({sid:sid}).toArray(function(err, docs) {
-      // Print the documents returned
-      docs.forEach(function(doc) {
-        res.status(200).send(doc)
-      });
-
+        // Print the documents returned
+        if (docs.length === 0)
+            res.status(200).send([])
+        else{
+            docs.forEach(function (doc) {
+                res.status(200).send(doc)
+            });
+        }
       // Close the DB
       client.close();
     });
@@ -69,11 +72,17 @@ app.get("/getUser/:userID", (req, res) => {
         console.log("Successfully connected to server");
         let db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('Users').find({userID:userID}).toArray(function(err, docs) {
+
+         db.collection('Users').find({userID:userID}).toArray(function(err, docs) {
             // Print the documents returned
-            docs.forEach(function(doc) {
-                res.status(200).send(doc)
-            });
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+             {
+                 docs.forEach(function (doc) {
+                     res.status(200).send(doc)
+                 });
+             }
             // Close the DB
             client.close();
         });
@@ -82,6 +91,7 @@ app.get("/getUser/:userID", (req, res) => {
     });
     client.close();
 });
+
 
 
 
@@ -96,9 +106,12 @@ app.get("/getAllUsers", (req, res) => {
         // Find some documents in our collection
         db.collection('Users').find({}).toArray(function(err, docs) {
             // Print the documents returned
-            docs.forEach(function(doc) {
-                res.status(200).send(doc)
-            });
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs);
+
+
             // Close the DB
             client.close();
         });
@@ -112,18 +125,23 @@ app.get("/getAllUsers", (req, res) => {
 //------//
 app.get("/getLiftRiders", (req, res) => {
     console.log("Got GET Request");
-    var shuttleID = req.body.shuttleID;
-    var date = req.body.date;
-    var direction = req.body.direction;
+    const shuttleID = req.body.shuttleID;
+    const date = req.body.date;
+    const direction = req.body.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
-        console.log("Successfully connected to server");
+        console.log("Successfully connected to server ");
         var db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('LiftRiders').find({shuttleID:shuttleID,date:date,direction:direction}).toArray(function(err, docs) {
+        db.collection('LiftRiders').find({shuttleID:req.body.shuttleID,date:req.body.date,direction:req.body.direction}).toArray(function(err, docs) {
             // Print the documents returned
-            res.status(200).send(docs)
+            console.log(docs.length)
+            if(docs.length===0)
+                res.status(200).send([])
+            else {
+                res.status(200).send(docs)
+            }
             // Close the DB
             client.close();
         });
@@ -147,7 +165,10 @@ app.get("/getLiftSupervisor", (req, res) => {
         // Find some documents in our collection
         db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date,direction:direction}).toArray(function(err, docs) {
             // Print the documents returned
-            res.status(200).send(docs)
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs)
             // Close the DB
             client.close();
         });
@@ -173,6 +194,9 @@ app.get("/getShuttleRiders", (req, res) => {
         // Find some documents in our collection
         db.collection('ShuttleRiders').find({shuttleID:shuttleID,date:date,direction:direction}).toArray(function(err, docs) {
             // Print the documents returned
+            if(docs.length===0)
+                res.status(200).send([])
+            else
                 res.status(200).send(docs)
             // Close the DB
             client.close();
@@ -195,7 +219,10 @@ app.get("/getShuttleRiderByRider", (req, res) => {
         // Find some documents in our collection
         db.collection('ShuttlesRiders').find({riderID:riderID}).toArray(function(err, docs) {
             // Print the documents returned
-            res.status(200).send(docs)
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs)
             // Close the DB
             client.close();
         });
@@ -218,7 +245,10 @@ app.get("/getShuttleRiderByShuttle", (req, res) => {
         // Find some documents in our collection
         db.collection('ShuttlesRiders').find({shuttleID:shuttleID}).toArray(function(err, docs) {
             // Print the documents returned
-            res.status(200).send(docs)
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs)
             // Close the DB
             client.close();
         });
@@ -241,10 +271,13 @@ app.get("/getShuttle/:shuttleID", (req, res) => {
     // Find some documents in our collection
     db.collection('Shuttles').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
-      docs.forEach(function(doc) {
-        res.status(200).send(doc)
-      });
-
+        if(docs.length===0)
+            res.status(200).send([])
+        else {
+            docs.forEach(function (doc) {
+                res.status(200).send(doc)
+            });
+        }
       // Close the DB
       client.close();
     });
@@ -267,10 +300,10 @@ app.get("/getAllSupervisors", (req, res) => {
     // Find some documents in our collection
     db.collection('Supervisors').find({}).toArray(function(err, docs) {
       // Print the documents returned
-
-      res.status(200).send(docs);
-
-
+        if(docs.length===0)
+            res.status(200).send([])
+        else
+            res.status(200).send(docs);
       // Close the DB
       client.close();
     });
@@ -295,10 +328,13 @@ app.get("/getSupervisor/:SupervisorID", (req, res) => {
     db.collection('Supervisors').find({SupervisorID:SupervisorID}).toArray(function(err, docs) {
       // Print the documents returned
       console.log(docs.length);
-      docs.forEach(function(docs) {
-        res.status(200).send(docs)
-      });
-
+        if(docs.length===0)
+            res.status(200).send([])
+        else {
+            docs.forEach(function (docs) {
+                res.status(200).send(docs)
+            });
+        }
       // Close the DB
       client.close();
     });
@@ -325,8 +361,10 @@ app.get("/getAllShuttles", (req, res) => {
     // Find some documents in our collection
     db.collection('Shuttles').find({}).toArray(function(err, docs) {
       // Print the documents returned
-
-      res.status(200).send(docs);
+        if(docs.length===0)
+            res.status(200).send([])
+        else
+            res.status(200).send(docs);
 
 
       // Close the DB
@@ -355,7 +393,10 @@ app.get("/getAllRiders", (req, res) => {
     // Find some documents in our collection
     db.collection('Riders').find({}).toArray(function(err, docs) {
       // Print the documents returned
-      res.status(200).send(docs);
+        if(docs.length===0)
+            res.status(200).send([])
+        else
+            res.status(200).send(docs);
       // Close the DB
       client.close();
     });
@@ -381,8 +422,12 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
     // Find some documents in our collection
     db.collection('ShuttleRiders').find({shuttleID:shuttleID}).toArray(function(err, docs) {
       // Print the documents returned
-      console.log("found "+ docs.length + " riders in the shuttle");
-      res.status(200).send(docs);
+        if(docs.length===0) {
+            res.status(200).send([])
+            console.log("found " + docs.length + " riders in the shuttle");
+        }
+        else
+            res.status(200).send(docs);
 
 
       // Close the DB
@@ -406,8 +451,10 @@ app.get("/getPassword/:userID", (req, res) => {
     // Find some documents in our collection
     db.collection('Users').find({userID:userId1}).toArray(function(err, docs) {
       // Print the documents returned
-
-      res.status(200).send(docs[0].password);
+        if(docs.length===0)
+            res.status(200).send([])
+        else
+            res.status(200).send(docs[0].password);
 
 
       // Close the DB
@@ -470,8 +517,8 @@ app.post("/createLiftRider", (req, res) => {
         date: req.body.date,
         direction: req.body.direction,
         riderID: req.body.riderID,
-        mark:0,
-        approved:0
+        mark:"0",
+        approved:"0"
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
         assert.equal(null, err);
@@ -479,7 +526,7 @@ app.post("/createLiftRider", (req, res) => {
         let db = client.db('PickMeUp');
         // Find some documents in our collection
         try{
-            db.collection('LiftRiders').insertOne(Supervisor);
+            db.collection('LiftRiders').insertOne(LiftRider);
         }catch(e){
             res.status(400).send(e)
         }
@@ -865,7 +912,7 @@ app.post("/setUser", (req, res) => {
         // Find some documents in our collection
         try{
             db.collection('Users').updateOne(
-                {"userId" : User.userID},
+                {"userID" : User.userID},
 
                 { $set:
                     User
@@ -932,7 +979,7 @@ app.post("/setLiftRiderMark", (req, res) => {
         date: req.body.date,
         direction: req.body.direction,
         mark:req.body.mark,
-        approved: 0
+        approved:"0"
 
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -972,7 +1019,7 @@ app.post("/setLiftRiderApproved", (req, res) => {
         date: req.body.date,
         direction: req.body.direction,
         approved:req.body.approved,
-        mark:0
+        mark:"0"
 
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -1058,11 +1105,10 @@ app.post("/setLiftSupervisor", (req, res) => {
         assert.equal(null, err);
         console.log("Successfully connected to server");
         let db = client.db('PickMeUp');
-        console.log(shuttle.shuttleID);
         // Find some documents in our collection
         try{
             db.collection('LiftSupervisor').updateOne(
-                {"supervisorID" : shuttleRider.supervisorID,"date":shuttleRider.date},
+                {"shuttleID" : shuttleRider.shuttleID,"date":shuttleRider.date,"direction":shuttleRider.direction},
 
                 { $set:
                     shuttleRider

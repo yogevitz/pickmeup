@@ -3,7 +3,7 @@ import Table from "../../components/Table";
 import { getAllSupervisors, createSupervisor, setSupervisor } from '../../proxy';
 
 const columns = [
-  { title: 'ID', field: 'sid' },
+  { title: 'ID', field: 'supervisorID' },
   { title: 'Name', field: 'name' },
   { title: 'Phone', field: 'phone' },
   {

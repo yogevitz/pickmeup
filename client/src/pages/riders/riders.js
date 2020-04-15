@@ -3,7 +3,7 @@ import Table from "../../components/Table";
 import { getAllRiders, createRider, setRider } from '../../proxy';
 
 const columns = [
-  { title: 'ID', field: 'sid' },
+  { title: 'ID', field: 'riderID' },
   { title: 'Name', field: 'name' },
   { title: 'Parent Name', field: 'parentName' },
   { title: 'Parent Phone', field: 'parentPhone' },

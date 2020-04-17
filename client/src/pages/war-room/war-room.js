@@ -64,7 +64,6 @@ class WarRoom extends React.Component {
     const riderID = rowProps.data.riderID;
     let newLiftRiders = this.state.liftRiders;
     newLiftRiders.find(_ => _.riderID === riderID).approved = isApproved ? '1' : '0';
-    this.setState({ liftRiders: newLiftRiders });
     await setLiftRiderApproved({
       shuttleID: '1',
       riderID,
@@ -72,6 +71,7 @@ class WarRoom extends React.Component {
       direction: 'Afternoon',
       approved: isApproved ? '1' : '0',
     });
+    this.setState({ liftRiders: newLiftRiders });
   };
 
   getRiderRowData = rider => {

@@ -3,8 +3,14 @@ import AttendanceList from '../../components/AttendanceList';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import MomentUtils from '@date-io/moment';
+import moment from 'moment';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
-import { getLiftRiders, setLiftRiderMark, setLiftRiderApproved } from "../../proxy";
+import { getLiftRiders, setLiftRiderMark, setLiftRiderApproved, getAllShuttles } from "../../proxy";
 
 const columns = [
   { title: 'Name', field: 'riderName' },
@@ -18,101 +24,169 @@ class WarRoom extends React.Component {
     super(props);
     this.state = {
       liftRiders: [],
+      lifts: [],
     };
-    this.checked = [];
+    this.shuttles = [];
+    this.checked = {};
+    this.selectedDate = new Date();
   }
 
-  onSelectionChange = async selected => {
+  onSelectionChange = async (selected, selectedRow) => {
+    const shuttleID = selected.length
+      ? selected[0].shuttleID
+      : selectedRow.shuttleID;
     const selectedIDs = selected.map(_ => _.riderID);
+
     let newChecked, newUnChecked;
-    let newLiftRiders = this.state.liftRiders;
-    if (selectedIDs.length > this.checked.length) {
-      newChecked = selectedIDs.filter(x => this.checked.indexOf(x) < 0);
-      this.checked.push(...newChecked);
+    let newLifts = this.state.lifts;
+
+    if (this.checked[shuttleID] && selectedIDs.length > this.checked[shuttleID].length) {
+      newChecked = selectedIDs.filter(x => this.checked[shuttleID].indexOf(x) < 0);
+      this.checked[shuttleID].push(...newChecked);
       newChecked.forEach(async checked => {
         await setLiftRiderMark({
-          shuttleID: '1',
+          shuttleID,
           riderID: checked,
-          date: '15-04-2020',
+          date: this.formatDate(this.selectedDate),
           direction: 'Afternoon',
           mark: '1',
         });
-        const tmpLiftRider = newLiftRiders.find(_ => _.riderID === checked);
+
+        const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
+          .riders.find(_ => _.riderID === checked);
         tmpLiftRider.mark = '1';
         tmpLiftRider.approved = '0';
         tmpLiftRider.tableData.checked = true;
       });
-    } else {
-      newUnChecked = this.checked.filter(x => selectedIDs.indexOf(x) < 0);
-      this.checked = this.checked.filter(_ => newUnChecked.indexOf(_) < 0);
+    } else if (this.checked[shuttleID]) {
+      newUnChecked = this.checked[shuttleID].filter(x => selectedIDs.indexOf(x) < 0);
+      this.checked[shuttleID] = this.checked[shuttleID].filter(_ => newUnChecked.indexOf(_) < 0);
       newUnChecked.forEach(async unChecked => {
         await setLiftRiderMark({
-          shuttleID: '1',
+          shuttleID,
           riderID: unChecked,
-          date: '15-04-2020',
+          date: this.formatDate(this.selectedDate),
           direction: 'Afternoon',
           mark: '0',
         });
-        const tmpLiftRider = newLiftRiders.find(_ => _.riderID === unChecked);
+
+        const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
+          .riders.find(_ => _.riderID === unChecked);
         tmpLiftRider.mark = '0';
         tmpLiftRider.tableData.checked = false;
       });
     }
-    this.setState({ liftRiders: newLiftRiders });
+
+    this.setState({ lifts: newLifts });
   };
 
   onApproveChange = async (event, rowProps) => {
-    const isApproved = event.target.checked;
+    const shuttleID = rowProps.data.shuttleID;
     const riderID = rowProps.data.riderID;
-    let newLiftRiders = this.state.liftRiders;
-    const tmpLiftRider = newLiftRiders.find(_ => _.riderID === riderID);
+    const isApproved = event.target.checked;
+
+    let newLifts = this.state.lifts;
+    const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
+      .riders.find(_ => _.riderID === riderID);
     tmpLiftRider.approved = isApproved ? '1' : '0';
+
     await setLiftRiderApproved({
-      shuttleID: '1',
+      shuttleID,
       riderID,
-      date: '15-04-2020',
+      date: this.formatDate(this.selectedDate),
       direction: 'Afternoon',
       approved: isApproved ? '1' : '0',
     });
-    this.setState({ liftRiders: newLiftRiders });
+
+    this.setState({ lifts: newLifts });
+  };
+
+  onSelectedDateChange = async (event, newValue) => {
+    this.selectedDate = newValue;
+    await this.updateShuttles();
+    await this.update();
   };
 
   getRiderRowData = rider => {
     const checked = rider.mark === '1';
     const approved = rider.approved;
-    checked && this.checked.push(rider.riderID);
+    checked && this.checked[rider.shuttleID].push(rider.riderID);
     return ({ ...rider, approved, tableData: { checked } });
   };
 
+  formatDate = date => moment(date).format('DD[-]MM[-]YYYY');
+
   update = async () => {
-    let liftRiders = await getLiftRiders({ shuttleID: '1', date: '15-04-2020', direction: 'Afternoon' });
-    liftRiders = liftRiders.map(this.getRiderRowData);
-    this.setState({ liftRiders: liftRiders });
+    const formattedDate = this.formatDate(this.selectedDate);
+
+    const lifts = await Promise.all(this.shuttles.map(async shuttle => {
+      const shuttleID = shuttle.shuttleID;
+      const shuttleName = shuttle.name;
+      const riders = await getLiftRiders({ shuttleID, date: formattedDate, direction: 'Afternoon' });
+      return ({
+        shuttleID,
+        shuttleName,
+        riders: riders.map(this.getRiderRowData),
+      })
+    }));
+
+    this.setState({ lifts });
+  };
+
+  updateShuttles = async () => {
+    this.checked = {};
+    this.shuttles = await getAllShuttles();
+    this.shuttles.forEach(shuttle => {this.checked[shuttle.shuttleID] = []});
   };
 
   async componentDidMount() {
+    await this.updateShuttles();
     await this.update();
   }
 
   render() {
-    const { liftRiders } = this.state;
+    const { lifts } = this.state;
+    const showRefreshButton = false;
     return (
       <Grid>
         <Grid container>
-          <Button variant="contained" onClick={this.update}>
+          <Grid container justify="center" spacing={3} style={{ textAlign: 'center' }}>
+            <Grid item xs={4}>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  label="Date"
+                  autoOk
+                  rifmFormatter={val=> val.replace(/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi, '')}
+                  refuse={/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi}
+                  format={"MMM DD, YYYY"}
+                  variant="inline"
+                  value={this.selectedDate}
+                  onChange={this.onSelectedDateChange}
+                />
+              </MuiPickersUtilsProvider>
+            </Grid>
+          </Grid>
+          {showRefreshButton && (<Button variant="contained" onClick={this.update}>
             <RefreshIcon/>
-          </Button>
+          </Button>)}
         </Grid>
-        <div style={{marginTop: '15px'}}>
-          <AttendanceList
-            title="Beer Sheva Shuttle"
-            columns={columns}
-            selection={true}
-            data={liftRiders}
-            onSelectionChange={this.onSelectionChange}
-            onApproveChange={this.onApproveChange}
-          />
-        </div>
+        <Grid>
+          {lifts.map(lift => lift.riders.length ? (
+            <div key={`shuttle-${lift.shuttleName}`} style={{marginTop: '15px'}}>
+              <AttendanceList
+                title={lift.shuttleName}
+                columns={columns}
+                selection={true}
+                data={lift.riders}
+                onSelectionChange={this.onSelectionChange}
+                onApproveChange={this.onApproveChange}
+                style={{marginTop: '15px'}}
+              />
+            </div>
+          ) : null)}
+        </Grid>
       </Grid>
     );
   }

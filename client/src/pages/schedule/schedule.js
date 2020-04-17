@@ -8,7 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
-import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -24,7 +24,7 @@ class Schedule extends React.Component {
       shuttles: [],
       supervisors: [],
       selectedShuttle: undefined,
-      selectedDate: undefined,
+      selectedDate: new Date(),
       selectedDirection: undefined,
       selectedSupervisor: undefined,
     };
@@ -45,7 +45,7 @@ class Schedule extends React.Component {
     const showAssignPanel = !!selectedShuttle && !!selectedDate && !!selectedDirection;
     return (
       <div>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid container justify="center" spacing={3} style={{ marginTop: '6px', textAlign: 'center' }}>
             <Grid item xs={3}>
               <Autocomplete
@@ -63,8 +63,11 @@ class Schedule extends React.Component {
               <KeyboardDatePicker
                 margin="normal"
                 id="date-picker-dialog"
-                label="Date picker dialog"
-                format="MM/dd/yyyy"
+                label="Date"
+                autoOk
+                rifmFormatter={val=> val.replace(/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi, '')}
+                refuse={/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi}
+                format={"MMM DD, YYYY"}
                 value={selectedDate}
                 onChange={(event, newValue) => {
                   this.setState({ selectedDate: newValue});
@@ -97,10 +100,18 @@ class Schedule extends React.Component {
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl component="fieldset">
-                      <RadioGroup aria-label="gender" name="gender1" value={selectedSupervisor} onChange={this.handleChange}>
-                        {
-                          supervisors.map(value => (<FormControlLabel value={value.name} control={<Radio />} label={value.name} />))
-                        }
+                      <RadioGroup
+                        aria-label="gender"
+                        name="gender1"
+                        value={selectedSupervisor}
+                        onChange={() => {}}
+                      >
+                        {supervisors.map(value => (
+                            <FormControlLabel
+                              key={`supervisor-${value.supervisorID}`}
+                              value={value.name}
+                              control={<Radio />} label={value.name}
+                            />))}
                       </RadioGroup>
                     </FormControl>
                   </Grid>

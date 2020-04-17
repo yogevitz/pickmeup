@@ -37,9 +37,10 @@ class WarRoom extends React.Component {
           direction: 'Afternoon',
           mark: '1',
         });
-        newLiftRiders.find(_ => _.riderID === checked).mark = '1';
-        newLiftRiders.find(_ => _.riderID === checked).approved = '0';
-        newLiftRiders.find(_ => _.riderID === checked).tableData.checked = true;
+        const tmpLiftRider = newLiftRiders.find(_ => _.riderID === checked);
+        tmpLiftRider.mark = '1';
+        tmpLiftRider.approved = '0';
+        tmpLiftRider.tableData.checked = true;
       });
     } else {
       newUnChecked = this.checked.filter(x => selectedIDs.indexOf(x) < 0);
@@ -52,8 +53,9 @@ class WarRoom extends React.Component {
           direction: 'Afternoon',
           mark: '0',
         });
-        newLiftRiders.find(_ => _.riderID === unChecked).mark = '0';
-        newLiftRiders.find(_ => _.riderID === unChecked).tableData.checked = false;
+        const tmpLiftRider = newLiftRiders.find(_ => _.riderID === unChecked);
+        tmpLiftRider.mark = '0';
+        tmpLiftRider.tableData.checked = false;
       });
     }
     this.setState({ liftRiders: newLiftRiders });
@@ -63,7 +65,8 @@ class WarRoom extends React.Component {
     const isApproved = event.target.checked;
     const riderID = rowProps.data.riderID;
     let newLiftRiders = this.state.liftRiders;
-    newLiftRiders.find(_ => _.riderID === riderID).approved = isApproved ? '1' : '0';
+    const tmpLiftRider = newLiftRiders.find(_ => _.riderID === riderID);
+    tmpLiftRider.approved = isApproved ? '1' : '0';
     await setLiftRiderApproved({
       shuttleID: '1',
       riderID,

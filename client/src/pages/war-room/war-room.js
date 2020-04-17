@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { getLiftRiders, setLiftRiderMark } from "../../proxy";
+import { getLiftRiders, setLiftRiderMark, setLiftRiderApproved } from "../../proxy";
 
 const columns = [
   { title: 'Name', field: 'riderName' },
@@ -51,18 +51,27 @@ class WarRoom extends React.Component {
   onApproveChange = async (event, rowProps) => {
     const isApproved = event.target.checked;
     const riderID = rowProps.data.riderID;
-    console.log({ riderID, isApproved });
+    let newLiftRiders = this.state.liftRiders;
+    newLiftRiders.find(_ => _.riderID === riderID).approved = isApproved ? '1' : '0';
+    this.setState({ liftRiders: newLiftRiders });
+    await setLiftRiderApproved({
+      shuttleID: '1',
+      riderID,
+      date: '15-04-2020',
+      direction: 'Afternoon',
+      approved: isApproved ? '1' : '0',
+    });
   };
 
   getRiderRowData = rider => {
     const checked = rider.mark === '1';
+    const approved = rider.approved;
     checked && this.checked.push(rider.riderID);
-    return ({ ...rider, tableData: { checked } });
+    return ({ ...rider, approved, tableData: { checked } });
   };
 
   update = async () => {
     let liftRiders = await getLiftRiders({ shuttleID: '1', date: '15-04-2020', direction: 'Afternoon' });
-    // let liftRiders = await getAllShuttleRiders(1);
     liftRiders = liftRiders.map(this.getRiderRowData);
     this.setState({ liftRiders: liftRiders });
   };

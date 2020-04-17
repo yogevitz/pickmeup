@@ -17,7 +17,7 @@ class WarRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shuttleRiders: [],
+      liftRiders: [],
     };
     this.checked = [];
   }
@@ -61,10 +61,10 @@ class WarRoom extends React.Component {
   };
 
   update = async () => {
-    let shuttleRiders = await getLiftRiders({ shuttleID: '1', date: '15-04-2020', direction: 'Afternoon' });
-    // let shuttleRiders = await getAllShuttleRiders(1);
-    shuttleRiders = shuttleRiders.map(this.getRiderRowData);
-    this.setState({ shuttleRiders: shuttleRiders });
+    let liftRiders = await getLiftRiders({ shuttleID: '1', date: '15-04-2020', direction: 'Afternoon' });
+    // let liftRiders = await getAllShuttleRiders(1);
+    liftRiders = liftRiders.map(this.getRiderRowData);
+    this.setState({ liftRiders: liftRiders });
   };
 
   async componentDidMount() {
@@ -72,7 +72,7 @@ class WarRoom extends React.Component {
   }
 
   render() {
-    const { shuttleRiders } = this.state;
+    const { liftRiders } = this.state;
     return (
       <Grid>
         <Grid container>
@@ -85,7 +85,7 @@ class WarRoom extends React.Component {
             title="Beer Sheva Shuttle"
             columns={columns}
             selection={true}
-            data={shuttleRiders}
+            data={liftRiders}
             onSelectionChange={this.onSelectionChange}
             onApproveChange={this.onApproveChange}
           />

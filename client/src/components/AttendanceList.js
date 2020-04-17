@@ -59,6 +59,7 @@ export default function AttendanceList(props) {
         paging: false,
         selection: true,
         showTextRowsSelected: false,
+        showSelectAllCheckbox: false,
       }}
       actions={[{
         icon: <SupervisorAccountIcon />,

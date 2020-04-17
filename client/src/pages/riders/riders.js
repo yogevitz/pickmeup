@@ -5,6 +5,8 @@ import { getAllRiders, createRider, setRider } from '../../proxy';
 const columns = [
   { title: 'ID', field: 'riderID' },
   { title: 'Name', field: 'name' },
+  { title: 'Teacher', field: 'teacher' },
+  { title: 'Class', field: 'class' },
   { title: 'Parent Name', field: 'parentName' },
   { title: 'Parent Phone', field: 'parentPhone' },
   {

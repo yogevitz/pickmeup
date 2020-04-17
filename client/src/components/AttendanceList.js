@@ -19,8 +19,6 @@ import FilterList from '@material-ui/icons/FilterList';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import VerifiedUserOutlinedIcon from '@material-ui/icons/VerifiedUserOutlined';
 import Remove from '@material-ui/icons/Remove';
 import Checkbox from "@material-ui/core/Checkbox";
 

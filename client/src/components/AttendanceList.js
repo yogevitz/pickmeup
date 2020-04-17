@@ -78,6 +78,7 @@ export default function AttendanceList(props) {
           <Checkbox
             icon={<AssignmentTurnedInOutlinedIcon />}
             checkedIcon={<AssignmentTurnedInIcon />}
+            checked={!rowProps.data.tableData.checked && rowProps.data.approved === '1'}
             onChange={(event) => onApproveChange(event, rowProps)}
             color="primary"
             disabled={rowProps.data.tableData.checked}

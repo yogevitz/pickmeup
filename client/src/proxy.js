@@ -62,7 +62,7 @@ export async function getLiftRiders(params) {
   return data;
 }
 
-export async function markRider(body) {
-  const { data } = await client.post(`/markRider`, body);
+export async function setLiftRiderMark(body) {
+  const { data } = await client.post(`/setLiftRiderMark`, body);
   return data;
 }

@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { getAllShuttleRiders, getLiftRiders, markRider } from "../../proxy";
+import { getLiftRiders, setLiftRiderMark } from "../../proxy";
 
 const columns = [
   { title: 'Name', field: 'riderName' },
@@ -28,21 +28,21 @@ class WarRoom extends React.Component {
     if (selectedIDs.length > this.checked.length) {
       newChecked = selectedIDs.filter(x => this.checked.indexOf(x) < 0);
       this.checked.push(...newChecked);
-      newChecked.forEach(async checked => await markRider({
+      newChecked.forEach(async checked => await setLiftRiderMark({
         shuttleID: '1',
         riderID: checked,
-        date: '31/03/2020',
-        direction: 'Morning',
+        date: '15-04-2020',
+        direction: 'Afternoon',
         mark: '1',
       }));
     } else {
       newUnChecked = this.checked.filter(x => selectedIDs.indexOf(x) < 0);
       this.checked = this.checked.filter(_ => newUnChecked.indexOf(_) < 0);
-      newUnChecked.forEach(async unChecked => await markRider({
+      newUnChecked.forEach(async unChecked => await setLiftRiderMark({
         shuttleID: '1',
         riderID: unChecked,
-        date: '31/03/2020',
-        direction: 'Morning',
+        date: '15-04-2020',
+        direction: 'Afternoon',
         mark: '0',
       }));
     }

@@ -25,27 +25,38 @@ class WarRoom extends React.Component {
   onSelectionChange = async selected => {
     const selectedIDs = selected.map(_ => _.riderID);
     let newChecked, newUnChecked;
+    let newLiftRiders = this.state.liftRiders;
     if (selectedIDs.length > this.checked.length) {
       newChecked = selectedIDs.filter(x => this.checked.indexOf(x) < 0);
       this.checked.push(...newChecked);
-      newChecked.forEach(async checked => await setLiftRiderMark({
-        shuttleID: '1',
-        riderID: checked,
-        date: '15-04-2020',
-        direction: 'Afternoon',
-        mark: '1',
-      }));
+      newChecked.forEach(async checked => {
+        await setLiftRiderMark({
+          shuttleID: '1',
+          riderID: checked,
+          date: '15-04-2020',
+          direction: 'Afternoon',
+          mark: '1',
+        });
+        newLiftRiders.find(_ => _.riderID === checked).mark = '1';
+        newLiftRiders.find(_ => _.riderID === checked).approved = '0';
+        newLiftRiders.find(_ => _.riderID === checked).tableData.checked = true;
+      });
     } else {
       newUnChecked = this.checked.filter(x => selectedIDs.indexOf(x) < 0);
       this.checked = this.checked.filter(_ => newUnChecked.indexOf(_) < 0);
-      newUnChecked.forEach(async unChecked => await setLiftRiderMark({
-        shuttleID: '1',
-        riderID: unChecked,
-        date: '15-04-2020',
-        direction: 'Afternoon',
-        mark: '0',
-      }));
+      newUnChecked.forEach(async unChecked => {
+        await setLiftRiderMark({
+          shuttleID: '1',
+          riderID: unChecked,
+          date: '15-04-2020',
+          direction: 'Afternoon',
+          mark: '0',
+        });
+        newLiftRiders.find(_ => _.riderID === unChecked).mark = '0';
+        newLiftRiders.find(_ => _.riderID === unChecked).tableData.checked = false;
+      });
     }
+    this.setState({ liftRiders: newLiftRiders });
   };
 
   onApproveChange = async (event, rowProps) => {

@@ -66,3 +66,8 @@ export async function setLiftRiderMark(body) {
   const { data } = await client.post(`/setLiftRiderMark`, body);
   return data;
 }
+
+export async function setLiftRiderApproved(body) {
+  const { data } = await client.post(`/setLiftRiderApproved`, body);
+  return data;
+}

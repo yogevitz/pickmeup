@@ -74,6 +74,7 @@ class Shuttles extends React.Component {
           data={riders}
           editable={false}
           tableLayout="fixed"
+          pageSize={5}
         />
       </Grid>
     );

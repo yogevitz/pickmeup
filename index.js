@@ -141,8 +141,6 @@ app.get("/getAllUsers", verifyToken, (req, res) => {
                 res.status(200).send([])
             else
                 res.status(200).send(docs);
-
-
             // Close the DB
             client.close();
         });
@@ -1557,7 +1555,7 @@ app.listen(port, () => {
 
 
 /*
-function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
     // Get auth header value
     const token = req.header("x-auth-token");
     const bearerHeader = req.headers['authorization'];
@@ -1566,7 +1564,13 @@ function verifyToken(req, res, next) {
         // Split at the space
         req.token = token;
         // Next middleware
-        next();
+        jwt.verify(token, secret, (err, authData) => {
+        if(err) {
+            res.sendStatus(403);
+        } else {
+            next();
+         }
+        });
     } else {
         // Forbidden
         res.sendStatus(403);

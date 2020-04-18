@@ -117,6 +117,7 @@ class Table extends React.Component {
           search: true,
           tableLayout: tableLayout || "auto",
           detailPanelType: 'single',
+          exportButton: true,
         }}
         editable={editable
           ? {

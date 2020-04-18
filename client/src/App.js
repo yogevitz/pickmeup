@@ -73,6 +73,8 @@ export default function NavTabs() {
     setValue(newValue);
   };
 
+  const showCreditFooter = false;
+
   return (
     <div className={classes.root}>
       <Container fixed style={{ paddingBottom: "15px" }}>
@@ -112,6 +114,9 @@ export default function NavTabs() {
             <Settings/>
           </TabPanel>
         </Card>
+        {showCreditFooter && <div style={{ fontSize: "11px", textAlign: "center" }}>
+          Powered by PickMeUp.com
+        </div>}
       </Container>
     </div>
   );

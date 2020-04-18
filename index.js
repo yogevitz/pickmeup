@@ -416,29 +416,57 @@ app.get("/getAllShuttles",verifyToken, (req, res) => {
 
 //------//
 app.get("/getAllRiders",verifyToken, (req, res) => {
-  console.log("Got GET Request");
-  uri1 = "mongodb://localhost:27017/PickMeUp'";
-  MongoClient.connect(uri1,{ useNewUrlParser: true }, function(err, client)
-  {
-    assert.equal(null, err);
-    console.log("Successfully connected to server");
-    let db = client.db('PickMeUp');
-    // Find some documents in our collection
-    db.collection('Riders').find({}).toArray(function(err, docs) {
-      // Print the documents returned
-        if(docs.length===0)
-            res.status(200).send([])
-        else
-            res.status(200).send(docs);
-      // Close the DB
-      client.close();
+    console.log("Got GET Request");
+    uri1 = "mongodb://localhost:27017/PickMeUp'";
+    MongoClient.connect(uri1,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('Riders').find({}).toArray(function(err, docs) {
+            // Print the documents returned
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs);
+            // Close the DB
+            client.close();
+        });
+        // Declare success
+        console.log("Called find()");
     });
-    // Declare success
-    console.log("Called find()");
-  });
-  riderId = req.params.riderId;
+    riderId = req.params.riderId;
 
-  client.close();
+    client.close();
+
+});
+
+//------//
+app.get("/getAllShuttlesRiders",verifyToken, (req, res) => {
+    console.log("Got GET Request");
+    uri1 = "mongodb://localhost:27017/PickMeUp'";
+    MongoClient.connect(uri1,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('ShuttlesRiders').find({}).toArray(function(err, docs) {
+            // Print the documents returned
+            if(docs.length===0)
+                res.status(200).send([])
+            else
+                res.status(200).send(docs);
+            // Close the DB
+            client.close();
+        });
+        // Declare success
+        console.log("Called find()");
+    });
+    riderId = req.params.riderId;
+
+    client.close();
 
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from "../../components/Table";
-import { getAllRiders, createRider, setRider } from '../../proxy';
+import { getAllRiders, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -44,8 +44,8 @@ class Riders extends React.Component {
   };
 
   handleDelete = async oldData => {
-    // TODO: uncomment once deleteRider is implemented:
-    // await deleteRider(oldData);
+    const riderID = oldData.riderID;
+    await deleteRider({ riderID });
     let tmpRiders = this.state.riders;
     tmpRiders = tmpRiders.filter(_ => _.riderID !== oldData.riderID);
     this.setState({ riders: tmpRiders });

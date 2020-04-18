@@ -5,6 +5,16 @@ export async function getAllShuttles() {
   return data;
 }
 
+export async function deleteShuttle(body) {
+  const { data } = await client.post(`/deleteShuttle`, body);
+  return data;
+}
+
+export async function deleteRider(body) {
+  const { data } = await client.post(`/deleteRider`, body);
+  return data;
+}
+
 export async function getAllSupervisors() {
   const { data } = await client.get( `/getAllSupervisors`);
   return data;
@@ -22,6 +32,11 @@ export async function getShuttle(shuttleID) {
 
 export async function createSupervisor(body) {
   const { data } = await client.post(`/createSupervisor`, body);
+  return data;
+}
+
+export async function deleteSupervisor(body) {
+  const { data } = await client.post(`/deleteSupervisor`, body);
   return data;
 }
 

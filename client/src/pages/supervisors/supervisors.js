@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from "../../components/Table";
-import { getAllSupervisors, createSupervisor, setSupervisor } from '../../proxy';
+import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'supervisorID' },
@@ -41,8 +41,8 @@ class Supervisors extends React.Component {
   };
 
   handleDelete = async oldData => {
-    // TODO: uncomment once deleteSupervisor is implemented:
-    // await deleteSupervisor(oldData);
+    const supervisorID = oldData.supervisorID;
+    await deleteSupervisor({ supervisorID });
     let tmpSupervisors = this.state.supervisors;
     tmpSupervisors = tmpSupervisors.filter(_ => _.supervisorID !== oldData.supervisorID);
     this.setState({ supervisors: tmpSupervisors });

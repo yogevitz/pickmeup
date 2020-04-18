@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Table from "../../components/Table";
-import { getAllShuttles, createShuttle, setShuttle, getShuttleRidersByShuttle } from '../../proxy';
+import { getAllShuttles, createShuttle, setShuttle, deleteShuttle, getShuttleRidersByShuttle } from '../../proxy';
 
 const columns = [
   { title: 'Name', field: 'name' },
@@ -51,8 +51,8 @@ class Shuttles extends React.Component {
   };
 
   handleDelete = async oldData => {
-    // TODO: uncomment once deleteShuttle is implemented:
-    // await deleteShuttle(oldData);
+    const shuttleID = oldData.shuttleID;
+    await deleteShuttle({ shuttleID });
     let tmpShuttles = this.state.shuttles;
     tmpShuttles = tmpShuttles.filter(_ => _.shuttleID !== oldData.shuttleID);
     this.setState({ shuttles: tmpShuttles });

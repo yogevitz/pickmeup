@@ -1,6 +1,7 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import Table from "../../components/Table";
-import { getAllShuttles, createShuttle, setShuttle } from '../../proxy';
+import { getAllShuttles, createShuttle, setShuttle, getShuttleRiderByShuttle } from '../../proxy';
 
 const columns = [
   { title: 'Name', field: 'name' },
@@ -17,12 +18,21 @@ class Shuttles extends React.Component {
     super(props);
     this.state = {
       shuttles: [],
+      shuttlesRiders: {},
     };
   }
 
   async componentWillMount() {
     const shuttles = await getAllShuttles();
-    this.setState({ shuttles: shuttles });
+    const shuttlesRiders = {};
+    shuttles.forEach(async shuttle => {
+      const shuttleID = shuttle.shuttleID;
+      const shuttleRiders = await getShuttleRiderByShuttle(shuttleID);
+      shuttlesRiders[shuttleID] = shuttleRiders.map(_ => ({
+        riderID: _.riderID, riderName: _.riderName,
+      }));
+    });
+    this.setState({ shuttles, shuttlesRiders });
   }
 
   handleAdd = async newData => {
@@ -48,6 +58,27 @@ class Shuttles extends React.Component {
     this.setState({ shuttles: tmpShuttles });
   };
 
+  renderDetailPanel = rowData => {
+    const { shuttlesRiders } = this.state;
+    const shuttleID = rowData.shuttleID;
+    const shuttleName = rowData.name;
+    const riders = shuttlesRiders[shuttleID];
+    return (
+      <Grid container justify="center" style={{ textAlign: 'center' }}>
+        <Table
+          title={`${shuttleName} Riders`}
+          columns={[
+            { title: 'Name', field: 'riderName' },
+            { title: 'ID', field: 'riderID' },
+          ]}
+          data={riders}
+          editable={false}
+          tableLayout="fixed"
+        />
+      </Grid>
+    );
+  };
+
   render() {
     const { shuttles } = this.state;
     return (
@@ -59,6 +90,8 @@ class Shuttles extends React.Component {
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
+          detailPanel={this.renderDetailPanel}
+          editable={true}
         />
       </div>
     );

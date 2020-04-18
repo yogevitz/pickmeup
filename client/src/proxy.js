@@ -56,6 +56,11 @@ export async function getAllShuttleRiders(shuttleID) {
   return data;
 }
 
+export async function getShuttleRiderByShuttle(shuttleID) {
+  const { data } = await client.get(`/getShuttleRiderByShuttle/${shuttleID}`);
+  return data;
+}
+
 export async function getLiftRiders(params) {
   const { shuttleID, date, direction } = params;
   const { data } = await client.get(`/getLiftRiders/${shuttleID}/${date}/${direction}`);

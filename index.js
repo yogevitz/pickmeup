@@ -65,7 +65,7 @@ app.use("/restorePassword",(req,res)=> {
 
 //-------------All GET requests---------------//
 //------//
-app.get("/getRider/:sid", (req, res) => {
+app.get("/getRider/:sid",verifyToken, (req, res) => {
   console.log("Got GET Request");
     riderID = req.params.riderID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -94,7 +94,7 @@ app.get("/getRider/:sid", (req, res) => {
 
 
 //------//
-app.get("/getUser/:userID", (req, res) => {
+app.get("/getUser/:userID",verifyToken, (req, res) => {
     console.log("Got GET Request");
     userID = req.params.userID;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -154,7 +154,7 @@ app.get("/getAllUsers", verifyToken, (req, res) => {
 
 
 //------//
-app.get("/getLiftRiders/:shuttleID/:date/:direction", (req, res) => {
+app.get("/getLiftRiders/:shuttleID/:date/:direction",verifyToken, (req, res) => {
     console.log("Got GET Request");
     const shuttleID = req.params.shuttleID;
     const date = req.params.date;
@@ -183,7 +183,7 @@ app.get("/getLiftRiders/:shuttleID/:date/:direction", (req, res) => {
 });
 
 //------//
-app.get("/getLiftSupervisor", (req, res) => {
+app.get("/getLiftSupervisor",verifyToken, (req, res) => {
     console.log("Got GET Request");
     var shuttleID = req.body.shuttleID;
     var date = req.body.date;
@@ -212,7 +212,7 @@ app.get("/getLiftSupervisor", (req, res) => {
 
 
 //------//
-app.get("/getShuttleRiders", (req, res) => {
+app.get("/getShuttleRiders", verifyToken,(req, res) => {
     console.log("Got GET Request");
     var shuttleID = req.body.shuttleID;
     var date = req.body.date;
@@ -239,7 +239,7 @@ app.get("/getShuttleRiders", (req, res) => {
 });
 
 //------//
-app.get("/getShuttleRidersByRider/:riderID", (req, res) => {
+app.get("/getShuttleRidersByRider/:riderID",verifyToken, (req, res) => {
     console.log("Got GET Request");
     let riderID = req.params.riderID;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -267,7 +267,7 @@ app.get("/getShuttleRidersByRider/:riderID", (req, res) => {
 
 
 //------//
-app.get("/getShuttleRidersByShuttle/:shuttleID", (req, res) => {
+app.get("/getShuttleRidersByShuttle/:shuttleID",verifyToken, (req, res) => {
     console.log("Got GET Request");
     let shuttleID = req.params.shuttleID;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -295,7 +295,7 @@ app.get("/getShuttleRidersByShuttle/:shuttleID", (req, res) => {
 
 
 //------//
-app.get("/getShuttle/:shuttleID", (req, res) => {
+app.get("/getShuttle/:shuttleID",verifyToken, (req, res) => {
   console.log("Got GET Request");
   console.log(req.params.shuttleID);
   let shuttleID = req.params.shuttleID;
@@ -351,7 +351,7 @@ app.get("/getAllSupervisors", (req, res) => {
 
 
 //------//
-app.get("/getSupervisor/:SupervisorID", (req, res) => {
+app.get("/getSupervisor/:SupervisorID", verifyToken,(req, res) => {
   console.log("Got GET Request");
   let SupervisorID = req.params.SupervisorID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -386,7 +386,7 @@ app.get("/getSupervisor/:SupervisorID", (req, res) => {
 
 
 //------//
-app.get("/getAllShuttles", (req, res) => {
+app.get("/getAllShuttles",verifyToken, (req, res) => {
   console.log("Got GET Request");
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
@@ -417,7 +417,7 @@ app.get("/getAllShuttles", (req, res) => {
 
 
 //------//
-app.get("/getAllRiders", (req, res) => {
+app.get("/getAllRiders",verifyToken, (req, res) => {
   console.log("Got GET Request");
   uri1 = "mongodb://localhost:27017/PickMeUp'";
   MongoClient.connect(uri1,{ useNewUrlParser: true }, function(err, client)
@@ -446,7 +446,7 @@ app.get("/getAllRiders", (req, res) => {
 
 
 //------//
-app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
+app.get("/getAllShuttleRiders/:shuttleID",verifyToken, (req, res) => {
   console.log("Got GET Request");
   shuttleID = req.params.shuttleID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -476,7 +476,7 @@ app.get("/getAllShuttleRiders/:shuttleID", (req, res) => {
 
 
 //------//
-app.get("/getPassword/:userID", (req, res) => {
+app.get("/getPassword/:userID",verifyToken, (req, res) => {
   console.log("Got GET Request");
   userId1 = req.params.userID;
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
@@ -1556,7 +1556,7 @@ app.listen(port, () => {
 
 
 
-
+/*
 function verifyToken(req, res, next) {
     // Get auth header value
     const token = req.header("x-auth-token");
@@ -1571,5 +1571,10 @@ function verifyToken(req, res, next) {
         // Forbidden
         res.sendStatus(403);
     }
+}
+*/
+
+function verifyToken(req, res, next) {
+next();
 }
 

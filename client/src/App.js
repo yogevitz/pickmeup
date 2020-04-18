@@ -75,8 +75,8 @@ export default function NavTabs() {
 
   return (
     <div className={classes.root}>
-      <Container fixed>
-        <Card>
+      <Container fixed style={{ paddingBottom: "15px" }}>
+        <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
           <CardHeader title={'Shuttles System'} />
           <AppBar position="static">
             <Tabs

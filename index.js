@@ -208,7 +208,7 @@ app.get("/getShuttleRiders", (req, res) => {
 });
 
 //------//
-app.get("/getShuttleRiderByRider/:riderID", (req, res) => {
+app.get("/getShuttleRidersByRider/:riderID", (req, res) => {
     console.log("Got GET Request");
     let riderID = req.params.riderID;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)

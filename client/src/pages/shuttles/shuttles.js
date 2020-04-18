@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Table from "../../components/Table";
-import { getAllShuttles, createShuttle, setShuttle, getShuttleRiderByShuttle } from '../../proxy';
+import { getAllShuttles, createShuttle, setShuttle, getShuttleRidersByShuttle } from '../../proxy';
 
 const columns = [
   { title: 'Name', field: 'name' },
@@ -27,7 +27,7 @@ class Shuttles extends React.Component {
     const shuttlesRiders = {};
     shuttles.forEach(async shuttle => {
       const shuttleID = shuttle.shuttleID;
-      const shuttleRiders = await getShuttleRiderByShuttle(shuttleID);
+      const shuttleRiders = await getShuttleRidersByShuttle(shuttleID);
       shuttlesRiders[shuttleID] = shuttleRiders.map(_ => ({
         riderID: _.riderID, riderName: _.riderName,
       }));

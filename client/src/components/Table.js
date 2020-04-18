@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import SaveAlt from '@material-ui/icons/SaveAlt';
@@ -129,6 +129,11 @@ class Table extends React.Component {
         onRowClick={editable && detailPanel
           ? (event, rowData, togglePanel) => togglePanel()
           : undefined}
+        components={{
+          Toolbar: props => (
+            <MTableToolbar {...props} columnsButton={true} />
+          )
+        }}
       />
     );
   }

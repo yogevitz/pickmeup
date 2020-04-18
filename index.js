@@ -30,6 +30,37 @@ MongoClient.connect(uri, function (err, db) {
   }
 });
 
+//-----------restore password-----------------//
+app.use("/restorePassword",(req,res)=> {
+    const question = req.body.question;
+    const answer = req.body.answer;
+    const userID = req.body.userID;
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('Users').find({userID:userID,answer:answer,question:question}).toArray(function(err, docs) {
+            // Print the documents returned
+            if (docs.length === 0)
+                res.status(403).send("Error, no such Q&A assigned to this userID")
+            else{
+                docs.forEach(function (doc) {
+                    res.status(200).send(doc.password)
+                });
+            }
+            // Close the DB
+            client.close();
+        });
+        // Declare success
+        console.log("Called find()");
+    });
+    client.close();
+});
+
+//-----------/restore password-----------------//
+
 
 
 //-------------All GET requests---------------//
@@ -96,7 +127,7 @@ app.get("/getUser/:userID", (req, res) => {
 
 
 //------//
-app.get("/getAllUsers", (req, res) => {
+app.get("/getAllUsers", verifyToken, (req, res) => {
     console.log("Got GET Request");
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
@@ -472,14 +503,50 @@ app.get("/getPassword/:userID", (req, res) => {
 //-------------All POST requests--------------//
 
 app.post("/login", (req, res) => {
-    payload = { id: generateSupervisorId(), name: req.body.name, admin: true };
-    options = { expiresIn: "1d" };
-    const token = jwt.sign(payload, secret, options);
-    res.send(token);
+    console.log("Got GET Request");
+    userID = req.body.userID;
+    password=req.body.password;
+    user = '';
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+
+        db.collection('Users').find({userID:userID,password:password}).toArray(function(err, docs) {
+            // Print the documents returned
+
+            if(docs.length===0)
+                res.status(400).send('No Such User or password, try again')
+            else
+            {
+                docs.forEach(function (doc) {
+                    user = doc;
+
+                    jwt.sign({user}, secret, { expiresIn: '24h' }, (err, token) => {
+                        const toSend =  {
+                            type:user.type,
+                            token:token
+                        }
+                        res.status(200).send(toSend)
+                    });
+
+                });
+            }
+            // Close the DB
+            client.close();
+        });
+      // Declare success
+        console.log("Called find()");
+    });
+    client.close();
 });
+
+
 //-------------C R E A T E----------------------//
 //------//
-app.post("/createSupervisor", (req, res) => {
+app.post("/createSupervisor",verifyToken, (req, res) => {
     console.log("got new post request");
     let sid1 = parseInt(req.body.sid);
     const Supervisor = {
@@ -509,7 +576,7 @@ app.post("/createSupervisor", (req, res) => {
 
 
 //------//
-app.post("/createLiftRider", (req, res) => {
+app.post("/createLiftRider",verifyToken, (req, res) => {
     console.log("got new post request");
 
     const LiftRider = {
@@ -541,7 +608,7 @@ app.post("/createLiftRider", (req, res) => {
 
 
 //------//
-app.post("/createLiftSupervisor", (req, res) => {
+app.post("/createLiftSupervisor",verifyToken, (req, res) => {
     console.log("got new post request");
 
     const LiftRiderSupervisor = {
@@ -571,7 +638,7 @@ app.post("/createLiftSupervisor", (req, res) => {
 
 
 //------//
-app.post("/createShuttleRider", (req, res) => {
+app.post("/createShuttleRider",verifyToken, (req, res) => {
   console.log("got new post request");
   const Shuttle = {
     shuttleID: req.body.shuttleID,
@@ -601,7 +668,7 @@ app.post("/createShuttleRider", (req, res) => {
 
 
 //------//
-app.post("/createShuttle", (req, res) => {
+app.post("/createShuttle",verifyToken, (req, res) => {
     console.log("got new post request");
     const Shuttle = {
         shuttleID: generateID(10),
@@ -633,7 +700,7 @@ app.post("/createShuttle", (req, res) => {
 
 
 //------//
-app.post("/createRider", (req, res) => {
+app.post("/createRider",verifyToken, (req, res) => {
   console.log("got new post request");
   const Rider = {
     riderID:  req.body.riderID,
@@ -666,7 +733,7 @@ app.post("/createRider", (req, res) => {
 
 
 //------//
-app.post("/createUser", (req, res) => {
+app.post("/createUser",verifyToken, (req, res) => {
     console.log("got new post request");
     const User = {
         userID:  req.body.userID,
@@ -701,7 +768,7 @@ app.post("/createUser", (req, res) => {
 
 //----------------A S S I G N---------------//
 //------//
-app.post("/assignRider", (req, res) => {
+app.post("/assignRider",verifyToken, (req, res) => {
   console.log("got new post request");
   const riderShuttle = {
     riderID : req.body.riderID,
@@ -736,7 +803,7 @@ app.post("/assignRider", (req, res) => {
 
 
 //------//
-app.post("/assignSupervisor", (req, res) => {
+app.post("/assignSupervisor",verifyToken, (req, res) => {
   console.log("got new post request");
   const SupervisorOnSuttle = {
     supervisorID: req.body.supervisorID,
@@ -767,7 +834,7 @@ app.post("/assignSupervisor", (req, res) => {
 });
 
 //--------------U P D A T E--------------------//
-app.post("/markRider", (req, res) => {
+app.post("/markRider",verifyToken, (req, res) => {
     console.log("got new post request");
     const riderShuttle = {
         riderID : req.body.riderID,
@@ -805,7 +872,7 @@ app.post("/markRider", (req, res) => {
 });
 
 //------//
-app.post("/updatePassword", (req, res) => {
+app.post("/updatePassword",verifyToken, (req, res) => {
   console.log("got new post request");
 
   const User = {
@@ -850,7 +917,7 @@ app.post("/updatePassword", (req, res) => {
 
 //-----------------S E T E R S---------------------//
 //------//
-app.post("/setRider", (req, res) => {
+app.post("/setRider",verifyToken, (req, res) => {
     console.log("got new post request");
     const Rider = {
         riderID: req.body.riderID,
@@ -892,7 +959,7 @@ app.post("/setRider", (req, res) => {
 
 
 //------//
-app.post("/setUser", (req, res) => {
+app.post("/setUser",verifyToken, (req, res) => {
     console.log("got new post request");
     const User = {
         userID: req.body.userID,
@@ -932,7 +999,7 @@ app.post("/setUser", (req, res) => {
 
 
 //------//
-app.post("/setShuttle", (req, res) => {
+app.post("/setShuttle",verifyToken, (req, res) => {
     console.log("got new post request");
     const shuttle = {
         shuttleID: req.body.shuttleID,
@@ -971,7 +1038,7 @@ app.post("/setShuttle", (req, res) => {
 
 
 //------//
-app.post("/setLiftRiderMark", (req, res) => {
+app.post("/setLiftRiderMark",verifyToken, (req, res) => {
     console.log("got new post request");
     const shuttle = {
         shuttleID: req.body.shuttleID,
@@ -1011,7 +1078,7 @@ app.post("/setLiftRiderMark", (req, res) => {
 
 
 //------//
-app.post("/setLiftRiderApproved", (req, res) => {
+app.post("/setLiftRiderApproved",verifyToken, (req, res) => {
     console.log("got new post request");
     const shuttle = {
         shuttleID: req.body.shuttleID,
@@ -1053,7 +1120,7 @@ app.post("/setLiftRiderApproved", (req, res) => {
 
 
 //------//
-app.post("/setShuttleRider", (req, res) => {
+app.post("/setShuttleRider",verifyToken, (req, res) => {
     console.log("got new post request");
     const shuttleRider = {
         shuttleID: req.body.shuttleID,
@@ -1091,7 +1158,7 @@ app.post("/setShuttleRider", (req, res) => {
 
 
 //------//
-app.post("/setLiftSupervisor", (req, res) => {
+app.post("/setLiftSupervisor",verifyToken, (req, res) => {
     console.log("got new post request");
     const shuttleRider = {
         shuttleID: req.body.shuttleID,
@@ -1129,7 +1196,7 @@ app.post("/setLiftSupervisor", (req, res) => {
 
 
 //------//
-app.post("/setSupervisor", (req, res) => {
+app.post("/setSupervisor",verifyToken, (req, res) => {
     console.log("got new post request");
     const Supervisor = {
         supervisorID: req.body.supervisorID,
@@ -1167,7 +1234,7 @@ app.post("/setSupervisor", (req, res) => {
 
 
 //------//
-app.post("/setRiderDefultes", (req, res) => {
+app.post("/setRiderDefultes",verifyToken, (req, res) => {
     console.log("got new post request");
     const Rider = {
         sid: req.body.sid,
@@ -1207,7 +1274,7 @@ app.post("/setRiderDefultes", (req, res) => {
 
 
 //------//
-app.post("/setRiderShuttles", (req, res) => {
+app.post("/setRiderShuttles",verifyToken, (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
     for(var i = 0 ; i < req.body.length ; i ++ ) {
@@ -1247,7 +1314,7 @@ app.post("/setRiderShuttles", (req, res) => {
 
 
 //------//
-app.post("/removeRiderShuttles", (req, res) => {
+app.post("/removeRiderShuttles",verifyToken, (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
     for(var i = 0 ; i < req.body.length ; i ++ ) {
@@ -1286,7 +1353,7 @@ app.post("/removeRiderShuttles", (req, res) => {
 });
 //----------------D E L E T E-----------------------//
 //------//
-app.post("/deleteShuttle", (req, res) => {
+app.post("/deleteShuttle",verifyToken, (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
 
@@ -1312,7 +1379,7 @@ app.post("/deleteShuttle", (req, res) => {
 });
 
 //------//
-app.post("/deleteShuttleRider", (req, res) => {
+app.post("/deleteShuttleRider",verifyToken, (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
 
@@ -1338,7 +1405,7 @@ app.post("/deleteShuttleRider", (req, res) => {
 });
 
 
-app.post("/deleteLiftRider", (req, res) => {
+app.post("/deleteLiftRider",verifyToken, (req, res) => {
     console.log("got new post request");
     console.log(req.body.length)
 
@@ -1365,7 +1432,7 @@ app.post("/deleteLiftRider", (req, res) => {
 
 
 //------//
-app.post("/deleteSupervisor", (req, res) => {
+app.post("/deleteSupervisor",verifyToken,(req, res) => {
     console.log("got new post request");
     MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
         assert.equal(null, err);
@@ -1390,7 +1457,7 @@ app.post("/deleteSupervisor", (req, res) => {
 
 
 //------//
-app.post("/deleteUser", (req, res) => {
+app.post("/deleteUser",verifyToken, (req, res) => {
     console.log("got new post request");
     MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
         assert.equal(null, err);
@@ -1415,7 +1482,7 @@ app.post("/deleteUser", (req, res) => {
 
 
 //------//
-app.post("/deleteLiftSupervisor", (req, res) => {
+app.post("/deleteLiftSupervisor",verifyToken, (req, res) => {
     console.log("got new post request");
     MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
         assert.equal(null, err);
@@ -1440,7 +1507,7 @@ app.post("/deleteLiftSupervisor", (req, res) => {
 
 
 //------//
-app.post("/deleteRider", (req, res) => {
+app.post("/deleteRider",verifyToken, (req, res) => {
     console.log("got new post request");
     MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
         assert.equal(null, err);
@@ -1485,19 +1552,20 @@ app.listen(port, () => {
 
 
 
-app.post("/private", (req, res) => {
+
+function verifyToken(req, res, next) {
+    // Get auth header value
     const token = req.header("x-auth-token");
-    // no token
-    if (!token) res.status(401).send("Access denied. No token provided.");
-    // verify token
-    try {
-        const decoded = jwt.verify(token, secret);
-        req.decoded = decoded;
-        if (req.decoded.admin)
-            res.status(200).send({ result: "Hello admin." });
-        else
-            res.status(200).send({ result: "Hello user." });
-    } catch (exception) {
-        res.status(400).send("Invalid token.");
+    const bearerHeader = req.headers['authorization'];
+    // Check if bearer is undefined
+    if(typeof token !== 'undefined') {
+        // Split at the space
+        req.token = token;
+        // Next middleware
+        next();
+    } else {
+        // Forbidden
+        res.sendStatus(403);
     }
-});
+}
+

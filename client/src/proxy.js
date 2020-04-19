@@ -1,5 +1,10 @@
 const client = require('./client');
 
+export async function login(body) {
+  const { data } = await client.post(`/login`, body);
+  return data;
+}
+
 export async function getAllShuttles() {
   const { data } = await client.get( `/getAllShuttles`);
   return data;
@@ -73,6 +78,11 @@ export async function getAllShuttleRiders(shuttleID) {
 
 export async function getShuttleRidersByShuttle(shuttleID) {
   const { data } = await client.get(`/getShuttleRidersByShuttle/${shuttleID}`);
+  return data;
+}
+
+export async function getAllShuttlesRiders() {
+  const { data } = await client.get(`/getAllShuttlesRiders`);
   return data;
 }
 

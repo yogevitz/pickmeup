@@ -56,10 +56,13 @@ export default function AttendanceList(props) {
       data={props.data}
       icons={tableIcons}
       options={{
+        toolbar: true,
         paging: false,
         selection: true,
         showTextRowsSelected: false,
         showSelectAllCheckbox: false,
+        exportButton: true,
+        exportAllData: true,
       }}
       actions={[{
         icon: <SupervisorAccountIcon />,

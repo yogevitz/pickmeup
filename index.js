@@ -534,41 +534,35 @@ app.get("/getPassword/:userID",verifyToken, (req, res) => {
 
 app.post("/login", (req, res) => {
     console.log("Got GET Request");
-    userID = req.body.userID;
-    password=req.body.password;
-    user = '';
-    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
-    {
-        assert.equal(null, err);
-        console.log("Successfully connected to server");
-        let db = client.db('PickMeUp');
-        // Find some documents in our collection
-
-        db.collection('Users').find({userID:userID,password:password}).toArray(function(err, docs) {
-            // Print the documents returned
-
-            if(docs.length===0)
-                res.status(400).send('No Such User or password, try again')
-            else
-            {
-                docs.forEach(function (doc) {
-                    user = doc;
-
-                    jwt.sign({user}, secret, { expiresIn: '24h' }, (err, token) => {
-                        const toSend =  {
-                            type:user.type,
-                            token:token
-                        }
-                        res.status(200).send(toSend)
-                    });
-
-                });
-            }
-            // Close the DB
-            client.close();
-        });
+    const userID = req.body.userID;
+    const password = req.body.password;
+    let user = '';
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
+      assert.equal(null, err);
+      console.log("Successfully connected to server");
+      let db = client.db('PickMeUp');
+      // Find some documents in our collection
+      db.collection('Users').find({ userID, password }).toArray(function(err, docs) {
+        // Print the documents returned
+        if (docs.length === 0) {
+          res.status(400).send('No Such User or password, try again');
+        } else {
+          docs.forEach(function (doc) {
+            user = doc;
+            jwt.sign({ user }, secret, { expiresIn: '24h' }, (err, token) => {
+              const toSend = {
+                type: user.type,
+                token: token,
+              };
+              res.status(200).send(toSend);
+            });
+          });
+        }
+        // Close the DB
+        client.close();
+      });
       // Declare success
-        console.log("Called find()");
+      console.log("Called find()");
     });
     client.close();
 });
@@ -1607,6 +1601,6 @@ async function verifyToken(req, res, next) {
 */
 
 function verifyToken(req, res, next) {
-next();
+  next();
 }
 

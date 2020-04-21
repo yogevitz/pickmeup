@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Container from "@material-ui/core/Container";
 import CardHeader from "@material-ui/core/CardHeader";
 import Card from "@material-ui/core/Card";
@@ -15,6 +16,7 @@ import Supervisors from "./pages/supervisors";
 import Riders from "./pages/riders";
 import Schedule from "./pages/schedule";
 import Settings from "./pages/settings";
+import { login } from './proxy';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,9 +70,17 @@ const useStyles = makeStyles(theme => ({
 export default function NavTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [isConnected, setIsConnected] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const onLogin = async () => {
+    const data = await login();
+    if (data && data.type && data.type === 'Admin') {
+      setIsConnected({isConnected: true});
+    }
   };
 
   const showCreditFooter = false;
@@ -79,40 +89,49 @@ export default function NavTabs() {
     <div className={classes.root}>
       <Container fixed style={{ paddingBottom: "15px" }}>
         <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
-          <CardHeader title={'Shuttles System'} />
-          <AppBar position="static">
-            <Tabs
-              variant="fullWidth"
-              value={value}
-              onChange={handleChange}
-              aria-label="Shuttles System"
-            >
-              <LinkTab label="War Room" href="/" {...a11yProps(0)} />
-              <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
-              <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
-              <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
-              <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} />
-              <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            <WarRoom/>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Shuttles/>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <Supervisors/>
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <Riders/>
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            <Schedule/>
-          </TabPanel>
-          <TabPanel value={value} index={5}>
-            <Settings/>
-          </TabPanel>
+          {!isConnected
+            ? (
+              <Button onClick={onLogin}>
+                Log in
+              </Button>)
+            : (
+              <div>
+                <CardHeader title={'Shuttles System'} />
+                <AppBar position="static">
+                  <Tabs
+                    variant="fullWidth"
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="Shuttles System"
+                  >
+                    <LinkTab label="War Room" href="/" {...a11yProps(0)} />
+                    <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
+                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
+                    <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
+                    <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} />
+                    <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
+                  </Tabs>
+                </AppBar>
+                <TabPanel value={value} index={0}>
+                  <WarRoom/>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <Shuttles/>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <Supervisors/>
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                  <Riders/>
+                </TabPanel>
+                <TabPanel value={value} index={4}>
+                  <Schedule/>
+                </TabPanel>
+                <TabPanel value={value} index={5}>
+                  <Settings/>
+                </TabPanel>
+              </div>
+            )}
         </Card>
         {showCreditFooter && <div style={{ fontSize: "11px", textAlign: "center" }}>
           Powered by PickMeUp.com

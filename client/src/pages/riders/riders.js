@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from "../../components/Table";
-import { getAllRiders, createRider, deleteRider, setRider } from '../../proxy';
+import Grid from "@material-ui/core/Grid";
+import { getAllRiders, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -20,12 +21,21 @@ class Riders extends React.Component {
     super(props);
     this.state = {
       riders: [],
+      ridersShuttles: {},
     };
   }
 
   async componentWillMount() {
-    const riders = await getAllRiders();
-    this.setState({ riders: riders });
+    let riders = await getAllRiders();
+    const shuttlesRiders = await getAllShuttlesRiders();
+    const ridersShuttles = {};
+    riders.forEach(rider => {
+      const riderID = rider.riderID;
+      const riderShuttles = shuttlesRiders.filter(_ => _.riderID === riderID);
+      ridersShuttles[riderID] = riderShuttles
+        .map(_ => ({ shuttleID: _.shuttleID, shuttleName: _.shuttleName }));
+    });
+    this.setState({ riders, ridersShuttles });
   }
 
   handleAdd = async newData => {
@@ -51,6 +61,29 @@ class Riders extends React.Component {
     this.setState({ riders: tmpRiders });
   };
 
+  renderDetailPanel = rowData => {
+    const { ridersShuttles } = this.state;
+    const riderID = rowData.riderID;
+    const riderName = rowData.name;
+    const shuttles = ridersShuttles[riderID];
+    console.log(shuttles);
+    return (
+      <Grid container justify="center" style={{ textAlign: 'center' }}>
+        <Table
+          title={`${riderName}'s Shuttles`}
+          columns={[
+            { title: 'Name', field: 'shuttleName' },
+            { title: 'Shuttle ID', field: 'shuttleID' },
+          ]}
+          data={shuttles}
+          paging={false}
+          editable={true}
+          tableLayout="fixed"
+        />
+      </Grid>
+    );
+  };
+
   render() {
     const { riders } = this.state;
     return (
@@ -62,6 +95,7 @@ class Riders extends React.Component {
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
+          detailPanel={this.renderDetailPanel}
           editable={true}
         />
       </div>

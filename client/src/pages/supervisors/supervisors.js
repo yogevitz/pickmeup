@@ -59,7 +59,10 @@ class Supervisors extends React.Component {
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
-          editable={true}
+          paging={true}
+          addable={true}
+          updateable={true}
+          deleteable={true}
         />
       </div>
     );

@@ -1,7 +1,6 @@
 import React from 'react';
 import Table from "../../components/Table";
-import Grid from "@material-ui/core/Grid";
-import { getAllRiders, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
+import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -22,11 +21,13 @@ class Riders extends React.Component {
     this.state = {
       riders: [],
       ridersShuttles: {},
+      shuttles: [],
     };
   }
 
   async componentWillMount() {
     let riders = await getAllRiders();
+    const shuttles = await getAllShuttles();
     const shuttlesRiders = await getAllShuttlesRiders();
     const ridersShuttles = {};
     riders.forEach(rider => {
@@ -35,7 +36,7 @@ class Riders extends React.Component {
       ridersShuttles[riderID] = riderShuttles
         .map(_ => ({ shuttleID: _.shuttleID, shuttleName: _.shuttleName }));
     });
-    this.setState({ riders, ridersShuttles });
+    this.setState({ riders, shuttles, ridersShuttles });
   }
 
   handleAdd = async newData => {
@@ -61,26 +62,42 @@ class Riders extends React.Component {
     this.setState({ riders: tmpRiders });
   };
 
+  handleAddRiderShuttle = async newData => {};
+
+  handleDeleteRiderShuttle = async oldData => {};
+
   renderDetailPanel = rowData => {
-    const { ridersShuttles } = this.state;
+    const { ridersShuttles, shuttles } = this.state;
     const riderID = rowData.riderID;
     const riderName = rowData.name;
-    const shuttles = ridersShuttles[riderID];
-    console.log(shuttles);
+    const riderShuttles = ridersShuttles[riderID];
     return (
-      <Grid container justify="center" style={{ textAlign: 'center' }}>
+      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px' }}>
         <Table
           title={`${riderName}'s Shuttles`}
           columns={[
-            { title: 'Name', field: 'shuttleName' },
-            { title: 'Shuttle ID', field: 'shuttleID' },
+            {
+              title: 'Name',
+              field: 'shuttleName',
+            },
+            {
+              title: 'Shuttle ID',
+              field: 'shuttleID',
+            },
           ]}
-          data={shuttles}
+          options={{
+            actionsColumnIndex: 4,
+          }}
+          data={riderShuttles}
           paging={false}
-          editable={true}
+          addable={true}
+          updateable={false}
+          deleteable={true}
           tableLayout="fixed"
+          handleAdd={this.handleAddRiderShuttle}
+          handleDelete={this.handleDeleteRiderShuttle}
         />
-      </Grid>
+      </div>
     );
   };
 
@@ -96,7 +113,10 @@ class Riders extends React.Component {
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
           detailPanel={this.renderDetailPanel}
-          editable={true}
+          paging={true}
+          addable={true}
+          updateable={true}
+          deleteable={true}
         />
       </div>
     );

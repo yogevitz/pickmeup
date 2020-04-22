@@ -102,7 +102,7 @@ class Table extends React.Component {
   };
 
   render() {
-    const { columns, title, editable, detailPanel, tableLayout, paging, pageSize } = this.props;
+    const { columns, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable
@@ -113,21 +113,22 @@ class Table extends React.Component {
         options={{
           pageSize: pageSize || 10,
           toolbar: true,
-          paging: paging !== undefined ? paging : true,
+          paging: paging || false,
           search: true,
-          tableLayout: tableLayout || "auto",
+          tableLayout: "auto",
           detailPanelType: 'single',
           exportButton: true,
           exportAllData: true,
+          toolbarButtonAlignment: 'right',
+          actionsColumnIndex: -1,
         }}
-        editable={editable
-          ? {
-            onRowAdd: this.onAdd,
-            onRowUpdate: this.onUpdate,
-            onRowDelete: this.onDelete,
-          } : undefined}
+        editable={addable || updateable || deleteable ? {
+          onRowAdd: addable ? this.onAdd : undefined,
+          onRowUpdate: updateable ? this.onUpdate : undefined,
+          onRowDelete: deleteable ? this.onDelete : undefined,
+        } : undefined}
         detailPanel={detailPanel}
-        onRowClick={editable && detailPanel
+        onRowClick={detailPanel
           ? (event, rowData, togglePanel) => togglePanel()
           : undefined}
         components={{

@@ -63,6 +63,7 @@ export default function AttendanceList(props) {
         showSelectAllCheckbox: false,
         exportButton: true,
         exportAllData: true,
+        toolbarButtonAlignment: 'right',
       }}
       actions={[{
         icon: <SupervisorAccountIcon />,

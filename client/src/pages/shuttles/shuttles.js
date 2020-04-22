@@ -64,7 +64,7 @@ class Shuttles extends React.Component {
     const shuttleName = rowData.name;
     const riders = shuttlesRiders[shuttleID];
     return (
-      <Grid container justify="center" style={{ textAlign: 'center' }}>
+      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px' }}>
         <Table
           title={`${shuttleName} Riders`}
           columns={[
@@ -72,11 +72,12 @@ class Shuttles extends React.Component {
             { title: 'ID', field: 'riderID' },
           ]}
           data={riders}
-          editable={true}
+          addable={true}
+          updateable={false}
+          deleteable={true}
           tableLayout="fixed"
-          pageSize={5}
         />
-      </Grid>
+      </div>
     );
   };
 
@@ -92,7 +93,9 @@ class Shuttles extends React.Component {
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
           detailPanel={this.renderDetailPanel}
-          editable={true}
+          addable={true}
+          updateable={true}
+          deleteable={true}
         />
       </div>
     );

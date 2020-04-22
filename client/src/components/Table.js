@@ -102,7 +102,7 @@ class Table extends React.Component {
   };
 
   render() {
-    const { columns, title, editable, detailPanel, tableLayout, pageSize } = this.props;
+    const { columns, title, editable, detailPanel, tableLayout, paging, pageSize } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable
@@ -113,7 +113,7 @@ class Table extends React.Component {
         options={{
           pageSize: pageSize || 10,
           toolbar: true,
-          paging: true,
+          paging: paging !== undefined ? paging : true,
           search: true,
           tableLayout: tableLayout || "auto",
           detailPanelType: 'single',

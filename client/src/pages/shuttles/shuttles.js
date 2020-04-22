@@ -72,7 +72,7 @@ class Shuttles extends React.Component {
             { title: 'ID', field: 'riderID' },
           ]}
           data={riders}
-          editable={false}
+          editable={true}
           tableLayout="fixed"
           pageSize={5}
         />

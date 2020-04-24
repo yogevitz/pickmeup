@@ -72,7 +72,7 @@ class Riders extends React.Component {
     const riderName = rowData.name;
     const riderShuttles = ridersShuttles[riderID];
     return (
-      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px' }}>
+      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Table
           title={`${riderName}'s Shuttles`}
           columns={[

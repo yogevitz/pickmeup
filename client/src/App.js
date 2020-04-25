@@ -106,8 +106,8 @@ export default function NavTabs() {
                   >
                     <LinkTab label="War Room" href="/" {...a11yProps(0)} />
                     <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
-                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(2)} />
-                    <LinkTab label="Riders" href="/riders" {...a11yProps(3)} />
+                    <LinkTab label="Riders" href="/riders" {...a11yProps(2)} />
+                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(3)} />
                     <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} />
                     <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
                   </Tabs>
@@ -119,10 +119,10 @@ export default function NavTabs() {
                   <Shuttles/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <Supervisors/>
+                  <Riders/>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                  <Riders/>
+                  <Supervisors/>
                 </TabPanel>
                 <TabPanel value={value} index={4}>
                   <Schedule/>

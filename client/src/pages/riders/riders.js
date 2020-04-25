@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
+import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -34,7 +34,7 @@ class Riders extends React.Component {
     };
   }
 
-  async componentWillMount() {
+  async update() {
     let riders = await getAllRiders();
     const shuttles = await getAllShuttles();
     const shuttlesRiders = await getAllShuttlesRiders();
@@ -46,6 +46,10 @@ class Riders extends React.Component {
         .map(_ => ({ shuttleID: _.shuttleID, shuttleName: _.shuttleName }));
     });
     this.setState({ riders, shuttles, ridersShuttles });
+  }
+
+  async componentWillMount() {
+    await this.update();
   }
 
   handleAdd = async newData => {
@@ -74,11 +78,8 @@ class Riders extends React.Component {
   handleAddRiderShuttle = async (riderID, riderName, shuttleID, shuttleName) => {
     this.closeAddShuttleDialog();
     if (riderID && riderName && shuttleID && shuttleName) {
-      console.log('Add to ShuttlesRiders: ');
-      console.log(`shuttleID: ${shuttleID}`);
-      console.log(`shuttleName: ${shuttleName}`);
-      console.log(`riderID: ${riderID}`);
-      console.log(`riderName: ${riderName}`);
+      await createShuttleRider({ shuttleID, shuttleName, riderID, riderName });
+      await this.update();
     }
   };
 

@@ -16,7 +16,7 @@ import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
 import Remove from '@material-ui/icons/Remove';
 
-const tableIcons = {
+export const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
   Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -36,7 +36,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-class Table extends React.Component {
+export class Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -140,5 +140,3 @@ class Table extends React.Component {
     );
   }
 }
-
-export default Table;

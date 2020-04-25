@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from "../../components/Table";
+import { Table, tableIcons } from "../../components/Table";
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [

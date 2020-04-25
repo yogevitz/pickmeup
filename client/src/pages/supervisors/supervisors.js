@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from "../../components/Table";
+import { Table } from "../../components/Table";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
 
 const columns = [

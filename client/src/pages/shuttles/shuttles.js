@@ -1,6 +1,5 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Table from "../../components/Table";
+import { Table } from "../../components/Table";
 import { getAllShuttles, createShuttle, setShuttle, deleteShuttle, getShuttleRidersByShuttle } from '../../proxy';
 
 const columns = [

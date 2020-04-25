@@ -102,7 +102,7 @@ export class Table extends React.Component {
   };
 
   render() {
-    const { columns, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
+    const { columns, actions, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable
@@ -110,6 +110,7 @@ export class Table extends React.Component {
         columns={columns}
         data={data}
         icons={tableIcons}
+        actions={actions}
         options={{
           pageSize: pageSize || 10,
           toolbar: true,

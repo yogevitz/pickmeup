@@ -1,5 +1,13 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
@@ -22,6 +30,7 @@ class Riders extends React.Component {
       riders: [],
       ridersShuttles: {},
       shuttles: [],
+      isAddShuttleDialogOpen: false,
     };
   }
 
@@ -62,19 +71,80 @@ class Riders extends React.Component {
     this.setState({ riders: tmpRiders });
   };
 
-  handleAddRiderShuttle = async newData => {};
+  handleAddRiderShuttle = async (riderID, riderName, shuttleID, shuttleName) => {
+    this.closeAddShuttleDialog();
+    if (riderID && riderName && shuttleID && shuttleName) {
+      console.log('Add to ShuttlesRiders: ');
+      console.log(`shuttleID: ${shuttleID}`);
+      console.log(`shuttleName: ${shuttleName}`);
+      console.log(`riderID: ${riderID}`);
+      console.log(`riderName: ${riderName}`);
+    }
+  };
 
   handleDeleteRiderShuttle = async oldData => {};
+
+  openAddShuttleDialog = () => {
+    this.setState({ isAddShuttleDialogOpen: true });
+  };
+
+  closeAddShuttleDialog = () => {
+    this.setState({ isAddShuttleDialogOpen: false });
+  };
 
   renderDetailPanel = rowData => {
     const { ridersShuttles, shuttles } = this.state;
     const riderID = rowData.riderID;
     const riderName = rowData.name;
+    let shuttleID = '';
+    let shuttleName = '';
     const riderShuttles = ridersShuttles[riderID];
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
+        <Dialog fullWidth open={this.state.isAddShuttleDialogOpen} onClose={this.closeAddShuttleDialog} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{`Add Shuttle`}</DialogTitle>
+          <DialogContent>
+            <DialogContentText style={{ paddingBottom: '5px' }}>
+              {`Choose a shuttle to add to ${riderName}'s shuttles`}
+            </DialogContentText>
+            <Autocomplete
+              id="add-rider-shuttle"
+              autoComplete={true}
+              openOnFocus={true}
+              options={shuttles}
+              getOptionLabel={(option) => option.name}
+              style={{ width: 500, paddingBottom: '20px' }}
+              onChange={(event, newValue) => {
+                if (newValue) {
+                  shuttleID = newValue.shuttleID;
+                  shuttleName = newValue.name;
+                }
+              }}
+              renderInput={(params) => <TextField {...params} label="Shuttle" />}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeAddShuttleDialog} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={async () =>
+                this.handleAddRiderShuttle(riderID, riderName, shuttleID, shuttleName)}
+              color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Table
           title={`${riderName}'s Shuttles`}
+          actions={[
+            {
+              icon: tableIcons.Add,
+              tooltip: 'Add User',
+              isFreeAction: true,
+              onClick: this.openAddShuttleDialog,
+            }
+          ]}
           columns={[
             {
               title: 'Name',
@@ -90,11 +160,10 @@ class Riders extends React.Component {
           }}
           data={riderShuttles}
           paging={false}
-          addable={true}
+          addable={false}
           updateable={false}
           deleteable={true}
           tableLayout="fixed"
-          handleAdd={this.handleAddRiderShuttle}
           handleDelete={this.handleDeleteRiderShuttle}
         />
       </div>

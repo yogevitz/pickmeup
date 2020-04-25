@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
+import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -83,7 +83,11 @@ class Riders extends React.Component {
     }
   };
 
-  handleDeleteRiderShuttle = async oldData => {};
+  handleDeleteRiderShuttle = async (oldData, riderID) => {
+    const shuttleID = oldData.shuttleID;
+    await deleteShuttleRider({ shuttleID, riderID });
+    await this.update();
+  };
 
   openAddShuttleDialog = () => {
     this.setState({ isAddShuttleDialogOpen: true });
@@ -165,7 +169,7 @@ class Riders extends React.Component {
           updateable={false}
           deleteable={true}
           tableLayout="fixed"
-          handleDelete={this.handleDeleteRiderShuttle}
+          handleDelete={async oldData => this.handleDeleteRiderShuttle(oldData, riderID)}
         />
       </div>
     );

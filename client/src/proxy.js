@@ -92,6 +92,12 @@ export async function createShuttleRider({ shuttleID, shuttleName, riderID, ride
   return data;
 }
 
+export async function deleteShuttleRider({ shuttleID, riderID }) {
+  const body = { shuttleID, riderID };
+  const { data } = await client.post(`/deleteShuttleRider`, body);
+  return data;
+}
+
 export async function getLiftRiders(params) {
   const { shuttleID, date, direction } = params;
   const { data } = await client.get(`/getLiftRiders/${shuttleID}/${date}/${direction}`);

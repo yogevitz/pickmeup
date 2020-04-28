@@ -1,6 +1,5 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Table from "../../components/Table";
+import { Table } from "../../components/Table";
 import { getAllShuttles, createShuttle, setShuttle, deleteShuttle, getShuttleRidersByShuttle } from '../../proxy';
 
 const columns = [
@@ -64,7 +63,7 @@ class Shuttles extends React.Component {
     const shuttleName = rowData.name;
     const riders = shuttlesRiders[shuttleID];
     return (
-      <Grid container justify="center" style={{ textAlign: 'center' }}>
+      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Table
           title={`${shuttleName} Riders`}
           columns={[
@@ -72,11 +71,12 @@ class Shuttles extends React.Component {
             { title: 'ID', field: 'riderID' },
           ]}
           data={riders}
-          editable={false}
+          addable={true}
+          updateable={false}
+          deleteable={true}
           tableLayout="fixed"
-          pageSize={5}
         />
-      </Grid>
+      </div>
     );
   };
 
@@ -92,7 +92,9 @@ class Shuttles extends React.Component {
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
           detailPanel={this.renderDetailPanel}
-          editable={true}
+          addable={true}
+          updateable={true}
+          deleteable={true}
         />
       </div>
     );

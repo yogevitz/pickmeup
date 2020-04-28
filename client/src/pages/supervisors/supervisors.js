@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from "../../components/Table";
+import { Table } from "../../components/Table";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
 
 const columns = [
@@ -59,7 +59,10 @@ class Supervisors extends React.Component {
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
-          editable={true}
+          paging={true}
+          addable={true}
+          updateable={true}
+          deleteable={true}
         />
       </div>
     );

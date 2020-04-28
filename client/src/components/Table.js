@@ -16,7 +16,7 @@ import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
 import Remove from '@material-ui/icons/Remove';
 
-const tableIcons = {
+export const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
   Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -36,7 +36,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-class Table extends React.Component {
+export class Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -102,7 +102,7 @@ class Table extends React.Component {
   };
 
   render() {
-    const { columns, title, editable, detailPanel, tableLayout, pageSize } = this.props;
+    const { columns, actions, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable
@@ -110,23 +110,26 @@ class Table extends React.Component {
         columns={columns}
         data={data}
         icons={tableIcons}
+        actions={actions}
         options={{
           pageSize: pageSize || 10,
           toolbar: true,
-          paging: true,
+          paging: paging || false,
           search: true,
-          tableLayout: tableLayout || "auto",
+          tableLayout: "auto",
           detailPanelType: 'single',
           exportButton: true,
+          exportAllData: true,
+          toolbarButtonAlignment: 'right',
+          actionsColumnIndex: -1,
         }}
-        editable={editable
-          ? {
-            onRowAdd: this.onAdd,
-            onRowUpdate: this.onUpdate,
-            onRowDelete: this.onDelete,
-          } : undefined}
+        editable={addable || updateable || deleteable ? {
+          onRowAdd: addable ? this.onAdd : undefined,
+          onRowUpdate: updateable ? this.onUpdate : undefined,
+          onRowDelete: deleteable ? this.onDelete : undefined,
+        } : undefined}
         detailPanel={detailPanel}
-        onRowClick={editable && detailPanel
+        onRowClick={detailPanel
           ? (event, rowData, togglePanel) => togglePanel()
           : undefined}
         components={{
@@ -138,5 +141,3 @@ class Table extends React.Component {
     );
   }
 }
-
-export default Table;

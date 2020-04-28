@@ -109,8 +109,6 @@ class Riders extends React.Component {
   showInfoAlert = type => {
     this.infoAlertSeverity = INFO_ALERT_SEVERITY[type];
     this.infoAlertText = INFO_ALERT_TEXT[type];
-    console.log(this.infoAlertSeverity);
-    console.log(this.infoAlertText);
     this.setState({ isInfoAlertShown: true });
   };
 

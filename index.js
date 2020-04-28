@@ -2,10 +2,11 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const jwt = require("jsonwebtoken");
+let randtoken = require('rand-token')
 let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];
 secret = "PickMeUp";
-
+var refreshTokens = {}
 
 
 
@@ -555,9 +556,12 @@ app.post("/login", (req, res) => {
                     user = doc;
 
                     jwt.sign({user}, secret, { expiresIn: '24h' }, (err, token) => {
+                        var refreshToken = randtoken.uid(256)
+                        refreshTokens[userID] = refreshToken;
                         const toSend =  {
                             type:user.type,
-                            token:token
+                            token:token,
+                            refreshToken:refreshToken
                         }
                         res.status(200).send(toSend)
                     });
@@ -573,6 +577,43 @@ app.post("/login", (req, res) => {
     client.close();
 });
 
+app.post('/token', function (req, res, next) {
+    var userID = req.body.userID;
+    var refreshToken = req.body.refreshToken;
+    if((refreshToken in refreshTokens) && (refreshTokens[userID] === refreshToken)) {
+        MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+        {
+            assert.equal(null, err);
+            console.log("Successfully connected to server");
+            let db = client.db('PickMeUp');
+            // Find some documents in our collection
+
+            db.collection('Users').find({userID:userID}).toArray(function(err, docs) {
+                if (docs.length === 0)
+                    res.status(400).send('No Such User or password, try again')
+                else {
+                    docs.forEach(function (doc) {
+                        user = doc;
+                        var token = jwt.sign(user, secret, {expiresIn: '2h'});
+                        var refreshToken = randtoken.uid(256)
+                        refreshTokens[userID] = refreshToken;
+                        const toSend = {
+                            type: user.type,
+                            userID: user.userID,
+                            token: token,
+                            refreshToken: refreshToken
+                        }
+                        res.status(200).send(toSend);
+                    });
+                }
+            });
+        });
+    }
+    else{
+        res.status(401).send("Error found ")
+    }
+
+});
 
 //-------------C R E A T E----------------------//
 //------//

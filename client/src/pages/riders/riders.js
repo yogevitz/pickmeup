@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
+import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -8,8 +9,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
@@ -33,10 +32,10 @@ class Riders extends React.Component {
       ridersShuttles: {},
       shuttles: [],
       isAddShuttleDialogOpen: false,
-      isAddSnackbarOpen: false,
-      isDeleteSnackbarOpen: false,
-      isUpdateSnackbarOpen: false,
+      isInfoAlertShown: false,
     };
+    this.infoAlertSeverity = '';
+    this.infoAlertText = '';
   }
 
   async update() {
@@ -62,7 +61,7 @@ class Riders extends React.Component {
     const tmpRiders = this.state.riders;
     tmpRiders.push(newData);
     this.setState({ riders: tmpRiders });
-    this.openSnackbar('add');
+    this.showInfoAlert('add');
   };
 
   handleUpdate = async newData => {
@@ -71,7 +70,7 @@ class Riders extends React.Component {
     tmpRiders = tmpRiders.filter(_ => _.riderID !== newData.riderID);
     tmpRiders.push(newData);
     this.setState({ riders: tmpRiders });
-    this.openSnackbar('update');
+    this.showInfoAlert('update');
   };
 
   handleDelete = async oldData => {
@@ -80,7 +79,7 @@ class Riders extends React.Component {
     let tmpRiders = this.state.riders;
     tmpRiders = tmpRiders.filter(_ => _.riderID !== oldData.riderID);
     this.setState({ riders: tmpRiders });
-    this.openSnackbar('delete');
+    this.showInfoAlert('delete');
   };
 
   handleAddRiderShuttle = async (riderID, riderName, shuttleID, shuttleName) => {
@@ -88,7 +87,7 @@ class Riders extends React.Component {
     if (riderID && riderName && shuttleID && shuttleName) {
       await createShuttleRider({ shuttleID, shuttleName, riderID, riderName });
       await this.update();
-      this.openSnackbar('add');
+      this.showInfoAlert('add');
     }
   };
 
@@ -96,7 +95,7 @@ class Riders extends React.Component {
     const shuttleID = oldData.shuttleID;
     await deleteShuttleRider({ shuttleID, riderID });
     await this.update();
-    this.openSnackbar('delete');
+    this.showInfoAlert('delete');
   };
 
   openAddShuttleDialog = () => {
@@ -107,22 +106,20 @@ class Riders extends React.Component {
     this.setState({ isAddShuttleDialogOpen: false });
   };
 
-  openSnackbar = type => {
-    this.setState(type === 'add'
-      ? { isAddSnackbarOpen: true }
-      : type === 'update'
-        ? { isUpdateSnackbarOpen: true }
-        : { isDeleteSnackbarOpen: true });
+  showInfoAlert = type => {
+    this.infoAlertSeverity = INFO_ALERT_SEVERITY[type];
+    this.infoAlertText = INFO_ALERT_TEXT[type];
+    console.log(this.infoAlertSeverity);
+    console.log(this.infoAlertText);
+    this.setState({ isInfoAlertShown: true });
   };
 
-  closeSnackbar = (event, reason) => {
+  handleCloseInfoAlert = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     this.setState({
-      isAddSnackbarOpen: false,
-      isDeleteSnackbarOpen: false,
-      isUpdateSnackbarOpen: false
+      isInfoAlertShown: false,
     });
   };
 
@@ -204,34 +201,16 @@ class Riders extends React.Component {
     );
   };
 
-  renderSnackbars = () => {
-    const { isAddSnackbarOpen, isDeleteSnackbarOpen, isUpdateSnackbarOpen } = this.state;
-    return (
-      <div>
-        <Snackbar open={isAddSnackbarOpen} autoHideDuration={3000} onClose={this.closeSnackbar}>
-          <MuiAlert elevation={6} variant="filled" onClose={this.closeSnackbar} severity="success">
-            Successfully Added :)
-          </MuiAlert>
-        </Snackbar>
-        <Snackbar open={isDeleteSnackbarOpen} autoHideDuration={3000} onClose={this.closeSnackbar}>
-          <MuiAlert elevation={6} variant="filled" onClose={this.closeSnackbar} severity="info">
-            Successfully Deleted!
-          </MuiAlert>
-        </Snackbar>
-        <Snackbar open={isUpdateSnackbarOpen} autoHideDuration={3000} onClose={this.closeSnackbar}>
-          <MuiAlert elevation={6} variant="filled" onClose={this.closeSnackbar} severity="info">
-            Successfully Updated!
-          </MuiAlert>
-        </Snackbar>
-      </div>
-    );
-  };
-
   render() {
-    const { riders } = this.state;
+    const { riders, isInfoAlertShown } = this.state;
     return (
       <div>
-        {this.renderSnackbars()}
+        <InfoAlert
+          isOpen={isInfoAlertShown}
+          onClose={this.handleCloseInfoAlert}
+          severity={this.infoAlertSeverity}
+          text={this.infoAlertText}
+        />
         <Table
           title="Riders"
           columns={columns}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from "../../components/Table";
+import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { getAllShuttles, createShuttle, setShuttle, deleteShuttle, getShuttleRidersByShuttle } from '../../proxy';
 
 const columns = [
@@ -18,7 +19,10 @@ class Shuttles extends React.Component {
     this.state = {
       shuttles: [],
       shuttlesRiders: {},
+      isInfoAlertShown: false,
     };
+    this.infoAlertSeverity = '';
+    this.infoAlertText = '';
   }
 
   async componentWillMount() {
@@ -39,6 +43,7 @@ class Shuttles extends React.Component {
     const tmpShuttles = this.state.shuttles;
     tmpShuttles.push(newData);
     this.setState({ shuttles: tmpShuttles });
+    this.showInfoAlert('add');
   };
 
   handleUpdate = async newData => {
@@ -47,6 +52,7 @@ class Shuttles extends React.Component {
     tmpShuttles = tmpShuttles.filter(_ => _.shuttleID !== newData.shuttleID);
     tmpShuttles.push(newData);
     this.setState({ shuttles: tmpShuttles });
+    this.showInfoAlert('update');
   };
 
   handleDelete = async oldData => {
@@ -55,6 +61,22 @@ class Shuttles extends React.Component {
     let tmpShuttles = this.state.shuttles;
     tmpShuttles = tmpShuttles.filter(_ => _.shuttleID !== oldData.shuttleID);
     this.setState({ shuttles: tmpShuttles });
+    this.showInfoAlert('delete');
+  };
+
+  showInfoAlert = type => {
+    this.infoAlertSeverity = INFO_ALERT_SEVERITY[type];
+    this.infoAlertText = INFO_ALERT_TEXT[type];
+    this.setState({ isInfoAlertShown: true });
+  };
+
+  handleCloseInfoAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({
+      isInfoAlertShown: false,
+    });
   };
 
   renderDetailPanel = rowData => {
@@ -81,9 +103,15 @@ class Shuttles extends React.Component {
   };
 
   render() {
-    const { shuttles } = this.state;
+    const { shuttles, isInfoAlertShown } = this.state;
     return (
       <div>
+        <InfoAlert
+          isOpen={isInfoAlertShown}
+          onClose={this.handleCloseInfoAlert}
+          severity={this.infoAlertSeverity}
+          text={this.infoAlertText}
+        />
         <Table
           title="Shuttles"
           columns={columns}

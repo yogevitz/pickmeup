@@ -169,7 +169,7 @@ class Riders extends React.Component {
           actions={[
             {
               icon: tableIcons.Add,
-              tooltip: 'Add User',
+              tooltip: 'Add Shuttle',
               isFreeAction: true,
               onClick: this.openAddShuttleDialog,
             }

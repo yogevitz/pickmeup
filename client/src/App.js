@@ -14,6 +14,7 @@ import WarRoom from "./pages/war-room";
 import Shuttles from "./pages/shuttles";
 import Supervisors from "./pages/supervisors";
 import Riders from "./pages/riders";
+import Login from "./pages/login";
 import Schedule from "./pages/schedule";
 import Settings from "./pages/settings";
 import { login } from './proxy';

@@ -1,7 +1,24 @@
 import React from 'react';
-import { Table } from "../../components/Table";
+import { Table, tableIcons } from "../../components/Table";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
-import { getAllShuttles, createShuttle, setShuttle, deleteShuttle, getShuttleRidersByShuttle } from '../../proxy';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  getAllShuttles,
+  getAllRiders,
+  createShuttle,
+  setShuttle,
+  deleteShuttle,
+  getShuttleRidersByShuttle,
+  createShuttleRider,
+  deleteShuttleRider,
+} from '../../proxy';
+import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 const columns = [
   { title: 'Name', field: 'name' },
@@ -19,23 +36,31 @@ class Shuttles extends React.Component {
     this.state = {
       shuttles: [],
       shuttlesRiders: {},
+      riders: [],
+      isAddRiderDialogOpen: false,
       isInfoAlertShown: false,
     };
     this.infoAlertSeverity = '';
     this.infoAlertText = '';
   }
 
-  async componentWillMount() {
+  async update() {
     const shuttles = await getAllShuttles();
+    const riders = await getAllRiders();
     const shuttlesRiders = {};
-    shuttles.forEach(async shuttle => {
+    await shuttles.forEach(async shuttle => {
       const shuttleID = shuttle.shuttleID;
       const shuttleRiders = await getShuttleRidersByShuttle(shuttleID);
       shuttlesRiders[shuttleID] = shuttleRiders.map(_ => ({
         riderID: _.riderID, riderName: _.riderName,
       }));
     });
-    this.setState({ shuttles, shuttlesRiders });
+    console.log({shuttles, riders, shuttlesRiders});
+    this.setState({ shuttles, riders, shuttlesRiders });
+  }
+
+  async componentWillMount() {
+    await this.update();
   }
 
   handleAdd = async newData => {
@@ -64,6 +89,31 @@ class Shuttles extends React.Component {
     this.showInfoAlert('delete');
   };
 
+  handleAddShuttleRider = async (shuttleID, shuttleName, riderID, riderName) => {
+    console.log({riderID, riderName, shuttleID, shuttleName});
+    this.closeAddRiderDialog();
+    if (shuttleID && shuttleName && riderID && riderName) {
+      await createShuttleRider({ shuttleID, shuttleName, riderID, riderName });
+      await this.update();
+      this.showInfoAlert('add');
+    }
+  };
+
+  handleDeleteShuttleRider = async (oldData, shuttleID) => {
+    const riderID = oldData.riderID;
+    await deleteShuttleRider({ shuttleID, riderID });
+    await this.update();
+    this.showInfoAlert('delete');
+  };
+
+  openAddRiderDialog = () => {
+    this.setState({ isAddRiderDialogOpen: true });
+  };
+
+  closeAddRiderDialog = () => {
+    this.setState({ isAddRiderDialogOpen: false });
+  };
+
   showInfoAlert = type => {
     this.infoAlertSeverity = INFO_ALERT_SEVERITY[type];
     this.infoAlertText = INFO_ALERT_TEXT[type];
@@ -80,23 +130,69 @@ class Shuttles extends React.Component {
   };
 
   renderDetailPanel = rowData => {
-    const { shuttlesRiders } = this.state;
+    const { shuttlesRiders, riders } = this.state;
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.name;
-    const riders = shuttlesRiders[shuttleID];
+    let riderID = '';
+    let riderName = '';
+    const shuttleRiders = shuttlesRiders[shuttleID];
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
+        <Dialog fullWidth open={this.state.isAddRiderDialogOpen} onClose={this.closeAddRiderDialog} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{`Add Rider`}</DialogTitle>
+          <DialogContent>
+            <DialogContentText style={{ paddingBottom: '5px' }}>
+              {`Choose a rider to add to ${shuttleName}`}
+            </DialogContentText>
+            <Autocomplete
+              id="add-shuttle-rider"
+              autoComplete={true}
+              openOnFocus={true}
+              options={riders}
+              getOptionLabel={(option) => `${option.name}  (ID: ${option.riderID}, Class: ${option.class})`}
+              style={{ width: 500, paddingBottom: '20px' }}
+              onChange={(event, newValue) => {
+                if (newValue) {
+                  riderID = newValue.riderID;
+                  riderName = newValue.name;
+                }
+              }}
+              renderInput={(params) => <TextField {...params} label="Rider" />}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeAddRiderDialog} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={async () =>
+                this.handleAddShuttleRider(shuttleID, shuttleName, riderID, riderName)}
+              color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Table
           title={`${shuttleName} Riders`}
+          actions={[
+            {
+              icon: tableIcons.Add,
+              tooltip: 'Add Rider',
+              isFreeAction: true,
+              onClick: this.openAddRiderDialog,
+            }
+          ]}
           columns={[
             { title: 'Name', field: 'riderName' },
             { title: 'ID', field: 'riderID' },
           ]}
-          data={riders}
-          addable={true}
+          data={shuttleRiders || []}
+          paging={false}
+          addable={false}
           updateable={false}
           deleteable={true}
           tableLayout="fixed"
+          handleDelete={async oldData => this.handleDeleteShuttleRider(oldData, shuttleID)}
         />
       </div>
     );
@@ -115,7 +211,7 @@ class Shuttles extends React.Component {
         <Table
           title="Shuttles"
           columns={columns}
-          data={shuttles}
+          data={shuttles  || []}
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}

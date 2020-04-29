@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from "../../components/Table";
+import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
 
 const columns = [
@@ -17,7 +18,10 @@ class Supervisors extends React.Component {
     super(props);
     this.state = {
       supervisors: [],
+      isInfoAlertShown: false,
     };
+    this.infoAlertSeverity = '';
+    this.infoAlertText = '';
   }
 
   async componentWillMount() {
@@ -30,6 +34,7 @@ class Supervisors extends React.Component {
     const tmpSupervisors = this.state.supervisors;
     tmpSupervisors.push(newData);
     this.setState({ supervisors: tmpSupervisors });
+    this.showInfoAlert('add');
   };
 
   handleUpdate = async newData => {
@@ -38,6 +43,7 @@ class Supervisors extends React.Component {
     tmpSupervisors = tmpSupervisors.filter(_ => _.supervisorID !== newData.supervisorID);
     tmpSupervisors.push(newData);
     this.setState({ supervisors: tmpSupervisors });
+    this.showInfoAlert('update');
   };
 
   handleDelete = async oldData => {
@@ -46,12 +52,34 @@ class Supervisors extends React.Component {
     let tmpSupervisors = this.state.supervisors;
     tmpSupervisors = tmpSupervisors.filter(_ => _.supervisorID !== oldData.supervisorID);
     this.setState({ supervisors: tmpSupervisors });
+    this.showInfoAlert('delete');
+  };
+
+  showInfoAlert = type => {
+    this.infoAlertSeverity = INFO_ALERT_SEVERITY[type];
+    this.infoAlertText = INFO_ALERT_TEXT[type];
+    this.setState({ isInfoAlertShown: true });
+  };
+
+  handleCloseInfoAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({
+      isInfoAlertShown: false,
+    });
   };
 
   render() {
-    const { supervisors } = this.state;
+    const { supervisors, isInfoAlertShown } = this.state;
     return (
       <div>
+        <InfoAlert
+          isOpen={isInfoAlertShown}
+          onClose={this.handleCloseInfoAlert}
+          severity={this.infoAlertSeverity}
+          text={this.infoAlertText}
+        />
         <Table
           title="Supervisors"
           columns={columns}

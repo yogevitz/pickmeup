@@ -213,6 +213,15 @@ class Riders extends React.Component {
     );
   };
 
+  downloadQR = () => {
+    let canvas = document.getElementById("qr-code-canvas");
+    let url = canvas.toDataURL("image/png");
+    let link = document.createElement('a');
+    link.download = `${this.qrCodeName}.png`;
+    link.href = document.getElementById('qr-code-canvas').toDataURL();
+    link.click();
+  };
+
   render() {
     const { riders, isInfoAlertShown } = this.state;
     return (
@@ -233,7 +242,7 @@ class Riders extends React.Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={this.downloadQR}
               color="primary">
               Export
             </Button>

@@ -23,7 +23,6 @@ class WarRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      liftRiders: [],
       lifts: [],
     };
     this.shuttles = [];

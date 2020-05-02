@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-
+import { Button, FormGroup, FormControl } from "@material-ui/core";
 
 export default function Login() {
     const [userID, setEmail] = useState("");
@@ -18,7 +17,7 @@ export default function Login() {
         <div className="Login">
             <form onSubmit={handleSubmit}>
                 <FormGroup controlId="userID" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
+                    Email
                     <FormControl
                         autoFocus
                         type="string"
@@ -27,7 +26,7 @@ export default function Login() {
                     />
                 </FormGroup>
                 <FormGroup controlId="password" bsSize="large">
-                    <ControlLabel>Password</ControlLabel>
+                    Password
                     <FormControl
                         value={password}
                         onChange={e => setPassword(e.target.value)}

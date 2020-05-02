@@ -1,5 +1,6 @@
 import React from 'react';
 import AttendanceList from '../../components/AttendanceList';
+import { Table } from "../../components/Table";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -11,6 +12,13 @@ import {
 } from '@material-ui/pickers';
 
 import { getLiftRiders, setLiftRiderMark, setLiftRiderApproved, getAllShuttles } from "../../proxy";
+
+const liftsColumns = [
+  { title: 'Name', field: 'shuttleName' },
+  { title: 'Attendance', field: 'attendance' },
+  { title: 'Supervisor Name', field: 'supervisorName' },
+  { title: 'Supervisor Phone', field: 'supervisorPhone' },
+];
 
 const columns = [
   { title: 'Name', field: 'riderName' },
@@ -27,7 +35,7 @@ class WarRoom extends React.Component {
     };
     this.shuttles = [];
     this.checked = {};
-    this.selectedDate = new Date();
+    this.selectedDate = new Date().toJSON();
   }
 
   onSelectionChange = async (selected, selectedRow) => {
@@ -118,14 +126,24 @@ class WarRoom extends React.Component {
   update = async () => {
     const formattedDate = this.formatDate(this.selectedDate);
 
-    const lifts = await Promise.all(this.shuttles.map(async shuttle => {
+    const lifts = await Promise.all(
+      this.shuttles.map(async shuttle => {
       const shuttleID = shuttle.shuttleID;
       const shuttleName = shuttle.name;
-      const riders = await getLiftRiders({ shuttleID, date: formattedDate, direction: 'Afternoon' });
+      const liftRiders = await getLiftRiders({ shuttleID, date: formattedDate, direction: 'Afternoon' });
+      const riders = liftRiders.map(this.getRiderRowData);
+      console.log(riders);
+      const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
+      const numOfMissingRiders = riders.filter(rider => rider.mark === '0').length;
+      const totalRiders = numOfPresentRiders + numOfMissingRiders;
       return ({
         shuttleID,
         shuttleName,
-        riders: riders.map(this.getRiderRowData),
+        riders,
+        attendance: `${numOfPresentRiders} / ${totalRiders}`,
+        numOfMissingRiders,
+        supervisorName: 'Idan Shani',
+        supervisorPhone: '0546372566',
       })
     }));
 
@@ -142,6 +160,25 @@ class WarRoom extends React.Component {
     await this.updateShuttles();
     await this.update();
   }
+
+  renderDetailPanel = rowData => {
+    const { lifts } = this.state;
+    const shuttleID = rowData.shuttleID;
+    const shuttleName = rowData.shuttleName;
+    const liftRiders = lifts.find(lift => lift.shuttleID === shuttleID).riders;
+    return (
+      <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
+        <AttendanceList
+          title={shuttleName}
+          columns={columns}
+          selection={true}
+          data={liftRiders}
+          onSelectionChange={this.onSelectionChange}
+          onApproveChange={this.onApproveChange}
+        />
+      </div>
+    );
+  };
 
   render() {
     const { lifts } = this.state;
@@ -171,20 +208,17 @@ class WarRoom extends React.Component {
             <RefreshIcon/>
           </Button>)}
         </Grid>
-        <Grid>
-          {lifts.map(lift => lift.riders.length ? (
-            <div key={`shuttle-${lift.shuttleName}`} style={{marginTop: '15px'}}>
-              <AttendanceList
-                title={lift.shuttleName}
-                columns={columns}
-                selection={true}
-                data={lift.riders}
-                onSelectionChange={this.onSelectionChange}
-                onApproveChange={this.onApproveChange}
-                style={{marginTop: '15px'}}
-              />
-            </div>
-          ) : null)}
+        <Grid style={{marginTop: '15px'}}>
+          <Table
+            title={`${moment(this.selectedDate).format('dddd')}, ${moment(this.selectedDate).format('ll')}`}
+            columns={liftsColumns}
+            data={lifts}
+            detailPanel={this.renderDetailPanel}
+            paging={false}
+            addable={false}
+            updateable={false}
+            deleteable={false}
+          />
         </Grid>
       </Grid>
     );

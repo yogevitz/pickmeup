@@ -55,7 +55,6 @@ class Shuttles extends React.Component {
         riderID: _.riderID, riderName: _.riderName,
       }));
     });
-    console.log({shuttles, riders, shuttlesRiders});
     this.setState({ shuttles, riders, shuttlesRiders });
   }
 

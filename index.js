@@ -182,11 +182,11 @@ app.get("/getLiftRiders/:shuttleID/:date/:direction",verifyToken, (req, res) => 
 });
 
 //------//
-app.get("/getLiftSupervisor",verifyToken, (req, res) => {
+app.get("/getLiftSupervisor/:shuttleID/:date/:direction",verifyToken, (req, res) => {
     console.log("Got GET Request");
-    var shuttleID = req.body.shuttleID;
-    var date = req.body.date;
-    var direction = req.body.direction;
+    var shuttleID = req.params.shuttleID;
+    var date = req.params.date;
+    var direction = req.params.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
@@ -536,7 +536,7 @@ app.get("/getPassword/:userID",verifyToken, (req, res) => {
 app.post("/login", (req, res) => {
     console.log("Got GET Request");
     userID = req.body.userID;
-    password=req.body.password;
+    password = req.body.password;
     user = '';
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
@@ -1648,6 +1648,6 @@ async function verifyToken(req, res, next) {
 */
 
 function verifyToken(req, res, next) {
-next();
+  next();
 }
 

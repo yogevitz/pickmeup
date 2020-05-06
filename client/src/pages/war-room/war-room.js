@@ -11,7 +11,13 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-import { getLiftRiders, setLiftRiderMark, setLiftRiderApproved, getAllShuttles } from "../../proxy";
+import {
+  getLiftSupervisor,
+  getLiftRiders,
+  setLiftRiderMark,
+  setLiftRiderApproved,
+  getAllShuttles
+} from "../../proxy";
 
 const liftsColumns = [
   { title: 'Name', field: 'shuttleName' },
@@ -130,15 +136,32 @@ class WarRoom extends React.Component {
       this.shuttles.map(async shuttle => {
       const shuttleID = shuttle.shuttleID;
       const shuttleName = shuttle.name;
-      const liftRiders = await getLiftRiders({ shuttleID, date: formattedDate, direction: 'Afternoon' });
+      const liftSupervisor = await getLiftSupervisor({
+        shuttleID,
+        date: formattedDate,
+        direction: 'Afternoon'
+      });
+      const supervisor = liftSupervisor.length
+        ? liftSupervisor[0]
+        : {};
+      const supervisorID = supervisor.supervisorID;
+      const supervisorName = supervisor.supervisorName;
+      const supervisorPhone = supervisor.supervisorPhone;
+      const liftRiders = await getLiftRiders({
+        shuttleID,
+        date: formattedDate,
+        direction: 'Afternoon'
+      });
       const riders = liftRiders.map(this.getRiderRowData);
-      console.log(riders);
       const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
       const numOfMissingRiders = riders.filter(rider => rider.mark === '0').length;
       const totalRiders = numOfPresentRiders + numOfMissingRiders;
       return ({
         shuttleID,
         shuttleName,
+        supervisorID,
+        supervisorName,
+        supervisorPhone,
         riders,
         attendance: `${numOfPresentRiders} / ${totalRiders}`,
         numOfMissingRiders,

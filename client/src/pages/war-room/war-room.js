@@ -1,6 +1,7 @@
 import React from 'react';
 import AttendanceList from '../../components/AttendanceList';
 import { Table } from "../../components/Table";
+import BSButton from 'react-bootstrap/Button';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -19,6 +20,12 @@ import {
   setLiftRiderApproved,
   getAllShuttles
 } from "../../proxy";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Dialog from "@material-ui/core/Dialog/Dialog";
 
 const liftsColumns = [
   { title: 'Name', field: 'shuttleName' },
@@ -30,16 +37,32 @@ const liftsColumns = [
       return rowData.numOfRiders === 0 ? '' : (
       <ProgressBar>
         <ProgressBar
+          animated
           variant="success"
           label={`${rowData.numOfPresentRiders}`}
           now={100 * rowData.numOfPresentRiders / rowData.numOfRiders}
           key={1}
         />
         <ProgressBar
+          animated
+          variant="info"
+          label={`${rowData.numOfApprovedRiders}`}
+          now={100 * rowData.numOfApprovedRiders / rowData.numOfRiders}
+          key={2}
+        />
+        <ProgressBar
+          animated
           variant="warning"
+          label={`${rowData.numOfMovedRiders}`}
+          now={100 * rowData.numOfMovedRiders / rowData.numOfRiders}
+          key={3}
+        />
+        <ProgressBar
+          animated
+          variant="danger"
           label={`${rowData.numOfMissingRiders}`}
           now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
-          key={2}
+          key={4}
         />
       </ProgressBar>
       )}
@@ -53,15 +76,24 @@ const columns = [
   { title: 'Parent Phone', field: 'parentPhone' },
 ];
 
+const marks = [
+  { id: '0', label: 'Missing' },
+  { id: '1', label: 'Present' },
+  { id: '2', label: 'Approved' },
+  { id: '3', label: 'Moved' },
+];
+
 class WarRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       lifts: [],
+      isSetRiderMarkDialogOpen: false,
     };
     this.shuttles = [];
     this.checked = {};
     this.selectedDate = new Date().toJSON();
+    this.riderMarkDialogData = {};
   }
 
   onSelectionChange = async (selected, selectedRow) => {
@@ -111,6 +143,28 @@ class WarRoom extends React.Component {
     }
 
     this.setState({ lifts: newLifts });
+  };
+
+  onClickMark = rowProps => {
+    this.riderMarkDialogData = rowProps.data;
+    this.setState({ isSetRiderMarkDialogOpen: true });
+  };
+
+  onSetMark = async mark => {
+    this.setState({ isSetRiderMarkDialogOpen: false });
+    const shuttleID = this.riderMarkDialogData.shuttleID;
+    const riderID = this.riderMarkDialogData.riderID;
+
+    await setLiftRiderMark({
+      shuttleID,
+      riderID,
+      date: this.formatDate(this.selectedDate),
+      mark,
+      direction: 'Afternoon',
+    });
+
+    this.riderMarkDialogData = {};
+    await this.update();
   };
 
   onApproveChange = async (event, rowProps) => {
@@ -164,17 +218,19 @@ class WarRoom extends React.Component {
       const supervisor = liftSupervisor.length
         ? liftSupervisor[0]
         : {};
-      const supervisorID = supervisor.supervisorID;
-      const supervisorName = supervisor.supervisorName;
-      const supervisorPhone = supervisor.supervisorPhone;
+      const supervisorID = supervisor.supervisorID || '315662485';
+      const supervisorName = supervisor.supervisorName || 'Idan Shani';
+      const supervisorPhone = supervisor.supervisorPhone || '0549725564';
       const liftRiders = await getLiftRiders({
         shuttleID,
         date: formattedDate,
-        direction: 'Afternoon'
+        direction: 'Afternoon',
       });
       const riders = liftRiders.map(this.getRiderRowData);
-      const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
       const numOfMissingRiders = riders.filter(rider => rider.mark === '0').length;
+      const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
+      const numOfApprovedRiders = riders.filter(rider => rider.mark === '2').length;
+      const numOfMovedRiders = riders.filter(rider => rider.mark === '3').length;
       const numOfRiders = riders.length;
       return ({
         shuttleID,
@@ -185,6 +241,8 @@ class WarRoom extends React.Component {
         riders,
         numOfPresentRiders,
         numOfMissingRiders,
+        numOfApprovedRiders,
+        numOfMovedRiders,
         numOfRiders,
       })
     }));
@@ -203,6 +261,55 @@ class WarRoom extends React.Component {
     await this.update();
   }
 
+  setMarkAction = rowProps => {
+    switch (rowProps.data.mark) {
+      case "0":
+        return (
+          <BSButton
+            block={true}
+            variant="danger"
+            size="sm"
+            onClick={() => this.onClickMark(rowProps)}
+          >
+            Missing
+          </BSButton>
+        );
+      case "1":
+        return (
+          <BSButton
+            block={true}
+            variant="success"
+            size="sm"
+            onClick={() => this.onClickMark(rowProps)}
+          >
+            Present
+          </BSButton>
+        );
+      case "2":
+        return (
+          <BSButton
+            block={true}
+            variant="info"
+            size="sm"
+            onClick={() => this.onClickMark(rowProps)}
+          >
+            Approved
+          </BSButton>
+        );
+      case "3":
+        return (
+          <BSButton
+            block={true}
+            variant="warning"
+            size="sm"
+            onClick={() => this.onClickMark(rowProps)}
+          >
+            Moved
+          </BSButton>
+        );
+    }
+  };
+
   renderDetailPanel = rowData => {
     const { lifts } = this.state;
     const shuttleID = rowData.shuttleID;
@@ -210,13 +317,40 @@ class WarRoom extends React.Component {
     const liftRiders = lifts.find(lift => lift.shuttleID === shuttleID).riders;
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
+        <Dialog fullWidth open={this.state.isSetRiderMarkDialogOpen} onClose={this.closeAddRiderDialog} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{`Set ${this.riderMarkDialogData.riderName}'s Attendance for ${shuttleName}`}</DialogTitle>
+          <DialogContent>
+            <Autocomplete
+              id="set-rider-mark"
+              autoComplete={true}
+              openOnFocus={true}
+              options={marks}
+              getOptionLabel={option => option.label}
+              style={{ paddingBottom: '20px' }}
+              onChange={(event, newValue) => {
+                this.riderMarkDialogData.mark = newValue.id;
+              }}
+              renderInput={(params) => <TextField {...params} label="Mark" />}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.setState({ isSetRiderMarkDialogOpen: false })} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={async () =>
+                this.onSetMark(this.riderMarkDialogData.mark)}
+              color="primary">
+              Update
+            </Button>
+          </DialogActions>
+        </Dialog>
         <AttendanceList
           title={shuttleName}
           columns={columns}
           selection={true}
           data={liftRiders}
-          onSelectionChange={this.onSelectionChange}
-          onApproveChange={this.onApproveChange}
+          setMarkAction={this.setMarkAction}
         />
       </div>
     );

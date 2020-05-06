@@ -43,7 +43,7 @@ export class Table extends React.Component {
     super(props);
     this.state = {
       data: props.data,
-    }
+    };
   }
 
   componentWillMount() {
@@ -104,7 +104,17 @@ export class Table extends React.Component {
   };
 
   render() {
-    const { columns, actions, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
+    const {
+      columns,
+      actions,
+      title,
+      addable,
+      updateable,
+      deleteable,
+      detailPanel,
+      paging,
+      pageSize,
+    } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable

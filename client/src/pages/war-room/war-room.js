@@ -4,6 +4,7 @@ import { Table } from "../../components/Table";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import MomentUtils from '@date-io/moment';
 import moment from 'moment';
 import {
@@ -21,9 +22,28 @@ import {
 
 const liftsColumns = [
   { title: 'Name', field: 'shuttleName' },
-  { title: 'Attendance', field: 'attendance' },
   { title: 'Supervisor Name', field: 'supervisorName' },
   { title: 'Supervisor Phone', field: 'supervisorPhone' },
+  {
+    title: 'Attendance',
+    render: rowData => {
+      return rowData.numOfRiders === 0 ? '' : (
+      <ProgressBar>
+        <ProgressBar
+          variant="success"
+          label={`${rowData.numOfPresentRiders}`}
+          now={100 * rowData.numOfPresentRiders / rowData.numOfRiders}
+          key={1}
+        />
+        <ProgressBar
+          variant="warning"
+          label={`${rowData.numOfMissingRiders}`}
+          now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
+          key={2}
+        />
+      </ProgressBar>
+      )}
+  },
 ];
 
 const columns = [
@@ -155,7 +175,7 @@ class WarRoom extends React.Component {
       const riders = liftRiders.map(this.getRiderRowData);
       const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
       const numOfMissingRiders = riders.filter(rider => rider.mark === '0').length;
-      const totalRiders = numOfPresentRiders + numOfMissingRiders;
+      const numOfRiders = riders.length;
       return ({
         shuttleID,
         shuttleName,
@@ -163,10 +183,9 @@ class WarRoom extends React.Component {
         supervisorName,
         supervisorPhone,
         riders,
-        attendance: `${numOfPresentRiders} / ${totalRiders}`,
+        numOfPresentRiders,
         numOfMissingRiders,
-        supervisorName: 'Idan Shani',
-        supervisorPhone: '0546372566',
+        numOfRiders,
       })
     }));
 

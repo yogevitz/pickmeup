@@ -17,10 +17,7 @@ import Edit from '@material-ui/icons/Edit';
 import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 import Remove from '@material-ui/icons/Remove';
-import Checkbox from "@material-ui/core/Checkbox";
 
 export default function AttendanceList(props) {
   const [state, setState] = React.useState({});
@@ -47,7 +44,7 @@ export default function AttendanceList(props) {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   };
 
-  const { onApproveChange } = props;
+  const { setMarkAction } = props;
 
   return (
     <MaterialTable
@@ -58,7 +55,7 @@ export default function AttendanceList(props) {
       options={{
         toolbar: true,
         paging: false,
-        selection: true,
+        selection: false,
         showTextRowsSelected: false,
         showSelectAllCheckbox: false,
         exportButton: true,
@@ -70,27 +67,13 @@ export default function AttendanceList(props) {
         onClick: () => {},
         position: 'row',
       }]}
-      onSelectionChange={props.onSelectionChange}
       localization={{
         header: {
           actions: <SupervisorAccountIcon />
         },
       }}
       components={{
-        Action: rowProps => (
-          <Checkbox
-            icon={<AssignmentTurnedInOutlinedIcon />}
-            checkedIcon={<AssignmentTurnedInIcon />}
-            checked={!rowProps.data.tableData.checked && rowProps.data.approved === '1'}
-            onChange={(event) => onApproveChange(event, rowProps)}
-            color="primary"
-            disabled={rowProps.data.tableData.checked}
-            variant="contained"
-            style={{textTransform: 'none'}}
-            size="small"
-            tooltip='Approve'
-          />
-        ),
+        Action: setMarkAction,
       }}
     />
   );

@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import QRCode from 'qrcode.react';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
 
 const columns = [
@@ -32,10 +33,13 @@ class Riders extends React.Component {
       ridersShuttles: {},
       shuttles: [],
       isAddShuttleDialogOpen: false,
+      isQRCodeDialogOpen: false,
       isInfoAlertShown: false,
     };
     this.infoAlertSeverity = '';
     this.infoAlertText = '';
+    this.qrCodeName = '';
+    this.qrCodeValue = '';
   }
 
   async update() {
@@ -104,6 +108,16 @@ class Riders extends React.Component {
 
   closeAddShuttleDialog = () => {
     this.setState({ isAddShuttleDialogOpen: false });
+  };
+
+  openQRCodeDialog = (event, rowData) => {
+    this.setState({ isQRCodeDialogOpen: true });
+    this.qrCodeName = rowData.name;
+    this.qrCodeValue = rowData.riderID;
+  };
+
+  closeQRCodeDialog = () => {
+    this.setState({ isQRCodeDialogOpen: false });
   };
 
   showInfoAlert = type => {
@@ -199,6 +213,15 @@ class Riders extends React.Component {
     );
   };
 
+  downloadQR = () => {
+    let canvas = document.getElementById("qr-code-canvas");
+    let url = canvas.toDataURL("image/png");
+    let link = document.createElement('a');
+    link.download = `${this.qrCodeName}.png`;
+    link.href = document.getElementById('qr-code-canvas').toDataURL();
+    link.click();
+  };
+
   render() {
     const { riders, isInfoAlertShown } = this.state;
     return (
@@ -209,10 +232,33 @@ class Riders extends React.Component {
           severity={this.infoAlertSeverity}
           text={this.infoAlertText}
         />
+        <Dialog fullWidth open={this.state.isQRCodeDialogOpen} onClose={this.closeQRCodeDialog} aria-labelledby="form-dialog-title">
+          <DialogTitle id="qr-code-dialog">{`QR Code for ${this.qrCodeName}`}</DialogTitle>
+          <DialogContent style={{ display: 'flex', flexDirection: 'column', margin: 'auto', width: 'fit-content' }}>
+            <QRCode id='qr-code-canvas' value={this.qrCodeValue} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeQRCodeDialog} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={this.downloadQR}
+              color="primary">
+              Export
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Table
           title="Riders"
           columns={columns}
           data={riders}
+          actions={[
+            {
+              icon: tableIcons.CropFree,
+              tooltip: 'Create QR Code',
+              onClick: this.openQRCodeDialog
+            }
+          ]}
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -82,6 +83,7 @@ export default function NavTabs() {
   };
 
   const showCreditFooter = false;
+  const linkTabStyle = { color: 'inherit', textDecoration: 'none' };
 
   return (
     <div className={classes.root}>
@@ -100,12 +102,12 @@ export default function NavTabs() {
                     onChange={handleChange}
                     aria-label="Shuttles System"
                   >
-                    <LinkTab label="War Room" href="/" {...a11yProps(0)} />
-                    <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} />
-                    <LinkTab label="Riders" href="/riders" {...a11yProps(2)} />
-                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(3)} />
-                    <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} />
-                    <LinkTab label="Settings" href="/settings" {...a11yProps(5)} />
+                    <LinkTab label="War Room" href="/" {...a11yProps(0)} style={linkTabStyle} />
+                    <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} style={linkTabStyle} />
+                    <LinkTab label="Riders" href="/riders" {...a11yProps(2)} style={linkTabStyle} />
+                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(3)} style={linkTabStyle} />
+                    <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} style={linkTabStyle} />
+                    <LinkTab label="Settings" href="/settings" {...a11yProps(5)} style={linkTabStyle} />
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>

@@ -112,6 +112,12 @@ export async function getLiftRiders(params) {
   return data;
 }
 
+export async function getLiftSupervisor(params) {
+  const { shuttleID, date, direction } = params;
+  const { data } = await client.get(`/getLiftSupervisor/${shuttleID}/${date}/${direction}`);
+  return data;
+}
+
 export async function setLiftRiderMark(body) {
   const { data } = await client.post(`/setLiftRiderMark`, body);
   return data;

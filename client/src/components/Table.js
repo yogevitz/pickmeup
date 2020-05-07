@@ -15,6 +15,7 @@ import Edit from '@material-ui/icons/Edit';
 import Check from '@material-ui/icons/Check';
 import FilterList from '@material-ui/icons/FilterList';
 import Remove from '@material-ui/icons/Remove';
+import CropFreeIcon from '@material-ui/icons/CropFree';
 
 export const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -33,7 +34,8 @@ export const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  CropFree: forwardRef((props, ref) => <CropFreeIcon {...props} ref={ref} />)
 };
 
 export class Table extends React.Component {
@@ -41,7 +43,7 @@ export class Table extends React.Component {
     super(props);
     this.state = {
       data: props.data,
-    }
+    };
   }
 
   componentWillMount() {
@@ -102,7 +104,17 @@ export class Table extends React.Component {
   };
 
   render() {
-    const { columns, actions, title, addable, updateable, deleteable, detailPanel, tableLayout, paging, pageSize, actionsColumnIndex } = this.props;
+    const {
+      columns,
+      actions,
+      title,
+      addable,
+      updateable,
+      deleteable,
+      detailPanel,
+      paging,
+      pageSize,
+    } = this.props;
     const { data } = this.state;
     return (
       <MaterialTable

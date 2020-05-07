@@ -71,17 +71,14 @@ const useStyles = makeStyles(theme => ({
 export default function NavTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [isConnected, setIsConnected] = React.useState(true);
+  const  [isConnected, setIsConnected] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const onLogin = async () => {
-    const data = await login();
-    if (data && data.type && data.type === 'Admin') {
-      setIsConnected({isConnected: true});
-    }
+  const handleLogin = () => {
+     setIsConnected(true);
   };
 
   const showCreditFooter = false;
@@ -92,9 +89,7 @@ export default function NavTabs() {
         <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
           {!isConnected
             ? (
-              <Button onClick={onLogin}>
-                Log in
-              </Button>)
+              <Login onLogin={handleLogin} />)
             : (
               <div>
                 <CardHeader title={'Shuttles System'} />

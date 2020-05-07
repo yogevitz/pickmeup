@@ -534,7 +534,7 @@ app.get("/getPassword/:userID",verifyToken, (req, res) => {
 //-------------All POST requests--------------//
 
 app.post("/login", (req, res) => {
-    console.log("Got GET Request");
+    console.log("Got post Request");
     userID = req.body.userID;
     password=req.body.password;
     user = '';
@@ -549,7 +549,7 @@ app.post("/login", (req, res) => {
             // Print the documents returned
 
             if(docs.length===0)
-                res.status(400).send('No Such User or password, try again')
+                res.status(200).send("1");
             else
             {
                 docs.forEach(function (doc) {

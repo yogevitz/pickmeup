@@ -1,9 +1,17 @@
 const client = require('./client');
 
 export async function login(body) {
+
   const { data } = await client.post(`/login`, body);
+
   return data;
 }
+
+export async function restorePassword(body) {
+  const { data } = await client.post(`/restorePassword`, body);
+  return data;
+}
+
 
 export async function getAllShuttles() {
   const { data } = await client.get( `/getAllShuttles`);

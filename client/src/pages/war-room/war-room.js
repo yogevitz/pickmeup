@@ -253,7 +253,9 @@ class WarRoom extends React.Component {
   updateShuttles = async () => {
     this.checked = {};
     this.shuttles = await getAllShuttles();
-    this.shuttles.forEach(shuttle => {this.checked[shuttle.shuttleID] = []});
+    this.shuttles
+      .sort((a, b) => (a.name > b.name) ? 1 : -1)
+      .forEach(shuttle => {this.checked[shuttle.shuttleID] = []});
   };
 
   async componentDidMount() {

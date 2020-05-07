@@ -48,11 +48,13 @@ class Shuttles extends React.Component {
     const shuttles = await getAllShuttles();
     const riders = await getAllRiders();
     const shuttlesRiders = {};
-    await shuttles.forEach(async shuttle => {
-      const shuttleID = shuttle.shuttleID;
-      const shuttleRiders = await getShuttleRidersByShuttle(shuttleID);
-      shuttlesRiders[shuttleID] = shuttleRiders.map(_ => ({
-        riderID: _.riderID, riderName: _.riderName,
+    await shuttles
+      .sort((a, b) => (a.name > b.name) ? 1 : -1)
+      .forEach(async shuttle => {
+        const shuttleID = shuttle.shuttleID;
+        const shuttleRiders = await getShuttleRidersByShuttle(shuttleID);
+        shuttlesRiders[shuttleID] = shuttleRiders.map(_ => ({
+          riderID: _.riderID, riderName: _.riderName,
       }));
     });
     this.setState({ shuttles, riders, shuttlesRiders });

@@ -153,18 +153,17 @@ app.get("/getAllUsers", verifyToken, (req, res) => {
 
 
 //------//
-app.get("/getLiftRiders/:shuttleID/:date/:direction",verifyToken, (req, res) => {
+app.get("/getLiftRiders/:shuttleID/:date",verifyToken, (req, res) => {
     console.log("Got GET Request");
     const shuttleID = req.params.shuttleID;
     const date = req.params.date;
-    const direction = req.params.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
         console.log("Successfully connected to server ");
         var db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('LiftRiders').find({ shuttleID, date ,direction }).toArray(function(err, docs) {
+        db.collection('LiftRiders').find({ shuttleID, date }).toArray(function(err, docs) {
             // Print the documents returned
             console.log(docs.length);
             if (docs.length === 0)
@@ -182,18 +181,17 @@ app.get("/getLiftRiders/:shuttleID/:date/:direction",verifyToken, (req, res) => 
 });
 
 //------//
-app.get("/getLiftSupervisor/:shuttleID/:date/:direction",verifyToken, (req, res) => {
+app.get("/getLiftSupervisor/:shuttleID/:date",verifyToken, (req, res) => {
     console.log("Got GET Request");
     var shuttleID = req.params.shuttleID;
     var date = req.params.date;
-    var direction = req.params.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
         console.log("Successfully connected to server");
         var db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date,direction:direction}).toArray(function(err, docs) {
+        db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date}).toArray(function(err, docs) {
             // Print the documents returned
             if(docs.length===0)
                 res.status(200).send([])
@@ -215,14 +213,13 @@ app.get("/getShuttleRiders", verifyToken,(req, res) => {
     console.log("Got GET Request");
     var shuttleID = req.body.shuttleID;
     var date = req.body.date;
-    var direction = req.body.direction;
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
         console.log("Successfully connected to server");
         var db = client.db('PickMeUp');
         // Find some documents in our collection
-        db.collection('ShuttleRiders').find({shuttleID:shuttleID,date:date,direction:direction}).toArray(function(err, docs) {
+        db.collection('ShuttleRiders').find({shuttleID:shuttleID,date:date}).toArray(function(err, docs) {
             // Print the documents returned
             if(docs.length===0)
                 res.status(200).send([])
@@ -653,7 +650,6 @@ app.post("/createLiftRider",verifyToken, (req, res) => {
     const LiftRider = {
         shuttleID: req.body.shuttleID,
         date: req.body.date,
-        direction: req.body.direction,
         riderID: req.body.riderID,
         mark:"0",
         approved:"0"
@@ -685,8 +681,7 @@ app.post("/createLiftSupervisor",verifyToken, (req, res) => {
     const LiftRiderSupervisor = {
         shuttleID: req.body.shuttleID,
         supervisorID: req.body.supervisorID,
-        date:req.body.date,
-        direction:req.body.direction
+        date:req.body.date
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
         assert.equal(null, err);
@@ -745,6 +740,8 @@ app.post("/createShuttle",verifyToken, (req, res) => {
         shuttleID: generateID(10),
         destination: req.body.destination,
         contactName: req.body.contactName,
+        city: req.body.city,
+        direction: req.body.direction,
         contactPhone: req.body.contactPhone,
         name: req.body.name
     };
@@ -845,7 +842,6 @@ app.post("/assignRider",verifyToken, (req, res) => {
     riderID : req.body.riderID,
     shuttleID: req.body.shuttleID,
     date: req.body.date,
-    direction : req.body.direction,
     mark:""
 
   };
@@ -879,7 +875,6 @@ app.post("/assignSupervisor",verifyToken, (req, res) => {
   const SupervisorOnSuttle = {
     supervisorID: req.body.supervisorID,
     shuttleID: req.body.shuttleID,
-    direction:req.body.direction,
     date : req.body.date
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -911,7 +906,6 @@ app.post("/markRider",verifyToken, (req, res) => {
         riderID : req.body.riderID,
         shuttleID: req.body.shuttleID,
         date: req.body.date,
-        direction : req.body.direction,
         mark: req.body.mark
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -925,8 +919,8 @@ app.post("/markRider",verifyToken, (req, res) => {
             db.collection('ShuttleRiders').updateOne(
                 {"riderID" : riderShuttle.riderID,
                     "shuttleID": riderShuttle.shuttleID,
-                    "date":riderShuttle.date,
-                    "direction":riderShuttle.direction},
+                    "date":riderShuttle.date
+                    },
                 { $set:
                     riderShuttle
                 }
@@ -1077,6 +1071,8 @@ app.post("/setShuttle",verifyToken, (req, res) => {
         destination: req.body.destination,
         contactName: req.body.contactName,
         contactPhone: req.body.contactPhone,
+        direction:req.body.direction,
+        city:req.body.city,
         name:req.body.name
 
     };
@@ -1115,9 +1111,8 @@ app.post("/setLiftRiderMark",verifyToken, (req, res) => {
         shuttleID: req.body.shuttleID,
         riderID: req.body.riderID,
         date: req.body.date,
-        direction: req.body.direction,
-        mark:req.body.mark,
-        approved:"0"
+        mark:req.body.mark
+
 
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
@@ -1129,7 +1124,7 @@ app.post("/setLiftRiderMark",verifyToken, (req, res) => {
         // Find some documents in our collection
         try{
             db.collection('LiftRiders').updateOne(
-                {"shuttleID" : shuttle.shuttleID,"riderID":shuttle.riderID,"date":shuttle.date,"direction":shuttle.direction},
+                {"shuttleID" : shuttle.shuttleID,"riderID":shuttle.riderID,"date":shuttle.date},
 
                 { $set:
                     shuttle
@@ -1155,8 +1150,6 @@ app.post("/setLiftRiderApproved",verifyToken, (req, res) => {
         shuttleID: req.body.shuttleID,
         riderID: req.body.riderID,
         date: req.body.date,
-        direction: req.body.direction,
-        approved:req.body.approved,
         mark:"0"
 
     };
@@ -1169,7 +1162,7 @@ app.post("/setLiftRiderApproved",verifyToken, (req, res) => {
         // Find some documents in our collection
         try{
             db.collection('LiftRiders').updateOne(
-                {"shuttleID" : shuttle.shuttleID,"riderID":shuttle.riderID,"date":shuttle.date,"direction":shuttle.direction},
+                {"shuttleID" : shuttle.shuttleID,"riderID":shuttle.riderID,"date":shuttle.date},
 
                 { $set:
                     shuttle
@@ -1234,9 +1227,7 @@ app.post("/setLiftSupervisor",verifyToken, (req, res) => {
     const shuttleRider = {
         shuttleID: req.body.shuttleID,
         supervisorID: req.body.supervisorID,
-        date: req.body.date,
-        direction: req.body.direction
-
+        date: req.body.date
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
@@ -1246,7 +1237,7 @@ app.post("/setLiftSupervisor",verifyToken, (req, res) => {
         // Find some documents in our collection
         try{
             db.collection('LiftSupervisor').updateOne(
-                {"shuttleID" : shuttleRider.shuttleID,"date":shuttleRider.date,"direction":shuttleRider.direction},
+                {"shuttleID" : shuttleRider.shuttleID,"date":shuttleRider.date},
 
                 { $set:
                     shuttleRider
@@ -1489,7 +1480,7 @@ app.post("/deleteLiftRider",verifyToken, (req, res) => {
         try {
             db.collection('LiftRiders').deleteOne(
                 {
-                    "shuttleID":req.body.shuttleID,"riderID":req.body.riderID,"date":req.body.date,"direction":req.body.direction}
+                    "shuttleID":req.body.shuttleID,"riderID":req.body.riderID,"date":req.body.date}
             );
         } catch (e) {
             res.status(400).send(e)
@@ -1563,7 +1554,7 @@ app.post("/deleteLiftSupervisor",verifyToken, (req, res) => {
         try {
             db.collection('LiftSupervisor').deleteOne(
                 {
-                    "supervisorID":req.body.supervisorID,"shuttleID":req.body.shuttleID,"date":req.body.date,"direction":req.body.direction}
+                    "supervisorID":req.body.supervisorID,"shuttleID":req.body.shuttleID,"date":req.body.date}
             );
         } catch (e) {
             res.status(400).send(e)

@@ -148,8 +148,8 @@ class Schedule extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown');
-    window.removeEventListener('keyup');
+    window.removeEventListener('keydown', null);
+    window.removeEventListener('keyup', null);
   }
 
   onKeyDown = event => {

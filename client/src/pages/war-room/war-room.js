@@ -96,55 +96,6 @@ class WarRoom extends React.Component {
     this.riderMarkDialogData = {};
   }
 
-  onSelectionChange = async (selected, selectedRow) => {
-    const shuttleID = selected.length
-      ? selected[0].shuttleID
-      : selectedRow.shuttleID;
-    const selectedIDs = selected.map(_ => _.riderID);
-
-    let newChecked, newUnChecked;
-    let newLifts = this.state.lifts;
-
-    if (this.checked[shuttleID] && selectedIDs.length > this.checked[shuttleID].length) {
-      newChecked = selectedIDs.filter(x => this.checked[shuttleID].indexOf(x) < 0);
-      this.checked[shuttleID].push(...newChecked);
-      newChecked.forEach(async checked => {
-        await setLiftRiderMark({
-          shuttleID,
-          riderID: checked,
-          date: this.formatDate(this.selectedDate),
-          direction: 'Afternoon',
-          mark: '1',
-        });
-
-        const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
-          .riders.find(_ => _.riderID === checked);
-        tmpLiftRider.mark = '1';
-        tmpLiftRider.approved = '0';
-        tmpLiftRider.tableData.checked = true;
-      });
-    } else if (this.checked[shuttleID]) {
-      newUnChecked = this.checked[shuttleID].filter(x => selectedIDs.indexOf(x) < 0);
-      this.checked[shuttleID] = this.checked[shuttleID].filter(_ => newUnChecked.indexOf(_) < 0);
-      newUnChecked.forEach(async unChecked => {
-        await setLiftRiderMark({
-          shuttleID,
-          riderID: unChecked,
-          date: this.formatDate(this.selectedDate),
-          direction: 'Afternoon',
-          mark: '0',
-        });
-
-        const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
-          .riders.find(_ => _.riderID === unChecked);
-        tmpLiftRider.mark = '0';
-        tmpLiftRider.tableData.checked = false;
-      });
-    }
-
-    this.setState({ lifts: newLifts });
-  };
-
   onClickMark = rowProps => {
     this.riderMarkDialogData = rowProps.data;
     this.setState({ isSetRiderMarkDialogOpen: true });
@@ -165,27 +116,6 @@ class WarRoom extends React.Component {
 
     this.riderMarkDialogData = {};
     await this.update();
-  };
-
-  onApproveChange = async (event, rowProps) => {
-    const shuttleID = rowProps.data.shuttleID;
-    const riderID = rowProps.data.riderID;
-    const isApproved = event.target.checked;
-
-    let newLifts = this.state.lifts;
-    const tmpLiftRider = newLifts.find(lift => lift.shuttleID === shuttleID)
-      .riders.find(_ => _.riderID === riderID);
-    tmpLiftRider.approved = isApproved ? '1' : '0';
-
-    await setLiftRiderApproved({
-      shuttleID,
-      riderID,
-      date: this.formatDate(this.selectedDate),
-      direction: 'Afternoon',
-      approved: isApproved ? '1' : '0',
-    });
-
-    this.setState({ lifts: newLifts });
   };
 
   onSelectedDateChange = async (event, newValue) => {

@@ -242,6 +242,9 @@ class WarRoom extends React.Component {
     }
   };
 
+  getTitle = () =>
+    `${moment(this.selectedDate).format('dddd')}, ${moment(this.selectedDate).format('ll')}`;
+
   renderDetailPanel = rowData => {
     const { lifts } = this.state;
     const shuttleID = rowData.shuttleID;
@@ -318,7 +321,7 @@ class WarRoom extends React.Component {
         </Grid>
         <Grid style={{marginTop: '15px'}}>
           <Table
-            title={`${moment(this.selectedDate).format('dddd')}, ${moment(this.selectedDate).format('ll')}`}
+            title={this.getTitle()}
             columns={liftsColumns}
             data={lifts}
             detailPanel={this.renderDetailPanel}

@@ -14,41 +14,56 @@ import {
   TodayButton,
   AppointmentTooltip,
   AppointmentForm,
-  EditRecurrenceMenu,
   DragDropProvider,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { getAllShuttles, getAllSupervisors } from "../../proxy";
 
+const SHIFT_KEY = 16;
+
 const appointments = [
   {
     title: 'Yogev Shlomovitz',
     supervisor: 0,
-    startDate: new Date(2020, 4, 3),
-    endDate: new Date(2020, 4, 7),
+    startDate: new Date(2020, 4, 10),
+    endDate: new Date(2020, 4, 11),
     id: 0,
   },
   {
-    title: 'Idan Shani',
-    supervisor: 1,
-    startDate: new Date(2020, 4, 7),
+    title: 'Yogev Shlomovitz',
+    supervisor: 0,
+    startDate: new Date(2020, 4, 11),
     endDate: new Date(2020, 4, 12),
     id: 1,
   },
   {
+    title: 'Idan Shani',
+    supervisor: 1,
+    startDate: new Date(2020, 4, 12),
+    endDate: new Date(2020, 4, 13),
+    id: 2,
+  },
+  {
     title: 'Hadar Nataf',
     supervisor: 2,
-    startDate: new Date(2020, 4, 12),
-    endDate: new Date(2020, 4, 21),
-    id: 2,
+    startDate: new Date(2020, 4, 13),
+    endDate: new Date(2020, 4, 14),
+    id: 3,
+  },
+  {
+    title: 'Hadar Nataf',
+    supervisor: 2,
+    startDate: new Date(2020, 4, 14),
+    endDate: new Date(2020, 4, 15),
+    id: 4,
   },
   {
     title: 'Tomer Gabay',
     supervisor: 3,
-    startDate: new Date(2020, 4, 21),
-    endDate: new Date(2020, 4, 31),
-    id: 3,
+    startDate: new Date(2020, 4, 15),
+    endDate: new Date(2020, 4, 16),
+    id: 5,
   },
 ];
 
@@ -89,24 +104,33 @@ class Schedule extends React.Component {
           instances: supervisors,
           allowMultiple: false
         }
-      ]
+      ],
+      isShiftPressed: false,
     };
   }
 
   commitChanges = ({ added, changed, deleted }) => {
-    this.setState(state => {
+    this.setState((state) => {
       let { data } = state;
+      const { isShiftPressed } = this.state;
       if (added) {
-        const startingAddedId =
-          data.length > 0 ? data[data.length - 1].id + 1 : 0;
+        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
         data = [...data, { id: startingAddedId, ...added }];
       }
       if (changed) {
-        data = data.map(appointment =>
-          changed[appointment.id]
-            ? { ...appointment, ...changed[appointment.id] }
-            : appointment
-        );
+        if (isShiftPressed) {
+          const changedAppointment = data.find(appointment => changed[appointment.id]);
+          const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
+          data = [
+            ...data,
+            { ...changedAppointment, id: startingAddedId, ...changed[changedAppointment.id] },
+          ];
+        } else {
+          data = data.map(appointment => (
+            changed[appointment.id]
+              ? { ...appointment, ...changed[appointment.id] }
+              : appointment));
+        }
       }
       if (deleted !== undefined) {
         data = data.filter(appointment => appointment.id !== deleted);
@@ -116,10 +140,29 @@ class Schedule extends React.Component {
   };
 
   async componentDidMount() {
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
     const shuttles = await getAllShuttles();
     const supervisors = await getAllSupervisors();
     this.setState({ shuttles, supervisors });
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown');
+    window.removeEventListener('keyup');
+  }
+
+  onKeyDown = event => {
+    if (event.keyCode === SHIFT_KEY) {
+      this.setState({ isShiftPressed: true });
+    }
+  };
+
+  onKeyUp = event => {
+    if (event.keyCode === SHIFT_KEY) {
+      this.setState({ isShiftPressed: false });
+    }
+  };
 
   render() {
     const { shuttles } = this.state;
@@ -146,7 +189,6 @@ class Schedule extends React.Component {
                 <Scheduler data={this.state.data} >
                   <ViewState />
                   <EditingState onCommitChanges={this.commitChanges} />
-                  <EditRecurrenceMenu />
                   <IntegratedEditing />
                   <MonthView />
                   <Toolbar />

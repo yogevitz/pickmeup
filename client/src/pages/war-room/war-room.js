@@ -111,7 +111,6 @@ class WarRoom extends React.Component {
       riderID,
       date: this.formatDate(this.selectedDate),
       mark,
-      direction: 'Afternoon',
     });
 
     this.riderMarkDialogData = {};
@@ -143,7 +142,6 @@ class WarRoom extends React.Component {
       const liftSupervisor = await getLiftSupervisor({
         shuttleID,
         date: formattedDate,
-        direction: 'Afternoon'
       });
       const supervisor = liftSupervisor.length
         ? liftSupervisor[0]
@@ -154,7 +152,6 @@ class WarRoom extends React.Component {
       const liftRiders = await getLiftRiders({
         shuttleID,
         date: formattedDate,
-        direction: 'Afternoon',
       });
       const riders = liftRiders.map(this.getRiderRowData);
       const numOfMissingRiders = riders.filter(rider => rider.mark === '0').length;

@@ -107,14 +107,14 @@ export async function deleteShuttleRider({ shuttleID, riderID }) {
 }
 
 export async function getLiftRiders(params) {
-  const { shuttleID, date, direction } = params;
-  const { data } = await client.get(`/getLiftRiders/${shuttleID}/${date}/${direction}`);
+  const { shuttleID, date } = params;
+  const { data } = await client.get(`/getLiftRiders/${shuttleID}/${date}`);
   return data;
 }
 
 export async function getLiftSupervisor(params) {
-  const { shuttleID, date, direction } = params;
-  const { data } = await client.get(`/getLiftSupervisor/${shuttleID}/${date}/${direction}`);
+  const { shuttleID, date } = params;
+  const { data } = await client.get(`/getLiftSupervisor/${shuttleID}/${date}`);
   return data;
 }
 

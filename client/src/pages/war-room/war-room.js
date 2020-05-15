@@ -17,7 +17,6 @@ import {
   getLiftSupervisor,
   getLiftRiders,
   setLiftRiderMark,
-  setLiftRiderApproved,
   getAllShuttles
 } from "../../proxy";
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
@@ -125,9 +124,8 @@ class WarRoom extends React.Component {
 
   getRiderRowData = rider => {
     const checked = rider.mark === '1';
-    const approved = rider.approved;
     checked && this.checked[rider.shuttleID].push(rider.riderID);
-    return ({ ...rider, approved, tableData: { checked } });
+    return ({ ...rider, tableData: { checked } });
   };
 
   formatDate = date => moment(date).format('DD[-]MM[-]YYYY');

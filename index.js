@@ -652,7 +652,6 @@ app.post("/createLiftRider",verifyToken, (req, res) => {
         date: req.body.date,
         riderID: req.body.riderID,
         mark:"0",
-        approved:"0"
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
         assert.equal(null, err);

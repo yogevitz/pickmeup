@@ -127,3 +127,8 @@ export async function setLiftRiderApproved(body) {
   const { data } = await client.post(`/setLiftRiderApproved`, body);
   return data;
 }
+
+export async function setLiftSupervisor(body) {
+  const { data } = await client.post(`/setLiftSupervisor`, body);
+  return data;
+}

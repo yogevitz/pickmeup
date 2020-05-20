@@ -182,28 +182,55 @@ app.get("/getLiftRiders/:shuttleID/:date",verifyToken, (req, res) => {
 
 //------//
 app.get("/getLiftSupervisor/:shuttleID/:date",verifyToken, (req, res) => {
-    console.log("Got GET Request");
-    var shuttleID = req.params.shuttleID;
-    var date = req.params.date;
-    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
-    {
-        assert.equal(null, err);
-        console.log("Successfully connected to server");
-        var db = client.db('PickMeUp');
-        // Find some documents in our collection
-        db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date}).toArray(function(err, docs) {
-            // Print the documents returned
-            if(docs.length===0)
-                res.status(200).send([])
-            else
-                res.status(200).send(docs)
-            // Close the DB
-            client.close();
-        });
-        // Declare success
-        console.log("Called find()");
+  console.log("Got GET Request");
+  var shuttleID = req.params.shuttleID;
+  var date = req.params.date;
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+  {
+    assert.equal(null, err);
+    console.log("Successfully connected to server");
+    var db = client.db('PickMeUp');
+    // Find some documents in our collection
+    db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date}).toArray(function(err, docs) {
+      // Print the documents returned
+      if(docs.length===0)
+        res.status(200).send([])
+      else
+        res.status(200).send(docs)
+      // Close the DB
+      client.close();
     });
-    client.close();
+    // Declare success
+    console.log("Called find()");
+  });
+  client.close();
+});
+
+
+//------//
+app.get("/getShuttleSupervisorSchedule/:shuttleID",verifyToken, (req, res) => {
+  console.log("Got GET Request");
+  var shuttleID = req.params.shuttleID;
+  var date = req.params.date;
+  MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+  {
+    assert.equal(null, err);
+    console.log("Successfully connected to server");
+    var db = client.db('PickMeUp');
+    // Find some documents in our collection
+    db.collection('LiftSupervisor').find({shuttleID:shuttleID,date:date}).toArray(function(err, docs) {
+      // Print the documents returned
+      if(docs.length===0)
+        res.status(200).send([])
+      else
+        res.status(200).send(docs)
+      // Close the DB
+      client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+  });
+  client.close();
 });
 
 

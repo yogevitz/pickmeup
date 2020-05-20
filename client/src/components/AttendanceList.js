@@ -61,6 +61,7 @@ export default function AttendanceList(props) {
         exportButton: true,
         exportAllData: true,
         toolbarButtonAlignment: 'right',
+        showEmptyDataSourceMessage: false,
       }}
       actions={[{
         icon: <SupervisorAccountIcon />,

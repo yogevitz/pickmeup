@@ -134,6 +134,7 @@ export class Table extends React.Component {
           exportAllData: true,
           toolbarButtonAlignment: 'right',
           actionsColumnIndex: -1,
+          showEmptyDataSourceMessage: false,
         }}
         editable={addable || updateable || deleteable ? {
           onRowAdd: addable ? this.onAdd : undefined,

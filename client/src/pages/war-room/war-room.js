@@ -240,11 +240,15 @@ class WarRoom extends React.Component {
   getTitle = () =>
     `${moment(this.selectedDate).format('dddd')}, ${moment(this.selectedDate).format('ll')}`;
 
+  sortRidersByMark = (a, b) => parseInt(a.mark) > parseInt(b.mark) ? 1 : -1;
+
   renderDetailPanel = rowData => {
     const { lifts } = this.state;
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.shuttleName;
-    const liftRiders = lifts.find(lift => lift.shuttleID === shuttleID).riders;
+    const liftRiders = lifts
+      .find(lift => lift.shuttleID === shuttleID).riders
+      .sort(this.sortRidersByMark);
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Dialog fullWidth open={this.state.isSetRiderMarkDialogOpen} onClose={this.closeAddRiderDialog} aria-labelledby="form-dialog-title">

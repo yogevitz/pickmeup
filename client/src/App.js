@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Container from "@material-ui/core/Container";
 import CardHeader from "@material-ui/core/CardHeader";
 import Card from "@material-ui/core/Card";
-import WarRoom from "./pages/war-room";
+import WarRoom from "./pages/attendance";
 import Shuttles from "./pages/shuttles";
 import Supervisors from "./pages/supervisors";
 import Riders from "./pages/riders";

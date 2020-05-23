@@ -1,5 +1,6 @@
 import React from 'react';
 import AttendanceList from '../../components/AttendanceList';
+import { withTranslation } from "react-i18next";
 import { Table } from "../../components/Table";
 import BSButton from 'react-bootstrap/Button';
 import Grid from '@material-ui/core/Grid';
@@ -26,55 +27,6 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 
-const liftsColumns = [
-  { title: 'Name', field: 'shuttleName' },
-  { title: 'Supervisor Name', field: 'supervisorName' },
-  { title: 'Supervisor Phone', field: 'supervisorPhone' },
-  {
-    title: 'Attendance',
-    render: rowData => {
-      return rowData.numOfRiders === 0 ? '' : (
-      <ProgressBar>
-        <ProgressBar
-          animated
-          variant="success"
-          label={`${rowData.numOfPresentRiders}`}
-          now={100 * rowData.numOfPresentRiders / rowData.numOfRiders}
-          key={1}
-        />
-        <ProgressBar
-          animated
-          variant="info"
-          label={`${rowData.numOfApprovedRiders}`}
-          now={100 * rowData.numOfApprovedRiders / rowData.numOfRiders}
-          key={2}
-        />
-        <ProgressBar
-          animated
-          variant="warning"
-          label={`${rowData.numOfMovedRiders}`}
-          now={100 * rowData.numOfMovedRiders / rowData.numOfRiders}
-          key={3}
-        />
-        <ProgressBar
-          animated
-          variant="danger"
-          label={`${rowData.numOfMissingRiders}`}
-          now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
-          key={4}
-        />
-      </ProgressBar>
-      )}
-  },
-];
-
-const columns = [
-  { title: 'Name', field: 'riderName' },
-  { title: 'ID', field: 'riderID' },
-  { title: 'Parent Name', field: 'parentName' },
-  { title: 'Parent Phone', field: 'parentPhone' },
-];
-
 const marks = [
   { id: '0', label: 'Missing' },
   { id: '1', label: 'Present' },
@@ -82,7 +34,7 @@ const marks = [
   { id: '3', label: 'Moved' },
 ];
 
-class WarRoom extends React.Component {
+class Attendance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -244,6 +196,13 @@ class WarRoom extends React.Component {
 
   renderDetailPanel = rowData => {
     const { lifts } = this.state;
+    const { t } = this.props;
+    const columns = [
+      { title: t('attendance.shuttle.rider-name'), field: 'riderName' },
+      { title: t('attendance.shuttle.rider-id'), field: 'riderID' },
+      { title: t('attendance.shuttle.parent-name'), field: 'parentName' },
+      { title: t('attendance.shuttle.parent-phone'), field: 'parentPhone' },
+    ];
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.shuttleName;
     const liftRiders = lifts
@@ -292,7 +251,49 @@ class WarRoom extends React.Component {
 
   render() {
     const { lifts } = this.state;
+    const { t } = this.props;
     const showRefreshButton = false;
+    const liftsColumns = [
+      { title: t('attendance.name'), field: 'shuttleName' },
+      { title: t('attendance.supervisor-name'), field: 'supervisorName' },
+      { title: t('attendance.supervisor-phone'), field: 'supervisorPhone' },
+      {
+        title: t('attendance.attendance'),
+        render: rowData => {
+          return rowData.numOfRiders === 0 ? '' : (
+            <ProgressBar>
+              <ProgressBar
+                animated
+                variant="success"
+                label={`${rowData.numOfPresentRiders}`}
+                now={100 * rowData.numOfPresentRiders / rowData.numOfRiders}
+                key={1}
+              />
+              <ProgressBar
+                animated
+                variant="info"
+                label={`${rowData.numOfApprovedRiders}`}
+                now={100 * rowData.numOfApprovedRiders / rowData.numOfRiders}
+                key={2}
+              />
+              <ProgressBar
+                animated
+                variant="warning"
+                label={`${rowData.numOfMovedRiders}`}
+                now={100 * rowData.numOfMovedRiders / rowData.numOfRiders}
+                key={3}
+              />
+              <ProgressBar
+                animated
+                variant="danger"
+                label={`${rowData.numOfMissingRiders}`}
+                now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
+                key={4}
+              />
+            </ProgressBar>
+          )}
+      },
+    ];
     return (
       <Grid>
         <Grid container>
@@ -335,4 +336,4 @@ class WarRoom extends React.Component {
   }
 }
 
-export default WarRoom;
+export default withTranslation()(Attendance);

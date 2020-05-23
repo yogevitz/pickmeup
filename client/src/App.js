@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-date-range/dist/styles.css';
@@ -21,6 +22,7 @@ import Login from "./pages/login";
 import Schedule from "./pages/schedule";
 import Settings from "./pages/settings";
 import { login } from './proxy';
+import Grid from "@material-ui/core/Grid";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,7 +73,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NavTabs() {
+function NavTabs({ t }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const  [isConnected, setIsConnected] = React.useState(false);
@@ -90,26 +92,28 @@ export default function NavTabs() {
   return (
     <div className={classes.root}>
       <Container fixed style={{ paddingBottom: "15px" }}>
-        <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
-          {!isConnected
+        <Card style={{ marginBottom: "15px", minHeight: "900px", backgroundColor: "OldLace", height: '100%' }}>
+          {isConnected
             ? (
               <Login onLogin={handleLogin} />)
             : (
               <div>
-                <CardHeader title={'Shuttles System'} />
+                <Grid container justify="center">
+                  <CardHeader title={t('page.title')} />
+                </Grid>
                 <AppBar position="static">
                   <Tabs
                     variant="fullWidth"
                     value={value}
                     onChange={handleChange}
-                    aria-label="Shuttles System"
+                    aria-label={t('page.title')}
                   >
-                    <LinkTab label="War Room" href="/" {...a11yProps(0)} style={linkTabStyle} />
-                    <LinkTab label="Shuttles" href="/shuttles" {...a11yProps(1)} style={linkTabStyle} />
-                    <LinkTab label="Riders" href="/riders" {...a11yProps(2)} style={linkTabStyle} />
-                    <LinkTab label="Supervisors" href="/supervisors" {...a11yProps(3)} style={linkTabStyle} />
-                    <LinkTab label="Schedule" href="/schedule" {...a11yProps(4)} style={linkTabStyle} />
-                    <LinkTab label="Settings" href="/settings" {...a11yProps(5)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.attendance')} href="/" {...a11yProps(0)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.shuttles')} href="/shuttles" {...a11yProps(1)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.riders')} href="/riders" {...a11yProps(2)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.supervisors')} href="/supervisors" {...a11yProps(3)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.schedule')} href="/schedule" {...a11yProps(4)} style={linkTabStyle} />
+                    <LinkTab label={t('tabs.settings')} href="/settings" {...a11yProps(5)} style={linkTabStyle} />
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
@@ -140,3 +144,5 @@ export default function NavTabs() {
     </div>
   );
 }
+
+export default withTranslation()(NavTabs);

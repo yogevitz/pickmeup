@@ -1,0 +1,17 @@
+{
+  "page.title": "מערכת ניהול הסעות ניצני הנגב",
+  "tabs.attendance": "נוכחות",
+  "tabs.shuttles": "הסעות",
+  "tabs.riders": "נוסעים",
+  "tabs.supervisors": "אחראי הסעות",
+  "tabs.schedule": "תכנון",
+  "tabs.settings": "הגדרות",
+  "attendance.name": "הסעה",
+  "attendance.supervisor-name": "אחראי הסעה",
+  "attendance.supervisor-phone": "טלפון",
+  "attendance.attendance": "מצב הנוכחות",
+  "attendance.shuttle.rider-name": "נוסע",
+  "attendance.shuttle.rider-id": "תעודת זהות",
+  "attendance.shuttle.parent-name": "הורה",
+  "attendance.shuttle.parent-phone": "טלפון"
+}

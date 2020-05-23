@@ -1,0 +1,17 @@
+{
+  "page.title": "Shuttles System",
+  "tabs.attendance": "Attendance",
+  "tabs.shuttles": "Shuttles",
+  "tabs.riders": "Riders",
+  "tabs.supervisors": "Supervisors",
+  "tabs.schedule": "Schedule",
+  "tabs.settings": "Settings",
+  "attendance.name": "Name",
+  "attendance.supervisor-name": "Supervisor Name",
+  "attendance.supervisor-phone": "Supervisor Phone",
+  "attendance.attendance": "Attendance",
+  "attendance.shuttle.rider-name": "Rider",
+  "attendance.shuttle.rider-id": "ID",
+  "attendance.shuttle.parent-name": "Parent",
+  "attendance.shuttle.parent-phone": "Phone"
+}

@@ -6,15 +6,17 @@ let randtoken = require('rand-token')
 let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];
 secret = "PickMeUp";
-var refreshTokens = {}
+var refreshTokens = {};
+let IDs = [];
 
 
 
 
 //-------------connecting to the mongoDB server----------//
 const MongoClient = require('mongodb').MongoClient;
-//const uri = "mongodb+srv://idsh:idaNN1991@cluster0-c0w6a.gcp.mongodb.net/test?retryWrites=true&w=majority";
-const uri = uri1 = "mongodb://localhost:27017/PickMeUp'";
+const uri = "mongodb+srv://idsh:idaNN1991@cluster0-c0w6a.gcp.mongodb.net/test?retryWrites=true&w=majority";
+//const uri =  "mongodb://localhost:27017/PickMeUp'";
+//const uri ="mongodb://http://3.16.151.243:5000"
 const client = new MongoClient(uri, { useNewUrlParser: true });
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -669,6 +671,37 @@ app.post("/createSupervisor",verifyToken, (req, res) => {
     console.log("Called find()");
 });
 
+function getRiderByID(riderID) {
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        db.collection('Riders').find({riderID: riderID}).toArray(function (err, docs) {
+            // Print the documents returned
+            if (docs.length === 0)
+                res.status(200).send([])
+            else {
+                docs.forEach(function (doc) {
+                    res.status(200).send(doc)
+                });
+            }
+            // Close the DB
+            client.close();
+        });
+    });
+
+}
+
+//------//
+app.post("/generateLiftRiders",verifyToken,async (req, res) => {
+    console.log("got new post request");
+    IDs = {};
+    const date = req.body.date;
+    await createLiftRidersForCall(req.body.shuttleID, date);
+res.status(200).send("liftRiders created");
+
+});
 
 //------//
 app.post("/createLiftRider",verifyToken, (req, res) => {
@@ -678,8 +711,12 @@ app.post("/createLiftRider",verifyToken, (req, res) => {
         shuttleID: req.body.shuttleID,
         date: req.body.date,
         riderID: req.body.riderID,
-        mark:"0",
+        riderName:req.body.riderName,
+        parentName:req.body.parentName,
+        parentPhone:req.body.parentPhone,
+        mark:"0"
     };
+    console.log(LiftRider)
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client) {
         assert.equal(null, err);
         console.log("Successfully connected to server");
@@ -792,6 +829,31 @@ app.post("/createShuttle",verifyToken, (req, res) => {
 });
 
 
+
+//------//
+app.post("/createRiders",verifyToken, (req, res) => {
+    console.log("got new post request");
+    for ( var i = 0 ; i < req.body.length; i = i + 1) {
+        var Rider = {
+            riderID: req.body[i].riderID,
+            name: req.body[i].name,
+            parentName: req.body[i].parentName,
+            parentEmail: req.body[i].parentEmail,
+            class: req.body[i].class,
+            teacher: req.body[i].teacher,
+            parentPhone: req[i].body.parentPhone
+        };
+        var toReturn;
+        toReturn = createUser(Rider);
+        if(toReturn === 0 && i ===req.body.length - 1){
+            res.status(200).send("All riders been uploaded");
+        }
+        if(toReturn !== 0 && i===req.body.length - 1){
+            res.sendStatus(400);
+        }
+    }
+
+});
 
 //------//
 app.post("/createRider",verifyToken, (req, res) => {
@@ -1667,4 +1729,94 @@ async function verifyToken(req, res, next) {
 function verifyToken(req, res, next) {
   next();
 }
+
+function createUser(Rider){
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        try{
+            db.collection('Riders').insertOne(Rider);
+        }catch(e){
+            return 1;
+        }
+        // Print the documents returned
+        client.close();
+        return 0;
+        // Close the DB
+
+    });
+    // Declare success
+    console.log("Called find()");
+}
+
+async function createLiftRidersForCall(shuttleID, date){
+    console.log(shuttleID);
+    let IDs = [];
+     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+         db.collection('ShuttlesRiders').find({ shuttleID:shuttleID }).toArray(function(err, docs) {
+            // Print the documents returned
+            if (docs.length === 0) {
+                return 0;
+            }
+            else {
+                for (let i = 0; i < docs.length; i = i + 1) {
+                    IDs[i] = docs[i].riderID;
+                }
+                return generateRiders(IDs);
+            }
+        });
+         function generateRiders(IDs) {
+             let Riders = [];
+             for( let i = 0 ; i < IDs.length ; i ++){
+                 let riderID = IDs[i];
+                 db.collection('Riders').find({riderID: riderID}).toArray(function (err, docs) {
+                     // Print the documents returned
+                     if (docs.length === 0)
+                         return 0;
+                     else {
+                         docs.forEach(function (doc) {
+                             Riders[i] = doc;
+                             generateLiftRiders(Riders[i]);
+                         });
+                     }
+                 });
+             }
+         }
+         function generateLiftRiders(rider) {
+                 let LiftRider = {
+                     shuttleID: shuttleID,
+                     date: date,
+                     riderID: rider.riderID,
+                     riderName: rider.name,
+                     parentName: rider.parentName,
+                     parentPhone: rider.parentPhone,
+                     mark: "0"
+                 };
+                 try {
+                     db.collection('LiftRiders').insert(LiftRider);
+                 } catch (e) {
+                     console.log('Something went wrong ');
+                     return 1;
+                 }
+                 // Declare success
+                 console.log("LiftRider created");
+         }
+
+    });
+    client.close();
+}
+
+
+
+
+
+
 

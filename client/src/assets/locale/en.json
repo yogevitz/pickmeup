@@ -13,5 +13,11 @@
   "attendance.shuttle.rider-name": "Rider",
   "attendance.shuttle.rider-id": "ID",
   "attendance.shuttle.parent-name": "Parent",
-  "attendance.shuttle.parent-phone": "Phone"
+  "attendance.shuttle.parent-phone": "Phone",
+  "shuttles.name": "Name",
+  "shuttles.contact-name": "Contact Name",
+  "shuttles.contact-phone": "Contact Phone",
+  "shuttles.destination": "Destination",
+  "shuttles.shuttle.rider-name": "Name",
+  "shuttles.shuttle.rider-id": "ID"
 }

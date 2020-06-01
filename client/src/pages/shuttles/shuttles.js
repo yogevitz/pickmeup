@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
+import { withTranslation } from "react-i18next";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,16 +20,6 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
-const columns = [
-  { title: 'Name', field: 'name' },
-  { title: 'Contact Name', field: 'contactName' },
-  { title: 'Contact Phone', field: 'contactPhone' },
-  {
-    title: 'Destination',
-    field: 'destination',
-  },
-];
 
 class Shuttles extends React.Component {
   constructor(props) {
@@ -131,6 +122,7 @@ class Shuttles extends React.Component {
   };
 
   renderDetailPanel = rowData => {
+    const { t } = this.props;
     const { shuttlesRiders, riders } = this.state;
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.name;
@@ -184,8 +176,8 @@ class Shuttles extends React.Component {
             }
           ]}
           columns={[
-            { title: 'Name', field: 'riderName' },
-            { title: 'ID', field: 'riderID' },
+            { title: t('shuttles.shuttle.rider-name'), field: 'riderName' },
+            { title: t('shuttles.shuttle.rider-id'), field: 'riderID' },
           ]}
           data={shuttleRiders || []}
           paging={false}
@@ -200,7 +192,14 @@ class Shuttles extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     const { shuttles, isInfoAlertShown } = this.state;
+    const columns = [
+      { title: t('shuttles.name'), field: 'name' },
+      { title: t('shuttles.contact-name'), field: 'contactName' },
+      { title: t('shuttles.contact-phone'), field: 'contactPhone' },
+      { title: t('shuttles.destination'), field: 'destination' },
+    ];
     return (
       <div>
         <InfoAlert
@@ -226,4 +225,4 @@ class Shuttles extends React.Component {
   }
 }
 
-export default Shuttles;
+export default withTranslation()(Shuttles);

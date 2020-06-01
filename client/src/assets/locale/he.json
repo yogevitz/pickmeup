@@ -13,5 +13,11 @@
   "attendance.shuttle.rider-name": "נוסע",
   "attendance.shuttle.rider-id": "תעודת זהות",
   "attendance.shuttle.parent-name": "הורה",
-  "attendance.shuttle.parent-phone": "טלפון"
+  "attendance.shuttle.parent-phone": "טלפון",
+  "shuttles.name": "שם",
+  "shuttles.contact-name": "איש קשר",
+  "shuttles.contact-phone": "טלפון",
+  "shuttles.destination": "יעד",
+  "shuttles.shuttle.rider-name": "נוסע",
+  "shuttles.shuttle.rider-id": "תעודת זהות"
 }

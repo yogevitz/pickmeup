@@ -168,7 +168,7 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${riderName}'s Shuttles`}
+          title={`${t('riders.rider.title.shuttles-of')} ${riderName}`}
           actions={[
             {
               icon: tableIcons.Add,

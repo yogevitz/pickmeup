@@ -166,7 +166,7 @@ class Shuttles extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${shuttleName} Riders`}
+          title={`${t('shuttles.shuttle.title.riders-of')} ${shuttleName}`}
           actions={[
             {
               icon: tableIcons.Add,
@@ -211,7 +211,7 @@ class Shuttles extends React.Component {
         <Table
           title={t('shuttles.title')}
           columns={columns}
-          data={shuttles  || []}
+          data={shuttles || []}
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}

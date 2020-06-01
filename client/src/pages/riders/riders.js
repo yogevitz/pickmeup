@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
+import { withTranslation } from "react-i18next";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -11,19 +12,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import QRCode from 'qrcode.react';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
-
-const columns = [
-  { title: 'ID', field: 'riderID' },
-  { title: 'Name', field: 'name' },
-  { title: 'Teacher', field: 'teacher' },
-  { title: 'Class', field: 'class' },
-  { title: 'Parent Name', field: 'parentName' },
-  { title: 'Parent Phone', field: 'parentPhone' },
-  {
-    title: 'Parent Email',
-    field: 'parentEmail',
-  },
-];
 
 class Riders extends React.Component {
   constructor(props) {
@@ -136,6 +124,7 @@ class Riders extends React.Component {
   };
 
   renderDetailPanel = rowData => {
+    const { t } = this.props;
     const { ridersShuttles, shuttles } = this.state;
     const riderID = rowData.riderID;
     const riderName = rowData.name;
@@ -190,11 +179,11 @@ class Riders extends React.Component {
           ]}
           columns={[
             {
-              title: 'Name',
+              title: t('riders.rider.shuttle-name'),
               field: 'shuttleName',
             },
             {
-              title: 'Shuttle ID',
+              title: t('riders.rider.shuttle-id'),
               field: 'shuttleID',
             },
           ]}
@@ -223,7 +212,17 @@ class Riders extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     const { riders, isInfoAlertShown } = this.state;
+    const columns = [
+      { title: t('riders.ID'), field: 'riderID' },
+      { title: t('riders.name'), field: 'name' },
+      { title: t('riders.teacher'), field: 'teacher' },
+      { title: t('riders.class'), field: 'class' },
+      { title: t('riders.parent-name'), field: 'parentName' },
+      { title: t('riders.parent-phone'), field: 'parentPhone' },
+      { title: t('riders.parent-email'), field: 'parentEmail' },
+    ];
     return (
       <div>
         <InfoAlert
@@ -273,4 +272,4 @@ class Riders extends React.Component {
   }
 }
 
-export default Riders;
+export default withTranslation()(Riders);

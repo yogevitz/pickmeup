@@ -19,5 +19,14 @@
   "shuttles.contact-phone": "Contact Phone",
   "shuttles.destination": "Destination",
   "shuttles.shuttle.rider-name": "Name",
-  "shuttles.shuttle.rider-id": "ID"
+  "shuttles.shuttle.rider-id": "ID",
+  "riders.ID": "ID",
+  "riders.name": "Name",
+  "riders.teacher": "Teacher",
+  "riders.class": "Class",
+  "riders.parent-name": "Parent Name",
+  "riders.parent-phone": "Parent Phone",
+  "riders.parent-email": "Parent Email",
+  "riders.rider.shuttle-name": "Name",
+  "riders.rider.shuttle-id": "Shuttle ID"
 }

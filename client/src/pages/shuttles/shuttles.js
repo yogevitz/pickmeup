@@ -176,8 +176,8 @@ class Shuttles extends React.Component {
             }
           ]}
           columns={[
-            { title: t('shuttles.shuttle.rider-name'), field: 'riderName' },
-            { title: t('shuttles.shuttle.rider-id'), field: 'riderID' },
+            { title: t('shuttles.shuttle.table.rider-name'), field: 'riderName' },
+            { title: t('shuttles.shuttle.table.rider-id'), field: 'riderID' },
           ]}
           data={shuttleRiders || []}
           paging={false}
@@ -195,10 +195,10 @@ class Shuttles extends React.Component {
     const { t } = this.props;
     const { shuttles, isInfoAlertShown } = this.state;
     const columns = [
-      { title: t('shuttles.name'), field: 'name' },
-      { title: t('shuttles.contact-name'), field: 'contactName' },
-      { title: t('shuttles.contact-phone'), field: 'contactPhone' },
-      { title: t('shuttles.destination'), field: 'destination' },
+      { title: t('shuttles.table.name'), field: 'name' },
+      { title: t('shuttles.table.contact-name'), field: 'contactName' },
+      { title: t('shuttles.table.contact-phone'), field: 'contactPhone' },
+      { title: t('shuttles.table.destination'), field: 'destination' },
     ];
     return (
       <div>
@@ -209,7 +209,7 @@ class Shuttles extends React.Component {
           text={this.infoAlertText}
         />
         <Table
-          title="Shuttles"
+          title={t('shuttles.title')}
           columns={columns}
           data={shuttles  || []}
           handleAdd={this.handleAdd}

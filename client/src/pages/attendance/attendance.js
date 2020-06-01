@@ -198,10 +198,10 @@ class Attendance extends React.Component {
     const { lifts } = this.state;
     const { t } = this.props;
     const columns = [
-      { title: t('attendance.shuttle.rider-name'), field: 'riderName' },
-      { title: t('attendance.shuttle.rider-id'), field: 'riderID' },
-      { title: t('attendance.shuttle.parent-name'), field: 'parentName' },
-      { title: t('attendance.shuttle.parent-phone'), field: 'parentPhone' },
+      { title: t('attendance.shuttle.table.rider-name'), field: 'riderName' },
+      { title: t('attendance.shuttle.table.rider-id'), field: 'riderID' },
+      { title: t('attendance.shuttle.table.parent-name'), field: 'parentName' },
+      { title: t('attendance.shuttle.table.parent-phone'), field: 'parentPhone' },
     ];
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.shuttleName;
@@ -254,11 +254,11 @@ class Attendance extends React.Component {
     const { t } = this.props;
     const showRefreshButton = false;
     const liftsColumns = [
-      { title: t('attendance.name'), field: 'shuttleName' },
-      { title: t('attendance.supervisor-name'), field: 'supervisorName' },
-      { title: t('attendance.supervisor-phone'), field: 'supervisorPhone' },
+      { title: t('attendance.table.name'), field: 'shuttleName' },
+      { title: t('attendance.table.supervisor-name'), field: 'supervisorName' },
+      { title: t('attendance.table.supervisor-phone'), field: 'supervisorPhone' },
       {
-        title: t('attendance.attendance'),
+        title: t('attendance.table.attendance'),
         render: rowData => {
           return rowData.numOfRiders === 0 ? '' : (
             <ProgressBar>

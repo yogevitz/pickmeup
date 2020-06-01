@@ -1,17 +1,8 @@
 import React from 'react';
 import { Table } from "../../components/Table";
+import { withTranslation } from "react-i18next";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
-
-const columns = [
-  { title: 'ID', field: 'supervisorID' },
-  { title: 'Name', field: 'name' },
-  { title: 'Phone', field: 'phone' },
-  {
-    title: 'Email',
-    field: 'email',
-  },
-];
 
 class Supervisors extends React.Component {
   constructor(props) {
@@ -71,7 +62,14 @@ class Supervisors extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     const { supervisors, isInfoAlertShown } = this.state;
+    const columns = [
+      { title: t('supervisors.table.id'), field: 'supervisorID' },
+      { title: t('supervisors.table.name'), field: 'name' },
+      { title: t('supervisors.table.phone'), field: 'phone' },
+      { title: t('supervisors.table.email'), field: 'email' },
+    ];
     return (
       <div>
         <InfoAlert
@@ -81,7 +79,7 @@ class Supervisors extends React.Component {
           text={this.infoAlertText}
         />
         <Table
-          title="Supervisors"
+          title={t('supervisors.title')}
           columns={columns}
           data={supervisors}
           handleAdd={this.handleAdd}
@@ -97,4 +95,4 @@ class Supervisors extends React.Component {
   }
 }
 
-export default Supervisors;
+export default withTranslation()(Supervisors);

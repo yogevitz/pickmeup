@@ -179,11 +179,11 @@ class Riders extends React.Component {
           ]}
           columns={[
             {
-              title: t('riders.rider.shuttle-name'),
+              title: t('riders.rider.table.shuttle-name'),
               field: 'shuttleName',
             },
             {
-              title: t('riders.rider.shuttle-id'),
+              title: t('riders.rider.table.shuttle-id'),
               field: 'shuttleID',
             },
           ]}
@@ -215,13 +215,13 @@ class Riders extends React.Component {
     const { t } = this.props;
     const { riders, isInfoAlertShown } = this.state;
     const columns = [
-      { title: t('riders.ID'), field: 'riderID' },
-      { title: t('riders.name'), field: 'name' },
-      { title: t('riders.teacher'), field: 'teacher' },
-      { title: t('riders.class'), field: 'class' },
-      { title: t('riders.parent-name'), field: 'parentName' },
-      { title: t('riders.parent-phone'), field: 'parentPhone' },
-      { title: t('riders.parent-email'), field: 'parentEmail' },
+      { title: t('riders.table.ID'), field: 'riderID' },
+      { title: t('riders.table.name'), field: 'name' },
+      { title: t('riders.table.teacher'), field: 'teacher' },
+      { title: t('riders.table.class'), field: 'class' },
+      { title: t('riders.table.parent-name'), field: 'parentName' },
+      { title: t('riders.table.parent-phone'), field: 'parentPhone' },
+      { title: t('riders.table.parent-email'), field: 'parentEmail' },
     ];
     return (
       <div>
@@ -248,7 +248,7 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title="Riders"
+          title={t('riders.title')}
           columns={columns}
           data={riders}
           actions={[

@@ -303,7 +303,7 @@ class Attendance extends React.Component {
                 <KeyboardDatePicker
                   margin="normal"
                   id="date-picker-dialog"
-                  label="Date"
+                  label={t('attendance.date.label')}
                   autoOk
                   rifmFormatter={val=> val.replace(/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi, '')}
                   refuse={/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi}

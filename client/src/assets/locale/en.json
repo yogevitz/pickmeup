@@ -7,6 +7,7 @@
   "tabs.supervisors": "Supervisors",
   "tabs.schedule": "Schedule",
   "tabs.settings": "Settings",
+  "attendance.title": "Attendance",
   "attendance.date.label": "Date",
   "attendance.table.name": "Name",
   "attendance.table.supervisor-name": "Supervisor Name",

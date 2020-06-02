@@ -6,6 +6,7 @@ import BSButton from 'react-bootstrap/Button';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Typography from '@material-ui/core/Typography';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import MomentUtils from '@date-io/moment';
 import moment from 'moment';
@@ -343,7 +344,15 @@ class Attendance extends React.Component {
         </Grid>
         <Grid style={{marginTop: '15px'}}>
           <Table
-            title={this.getTitle()}
+            title={
+              <Typography
+                variant="h5"
+                gutterBottom
+                style={{ marginLeft: '20px', marginRight: '20px', }}
+              >
+                {t('attendance.title')}
+              </Typography>
+            }
             columns={liftsColumns}
             data={lifts}
             detailPanel={this.renderDetailPanel}

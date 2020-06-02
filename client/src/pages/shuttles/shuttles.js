@@ -21,6 +21,7 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 class Shuttles extends React.Component {
   constructor(props) {
@@ -228,7 +229,15 @@ class Shuttles extends React.Component {
           text={this.infoAlertText}
         />
         <Table
-          title={t('shuttles.title')}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {t('shuttles.title')}
+            </Typography>
+          }
           columns={columns}
           data={shuttles || []}
           handleAdd={this.handleAdd}

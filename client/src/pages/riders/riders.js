@@ -11,6 +11,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from "@material-ui/core/Typography";
 import QRCode from 'qrcode.react';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider , uploadRiders} from '../../proxy';
 let csv = require("csvtojson");
@@ -339,7 +340,15 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={t('riders.title')}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {t('riders.title')}
+            </Typography>
+          }
           columns={columns}
           data={riders}
           actions={[

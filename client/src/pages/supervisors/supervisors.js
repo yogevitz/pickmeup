@@ -3,6 +3,7 @@ import Table from "../../components/Table";
 import { withTranslation } from "react-i18next";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';
+import Typography from "@material-ui/core/Typography";
 
 class Supervisors extends React.Component {
   constructor(props) {
@@ -91,7 +92,15 @@ class Supervisors extends React.Component {
           text={this.infoAlertText}
         />
         <Table
-          title={t('supervisors.title')}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {t('supervisors.title')}
+            </Typography>
+          }
           columns={columns}
           data={supervisors}
           handleAdd={this.handleAdd}

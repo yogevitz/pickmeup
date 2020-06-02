@@ -265,6 +265,7 @@ class Riders extends React.Component {
   render() {
     const { t } = this.props;
     const { riders, isInfoAlertShown } = this.state;
+    const isShowImport = false;
     const columns = [
       {
         title: t('riders.table.ID'), field: 'riderID',
@@ -297,20 +298,23 @@ class Riders extends React.Component {
     ];
     return (
       <div>
-        <input
-          type="file"
-          name="file"
-          style={{display: 'flex', justifyContent:'center', alignItems:'center'}}
-          onChange={this.onChangeFile}
-          accept=".csv"
-        />
-        <button
-          type="button"
-          className="btn btn-success btn-block"
-          onClick={this.onClickImport}
-        >
-          Upload
-        </button>
+        {isShowImport && (
+          <div>
+            <input
+              type="file"
+              name="file"
+              style={{display: 'flex', justifyContent:'center', alignItems:'center'}}
+              onChange={this.onChangeFile}
+              accept=".csv"
+            />
+            <button
+              type="button"
+              className="btn btn-success btn-block"
+              onClick={this.onClickImport}
+            >
+              Upload
+            </button>
+          </div>)}
         <InfoAlert
           isOpen={isInfoAlertShown}
           onClose={this.handleCloseInfoAlert}

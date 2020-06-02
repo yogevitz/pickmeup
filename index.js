@@ -836,7 +836,7 @@ app.post("/createRiders",verifyToken,async (req, res) => {
     console.log("got new post request");
     //console.log(req.body.Riders);
     let data1 = {};
-    data1 = JSON.parse(req.body.Riders);;
+    data1 = JSON.parse(req.body.riders);
     //console.log(data1);
     let i = 0;
     let Riders =[];

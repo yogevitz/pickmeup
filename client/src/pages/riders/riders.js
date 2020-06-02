@@ -291,10 +291,10 @@ class Riders extends React.Component {
         title: t('riders.table.parent-phone'), field: 'parentPhone',
         headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
       },
-      {
-        title: t('riders.table.parent-email'), field: 'parentEmail',
-        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
-      },
+      // {
+      //   title: t('riders.table.parent-email'), field: 'parentEmail',
+      //   headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      // },
     ];
     return (
       <div>
@@ -338,7 +338,7 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title="Riders"
+          title={t('riders.title')}
           columns={columns}
           data={riders}
           actions={[

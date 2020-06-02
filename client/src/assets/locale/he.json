@@ -1,4 +1,5 @@
 {
+  "common.search": "חיפוש",
   "page.title": "מערכת ניהול הסעות ניצני הנגב",
   "tabs.attendance": "נוכחות",
   "tabs.shuttles": "הסעות",
@@ -20,7 +21,7 @@
   "shuttles.table.contact-name": "איש קשר",
   "shuttles.table.contact-phone": "טלפון",
   "shuttles.table.destination": "יעד",
-  "shuttles.shuttle.title.riders-of": "הנוסעים של",
+  "shuttles.shuttle.title.riders-of": "הנוסעים של:",
   "shuttles.shuttle.table.rider-name": "נוסע",
   "shuttles.shuttle.table.rider-id": "תעודת זהות",
   "riders.title": "נוסעים",
@@ -31,7 +32,7 @@
   "riders.table.parent-name": "הורה",
   "riders.table.parent-phone": "טלפון",
   "riders.table.parent-email": "אימייל",
-  "riders.rider.title.shuttles-of": "ההסעות של",
+  "riders.rider.title.shuttles-of": "ההסעות של:",
   "riders.rider.table.shuttle-name": "הסעה",
   "riders.rider.table.shuttle-id": "מזהה הסעה",
   "supervisors.title": "אחראי הסעות",

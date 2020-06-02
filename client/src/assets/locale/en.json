@@ -1,4 +1,5 @@
 {
+  "common.search": "Search",
   "page.title": "Shuttles System",
   "tabs.attendance": "Attendance",
   "tabs.shuttles": "Shuttles",
@@ -20,7 +21,7 @@
   "shuttles.table.contact-name": "Contact Name",
   "shuttles.table.contact-phone": "Contact Phone",
   "shuttles.table.destination": "Destination",
-  "shuttles.shuttle.title.riders-of": "Riders of",
+  "shuttles.shuttle.title.riders-of": "Riders of:",
   "shuttles.shuttle.table.rider-name": "Name",
   "shuttles.shuttle.table.rider-id": "ID",
   "riders.title": "Riders",
@@ -31,7 +32,7 @@
   "riders.table.parent-name": "Parent Name",
   "riders.table.parent-phone": "Parent Phone",
   "riders.table.parent-email": "Parent Email",
-  "riders.rider.title.shuttles-of": "Shuttles of",
+  "riders.rider.title.shuttles-of": "Shuttles of:",
   "riders.rider.table.shuttle-name": "Name",
   "riders.rider.table.shuttle-id": "Shuttle ID",
   "supervisors.title": "Supervisors",

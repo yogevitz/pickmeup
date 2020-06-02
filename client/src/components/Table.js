@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import { tableIcons } from '../utils';
+import { withTranslation } from "react-i18next";
 
 class Table extends React.Component {
   constructor(props) {
@@ -69,6 +70,7 @@ class Table extends React.Component {
 
   render() {
     const {
+      t,
       columns,
       actions,
       title,
@@ -87,6 +89,11 @@ class Table extends React.Component {
         data={data}
         icons={tableIcons}
         actions={actions}
+        localization={{
+          toolbar: {
+            searchPlaceholder: t('common.search')
+          }
+        }}
         options={{
           pageSize: pageSize || 10,
           toolbar: true,
@@ -118,3 +125,5 @@ class Table extends React.Component {
     );
   }
 }
+
+export default withTranslation()(Table);

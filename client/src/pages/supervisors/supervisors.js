@@ -65,10 +65,22 @@ class Supervisors extends React.Component {
     const { t } = this.props;
     const { supervisors, isInfoAlertShown } = this.state;
     const columns = [
-      { title: t('supervisors.table.id'), field: 'supervisorID' },
-      { title: t('supervisors.table.name'), field: 'name' },
-      { title: t('supervisors.table.phone'), field: 'phone' },
-      { title: t('supervisors.table.email'), field: 'email' },
+      {
+        title: t('supervisors.table.id'), field: 'supervisorID',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('supervisors.table.name'), field: 'name',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('supervisors.table.phone'), field: 'phone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('supervisors.table.email'), field: 'email',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
     ];
     return (
       <div>

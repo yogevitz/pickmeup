@@ -181,10 +181,12 @@ class Riders extends React.Component {
             {
               title: t('riders.rider.table.shuttle-name'),
               field: 'shuttleName',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
             },
             {
               title: t('riders.rider.table.shuttle-id'),
               field: 'shuttleID',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
             },
           ]}
           options={{
@@ -215,13 +217,34 @@ class Riders extends React.Component {
     const { t } = this.props;
     const { riders, isInfoAlertShown } = this.state;
     const columns = [
-      { title: t('riders.table.ID'), field: 'riderID' },
-      { title: t('riders.table.name'), field: 'name' },
-      { title: t('riders.table.teacher'), field: 'teacher' },
-      { title: t('riders.table.class'), field: 'class' },
-      { title: t('riders.table.parent-name'), field: 'parentName' },
-      { title: t('riders.table.parent-phone'), field: 'parentPhone' },
-      { title: t('riders.table.parent-email'), field: 'parentEmail' },
+      {
+        title: t('riders.table.ID'), field: 'riderID',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.name'), field: 'name',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.teacher'), field: 'teacher',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.class'), field: 'class',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-name'), field: 'parentName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-phone'), field: 'parentPhone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-email'), field: 'parentEmail',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
     ];
     return (
       <div>

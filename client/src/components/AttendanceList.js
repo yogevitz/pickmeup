@@ -50,7 +50,7 @@ function AttendanceList(props) {
           addRemoveColumns: t('toolbar.add-or-remove-columns')
         },
         header: {
-          actions: <SupervisorAccountIcon />
+          actions: '',
         },
         pagination: {
           firstTooltip: t('pagination.first'),

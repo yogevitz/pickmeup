@@ -23,101 +23,250 @@ import { getAllShuttles, getAllSupervisors } from "../../proxy";
 const SHIFT_KEY = 16;
 
 const appointments = {
-  '1': [
+  '63973779589': [
     {
-      title: 'Yogev Shlomovitz',
-      supervisor: '311530018',
-      startDate: new Date(2020, 4, 10),
-      endDate: new Date(2020, 4, 11),
-      id: 0,
-    },
-    // {
-    //   title: 'Yogev Shlomovitz',
-    //   supervisor: '311530018',
-    //   startDate: new Date(2020, 4, 11),
-    //   endDate: new Date(2020, 4, 12),
-    //   id: 1,
-    // },
-    // {
-    //   title: 'Idan Shani',
-    //   supervisor: '315662485',
-    //   startDate: new Date(2020, 4, 12),
-    //   endDate: new Date(2020, 4, 13),
-    //   id: 2,
-    // },
-    // {
-    //   title: 'Bar Perez',
-    //   supervisor: '302548452',
-    //   startDate: new Date(2020, 4, 13),
-    //   endDate: new Date(2020, 4, 14),
-    //   id: 3,
-    // },
-    // {
-    //   title: 'Bar Perez',
-    //   supervisor: '302548452',
-    //   startDate: new Date(2020, 4, 14),
-    //   endDate: new Date(2020, 4, 15),
-    //   id: 4,
-    // },
-    // {
-    //   title: 'Guy Kaplan',
-    //   supervisor: '309887272',
-    //   startDate: new Date(2020, 4, 15),
-    //   endDate: new Date(2020, 4, 16),
-    //   id: 5,
-    // },
-  ],
-  '2': [
-    {
-      title: 'Idan Shani',
-      supervisor: '315662485',
-      startDate: new Date(2020, 4, 10),
-      endDate: new Date(2020, 4, 11),
-      id: 0,
-    },
-    {
-      title: 'Bar Perez',
-      supervisor: '302548452',
-      startDate: new Date(2020, 4, 11),
-      endDate: new Date(2020, 4, 12),
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 4, 31),
+      endDate: new Date(2020, 5, 1),
       id: 1,
     },
     {
-      title: 'Guy Kaplan',
-      supervisor: '309887272',
-      startDate: new Date(2020, 4, 12),
-      endDate: new Date(2020, 4, 13),
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 1),
+      endDate: new Date(2020, 5, 2),
       id: 2,
     },
     {
-      title: 'Bar Perez',
-      supervisor: '302548452',
-      startDate: new Date(2020, 4, 13),
-      endDate: new Date(2020, 4, 14),
+      title: 'שלמה ארצי',
+      supervisor: '311530018',
+      startDate: new Date(2020, 5, 2),
+      endDate: new Date(2020, 5, 3),
       id: 3,
     },
     {
-      title: 'Yogev Shlomovitz',
+      title: 'שלמה ארצי',
       supervisor: '311530018',
-      startDate: new Date(2020, 4, 14),
-      endDate: new Date(2020, 4, 15),
+      startDate: new Date(2020, 5, 3),
+      endDate: new Date(2020, 5, 4),
       id: 4,
     },
     {
-      title: 'Guy Kaplan',
-      supervisor: '309887272',
-      startDate: new Date(2020, 4, 15),
-      endDate: new Date(2020, 4, 16),
+      title: 'שלמה ארצי',
+      supervisor: '311530018',
+      startDate: new Date(2020, 5, 4),
+      endDate: new Date(2020, 5, 5),
       id: 5,
+    },
+    {
+      title: 'שלמה ארצי',
+      supervisor: '311530018',
+      startDate: new Date(2020, 5, 5),
+      endDate: new Date(2020, 5, 6),
+      id: 6,
+    },
+    {
+      title: 'נועה קירל',
+      supervisor: '315662485',
+      startDate: new Date(2020, 5, 7),
+      endDate: new Date(2020, 5, 8),
+      id: 7,
+    },
+    {
+      title: 'נועה קירל',
+      supervisor: '315662485',
+      startDate: new Date(2020, 5, 8),
+      endDate: new Date(2020, 5, 9),
+      id: 8,
+    },
+    {
+      title: 'נועה קירל',
+      supervisor: '315662485',
+      startDate: new Date(2020, 5, 9),
+      endDate: new Date(2020, 5, 10),
+      id: 9,
+    },
+    {
+      title: 'אביב גפן',
+      supervisor: '302548452',
+      startDate: new Date(2020, 5, 10),
+      endDate: new Date(2020, 5, 11),
+      id: 10,
+    },
+    {
+      title: 'אביב גפן',
+      supervisor: '302548452',
+      startDate: new Date(2020, 5, 11),
+      endDate: new Date(2020, 5, 12),
+      id: 11,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 12),
+      endDate: new Date(2020, 5, 13),
+      id: 12,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 14),
+      endDate: new Date(2020, 5, 15),
+      id: 13,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 15),
+      endDate: new Date(2020, 5, 16),
+      id: 14,
+    },
+    {
+      title: 'רועי כפרי',
+      supervisor: '314229873',
+      startDate: new Date(2020, 5, 16),
+      endDate: new Date(2020, 5, 17),
+      id: 15,
+    },
+    {
+      title: 'רועי כפרי',
+      supervisor: '314229873',
+      startDate: new Date(2020, 5, 17),
+      endDate: new Date(2020, 5, 18),
+      id: 16,
+    },
+  ],
+  '69379352912': [
+    {
+      title: 'טל טירנגל',
+      supervisor: '309887272',
+      startDate: new Date(2020, 4, 31),
+      endDate: new Date(2020, 5, 1),
+      id: 1,
+    },
+    {
+      title: 'טל טירנגל',
+      supervisor: '309887272',
+      startDate: new Date(2020, 5, 1),
+      endDate: new Date(2020, 5, 2),
+      id: 2,
+    },
+    {
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 2),
+      endDate: new Date(2020, 5, 3),
+      id: 3,
+    },
+    {
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 3),
+      endDate: new Date(2020, 5, 4),
+      id: 4,
+    },
+    {
+      title: 'שלמה ארצי',
+      supervisor: '311530018',
+      startDate: new Date(2020, 5, 4),
+      endDate: new Date(2020, 5, 5),
+      id: 5,
+    },
+    {
+      title: 'שלמה ארצי',
+      supervisor: '311530018',
+      startDate: new Date(2020, 5, 5),
+      endDate: new Date(2020, 5, 6),
+      id: 6,
+    },
+    {
+      title: 'נועה קירל',
+      supervisor: '315662485',
+      startDate: new Date(2020, 5, 7),
+      endDate: new Date(2020, 5, 8),
+      id: 7,
+    },
+    {
+      title: 'נועה קירל',
+      supervisor: '315662485',
+      startDate: new Date(2020, 5, 8),
+      endDate: new Date(2020, 5, 9),
+      id: 8,
+    },
+    {
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 9),
+      endDate: new Date(2020, 5, 10),
+      id: 9,
+    },
+    {
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 10),
+      endDate: new Date(2020, 5, 11),
+      id: 10,
+    },
+    {
+      title: 'רותם סלע',
+      supervisor: '316248216',
+      startDate: new Date(2020, 5, 11),
+      endDate: new Date(2020, 5, 12),
+      id: 11,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 12),
+      endDate: new Date(2020, 5, 13),
+      id: 12,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 14),
+      endDate: new Date(2020, 5, 15),
+      id: 13,
+    },
+    {
+      title: 'בר רפאלי',
+      supervisor: '208374172',
+      startDate: new Date(2020, 5, 15),
+      endDate: new Date(2020, 5, 16),
+      id: 14,
+    },
+    {
+      title: 'רועי כפרי',
+      supervisor: '314229873',
+      startDate: new Date(2020, 5, 16),
+      endDate: new Date(2020, 5, 17),
+      id: 15,
+    },
+    {
+      title: 'רועי כפרי',
+      supervisor: '314229873',
+      startDate: new Date(2020, 5, 17),
+      endDate: new Date(2020, 5, 18),
+      id: 16,
+    },
+    {
+      title: 'רועי כפרי',
+      supervisor: '314229873',
+      startDate: new Date(2020, 5, 18),
+      endDate: new Date(2020, 5, 19),
+      id: 17,
     },
   ],
 };
 
 const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
   const onSupervisorChange = (event, newValue) => {
+    console.log('onSupervisorChange');
+    console.log({event, newValue});
     onFieldChange({
-      supervisor: newValue ? newValue.id : undefined,
-      title: newValue ? newValue.text : undefined,
+      supervisor: newValue ? newValue.id : null,
+      title: newValue ? newValue.text : null,
     });
   };
 
@@ -129,7 +278,7 @@ const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
           options={restProps.resources[0].instances}
           getOptionLabel={option => option.text}
           onChange={onSupervisorChange}
-          value={restProps.appointmentResources ? restProps.appointmentResources[0] : undefined}
+          value={restProps.appointmentResources ? restProps.appointmentResources[0] : null}
           renderInput={(params) =>
             <TextField {...params} label="Supervisor" variant="outlined" />}
         />
@@ -144,9 +293,9 @@ class Schedule extends React.Component {
     this.state = {
       shuttles: [],
       supervisors: [],
-      selectedShuttle: undefined,
+      selectedShuttle: null,
       selectedDate: new Date(),
-      selectedSupervisor: undefined,
+      selectedSupervisor: null,
       data: [],
       resources: [],
       isShiftPressed: false,
@@ -156,6 +305,7 @@ class Schedule extends React.Component {
   commitChanges = ({ added, changed, deleted }) => {
     this.setState((state) => {
       let { data } = state;
+      console.log(data);
       const { isShiftPressed } = this.state;
       if (added) {
         const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
@@ -253,14 +403,14 @@ class Schedule extends React.Component {
                 getOptionLabel={(option) => option.name}
                 onChange={this.onChangeSelectedShuttle}
                 renderInput={(params) =>
-                  <TextField {...params} label="Shuttle" variant="outlined" />}
+                  <TextField {...params} label="הסעה" variant="outlined" />}
               />
             </Grid>
           </Grid>
           <Grid container justify="center" spacing={3} style={{ marginTop: '15px', textAlign: 'center' }}>
             {selectedShuttle && <Grid item xs={10}>
               <Paper>
-                <Scheduler data={this.state.data} >
+                <Scheduler data={this.state.data || []} >
                   <ViewState />
                   <EditingState onCommitChanges={this.commitChanges} />
                   <IntegratedEditing />

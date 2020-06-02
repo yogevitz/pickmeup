@@ -9,6 +9,7 @@
   "common.export": "Export",
   "common.shuttle": "Shuttle",
   "common.rider": "Rider",
+  "common.supervisor": "Supervisor",
   "common.actions": "Actions",
   "toolbar.columns-title": "Show Columns",
   "toolbar.create-qr-code": "Create QR Code",

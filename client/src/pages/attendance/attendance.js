@@ -29,10 +29,11 @@ import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 
 const marks = [
-  { id: '0', label: 'Missing' },
-  { id: '1', label: 'Present' },
-  { id: '2', label: 'Approved' },
-  { id: '3', label: 'Moved' },
+  { id: '0', label: 'חסר' },
+  { id: '1', label: 'נוכח' },
+  { id: '2', label: 'מאושר' },
+  { id: '3', label: 'הועבר' },
+  { id: '4', label: 'התווסף' },
 ];
 
 class Attendance extends React.Component {
@@ -97,9 +98,9 @@ class Attendance extends React.Component {
       const supervisor = liftSupervisor.length
         ? liftSupervisor[0]
         : {};
-      const supervisorID = supervisor.supervisorID || '315662485';
-      const supervisorName = supervisor.supervisorName || 'Idan Shani';
-      const supervisorPhone = supervisor.supervisorPhone || '0549725564';
+      const supervisorID = supervisor.supervisorID;
+      const supervisorName = supervisor.supervisorName;
+      const supervisorPhone = supervisor.supervisorPhone;
       const liftRiders = await getLiftRiders({
         shuttleID,
         date: formattedDate,
@@ -151,7 +152,7 @@ class Attendance extends React.Component {
             size="sm"
             onClick={() => this.onClickMark(rowProps)}
           >
-            Missing
+            חסר
           </BSButton>
         );
       case "1":
@@ -162,7 +163,7 @@ class Attendance extends React.Component {
             size="sm"
             onClick={() => this.onClickMark(rowProps)}
           >
-            Present
+            נוכח
           </BSButton>
         );
       case "2":
@@ -173,7 +174,7 @@ class Attendance extends React.Component {
             size="sm"
             onClick={() => this.onClickMark(rowProps)}
           >
-            Approved
+            מאושר
           </BSButton>
         );
       case "3":
@@ -184,7 +185,18 @@ class Attendance extends React.Component {
             size="sm"
             onClick={() => this.onClickMark(rowProps)}
           >
-            Moved
+            הועבר
+          </BSButton>
+        );
+      case "4":
+        return (
+          <BSButton
+            block={true}
+            variant="warning"
+            size="sm"
+            onClick={() => this.onClickMark(rowProps)}
+          >
+            התווסף
           </BSButton>
         );
     }
@@ -193,7 +205,14 @@ class Attendance extends React.Component {
   getTitle = () =>
     `${moment(this.selectedDate).format('dddd')}, ${moment(this.selectedDate).format('ll')}`;
 
-  sortRidersByMark = (a, b) => parseInt(a.mark) > parseInt(b.mark) ? 1 : -1;
+  sortRidersByMark = (a, b) => {
+    if (a.mark === "1") {
+      return 1;
+    } else if (b.mark === "1") {
+      return -1;
+    }
+    return parseInt(a.mark) > parseInt(b.mark) ? 1 : -1;
+  };
 
   renderDetailPanel = rowData => {
     const { lifts } = this.state;
@@ -252,7 +271,15 @@ class Attendance extends React.Component {
           </DialogActions>
         </Dialog>
         <AttendanceList
-          title={shuttleName}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {shuttleName}
+            </Typography>
+          }
           columns={columns}
           selection={true}
           data={liftRiders}

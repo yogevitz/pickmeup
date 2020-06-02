@@ -170,7 +170,15 @@ class Shuttles extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${t('shuttles.shuttle.title.riders-of')} ${shuttleName}`}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {`${t('shuttles.shuttle.title.riders-of')} ${shuttleName}`}
+            </Typography>
+          }
           actions={[
             {
               icon: tableIcons.Add,

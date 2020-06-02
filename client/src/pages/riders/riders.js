@@ -212,7 +212,15 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${t('riders.rider.title.shuttles-of')} ${riderName}`}
+          title={
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{ marginLeft: '20px', marginRight: '20px', }}
+            >
+              {`${t('riders.rider.title.shuttles-of')} ${riderName}`}
+            </Typography>
+          }
           actions={[
             {
               icon: tableIcons.Add,

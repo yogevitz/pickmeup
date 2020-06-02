@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from "../../components/Table";
+import Table from "../../components/Table";
 import { withTranslation } from "react-i18next";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { getAllSupervisors, createSupervisor, deleteSupervisor, setSupervisor } from '../../proxy';

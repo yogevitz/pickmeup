@@ -1,21 +1,6 @@
 import React, { forwardRef } from 'react';
+import { tableIcons } from "../utils";
 import MaterialTable from 'material-table';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import FirstPage from '@material-ui/icons/FirstPage';
-import Save from '@material-ui/icons/Save';
-import LastPage from '@material-ui/icons/LastPage';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import AddBox from '@material-ui/icons/AddBox';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import Check from '@material-ui/icons/Check';
-import FilterList from '@material-ui/icons/FilterList';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Remove from '@material-ui/icons/Remove';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import AttendanceList from '../../components/AttendanceList';
 import { withTranslation } from "react-i18next";
-import { Table } from "../../components/Table";
+import Table from "../../components/Table";
 import BSButton from 'react-bootstrap/Button';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';

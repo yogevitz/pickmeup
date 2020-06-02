@@ -1,5 +1,6 @@
 import React from 'react';
-import { Table, tableIcons } from "../../components/Table";
+import Table from "../../components/Table";
+import { tableIcons } from "../../utils";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
 import { withTranslation } from "react-i18next";
 import Button from '@material-ui/core/Button';

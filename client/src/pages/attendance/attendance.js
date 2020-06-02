@@ -198,10 +198,22 @@ class Attendance extends React.Component {
     const { lifts } = this.state;
     const { t } = this.props;
     const columns = [
-      { title: t('attendance.shuttle.rider-name'), field: 'riderName' },
-      { title: t('attendance.shuttle.rider-id'), field: 'riderID' },
-      { title: t('attendance.shuttle.parent-name'), field: 'parentName' },
-      { title: t('attendance.shuttle.parent-phone'), field: 'parentPhone' },
+      {
+        title: t('attendance.shuttle.table.rider-name'), field: 'riderName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.shuttle.table.rider-id'), field: 'riderID',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.shuttle.table.parent-name'), field: 'parentName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.shuttle.table.parent-phone'), field: 'parentPhone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
     ];
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.shuttleName;
@@ -254,11 +266,21 @@ class Attendance extends React.Component {
     const { t } = this.props;
     const showRefreshButton = false;
     const liftsColumns = [
-      { title: t('attendance.name'), field: 'shuttleName' },
-      { title: t('attendance.supervisor-name'), field: 'supervisorName' },
-      { title: t('attendance.supervisor-phone'), field: 'supervisorPhone' },
       {
-        title: t('attendance.attendance'),
+        title: t('attendance.table.name'), field: 'shuttleName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.table.supervisor-name'), field: 'supervisorName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.table.supervisor-phone'), field: 'supervisorPhone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('attendance.table.attendance'),
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
         render: rowData => {
           return rowData.numOfRiders === 0 ? '' : (
             <ProgressBar>
@@ -303,7 +325,7 @@ class Attendance extends React.Component {
                 <KeyboardDatePicker
                   margin="normal"
                   id="date-picker-dialog"
-                  label="Date"
+                  label={t('attendance.date.label')}
                   autoOk
                   rifmFormatter={val=> val.replace(/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi, '')}
                   refuse={/[^\.\ \,\[a-zA-Z0-9_]*$]+/gi}

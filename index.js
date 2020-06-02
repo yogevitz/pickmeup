@@ -15,8 +15,8 @@ let IDs = [];
 
 //-------------connecting to the mongoDB server----------//
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://idsh:idaNN1991@cluster0-c0w6a.gcp.mongodb.net/test?retryWrites=true&w=majority";
-//const uri =  "mongodb://localhost:27017/PickMeUp'";
+// const uri = "mongodb+srv://idsh:idaNN1991@cluster0-c0w6a.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const uri =  "mongodb://localhost:27017/PickMeUp'";
 //const uri ="mongodb://http://3.16.151.243:5000"
 const client = new MongoClient(uri, { useNewUrlParser: true });
 app.use(function(req, res, next) {

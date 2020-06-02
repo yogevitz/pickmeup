@@ -10,11 +10,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Container from "@material-ui/core/Container";
 import CardHeader from "@material-ui/core/CardHeader";
 import Card from "@material-ui/core/Card";
-import WarRoom from "./pages/attendance";
+import Attendance from "./pages/attendance";
 import Shuttles from "./pages/shuttles";
 import Supervisors from "./pages/supervisors";
 import Riders from "./pages/riders";
@@ -86,13 +85,16 @@ function NavTabs({ t }) {
      setIsConnected(true);
   };
 
+  const isRTL = true;
+
   const showCreditFooter = false;
   const linkTabStyle = { color: 'inherit', textDecoration: 'none' };
 
   return (
     <div className={classes.root}>
       <Container fixed style={{ paddingBottom: "15px" }}>
-        <Card style={{ marginBottom: "15px", minHeight: "900px", backgroundColor: "OldLace", height: '100%' }}>
+        <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
+          <div dir={isRTL ? 'rtl' : 'ltr'}>
           {isConnected
             ? (
               <Login onLogin={handleLogin} />)
@@ -117,7 +119,7 @@ function NavTabs({ t }) {
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
-                  <WarRoom/>
+                  <Attendance/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <Shuttles/>
@@ -136,6 +138,7 @@ function NavTabs({ t }) {
                 </TabPanel>
               </div>
             )}
+          </div>
         </Card>
         {showCreditFooter && <div style={{ fontSize: "11px", textAlign: "center" }}>
           Powered by PickMeUp.com

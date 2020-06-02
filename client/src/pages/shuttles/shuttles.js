@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
+import { withTranslation } from "react-i18next";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,16 +20,6 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
-const columns = [
-  { title: 'Name', field: 'name' },
-  { title: 'Contact Name', field: 'contactName' },
-  { title: 'Contact Phone', field: 'contactPhone' },
-  {
-    title: 'Destination',
-    field: 'destination',
-  },
-];
 
 class Shuttles extends React.Component {
   constructor(props) {
@@ -131,6 +122,7 @@ class Shuttles extends React.Component {
   };
 
   renderDetailPanel = rowData => {
+    const { t } = this.props;
     const { shuttlesRiders, riders } = this.state;
     const shuttleID = rowData.shuttleID;
     const shuttleName = rowData.name;
@@ -174,7 +166,7 @@ class Shuttles extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${shuttleName} Riders`}
+          title={`${t('shuttles.shuttle.title.riders-of')} ${shuttleName}`}
           actions={[
             {
               icon: tableIcons.Add,
@@ -184,8 +176,14 @@ class Shuttles extends React.Component {
             }
           ]}
           columns={[
-            { title: 'Name', field: 'riderName' },
-            { title: 'ID', field: 'riderID' },
+            {
+              title: t('shuttles.shuttle.table.rider-name'), field: 'riderName',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+            },
+            {
+              title: t('shuttles.shuttle.table.rider-id'), field: 'riderID',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+            },
           ]}
           data={shuttleRiders || []}
           paging={false}
@@ -200,7 +198,26 @@ class Shuttles extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     const { shuttles, isInfoAlertShown } = this.state;
+    const columns = [
+      {
+        title: t('shuttles.table.name'), field: 'name',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('shuttles.table.contact-name'), field: 'contactName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('shuttles.table.contact-phone'), field: 'contactPhone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('shuttles.table.destination'), field: 'destination',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+    ];
     return (
       <div>
         <InfoAlert
@@ -210,9 +227,9 @@ class Shuttles extends React.Component {
           text={this.infoAlertText}
         />
         <Table
-          title="Shuttles"
+          title={t('shuttles.title')}
           columns={columns}
-          data={shuttles  || []}
+          data={shuttles || []}
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
@@ -226,4 +243,4 @@ class Shuttles extends React.Component {
   }
 }
 
-export default Shuttles;
+export default withTranslation()(Shuttles);

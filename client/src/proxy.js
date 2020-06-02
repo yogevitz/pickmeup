@@ -43,6 +43,12 @@ export async function getShuttle(shuttleID) {
   return data;
 }
 
+export async function uploadRiders(body) {
+
+  const { data } = await client.post(`/createRiders`, body);
+  return data;
+}
+
 export async function createSupervisor(body) {
   const { data } = await client.post(`/createSupervisor`, body);
   return data;

@@ -10,7 +10,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import QRCode from 'qrcode.react';
-import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider } from '../../proxy';
+import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider , uploadRiders} from '../../proxy';
+let csv = require("csvtojson");
 
 const columns = [
   { title: 'ID', field: 'riderID' },
@@ -35,6 +36,8 @@ class Riders extends React.Component {
       isAddShuttleDialogOpen: false,
       isQRCodeDialogOpen: false,
       isInfoAlertShown: false,
+      selectedFile: null,
+
     };
     this.infoAlertSeverity = '';
     this.infoAlertText = '';
@@ -134,6 +137,45 @@ class Riders extends React.Component {
       isInfoAlertShown: false,
     });
   };
+  onClickHandler1=async ()=> {
+    const data = new FormData();
+    let Riders = {};
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      // The file's text will be printed here
+      console.log(event.target.result)
+      let csv = reader.result;
+      let lines = csv.split("\n");
+      let result = [];
+      let headers=lines[0].split(",");
+      for(let i=1;i<lines.length;i++){
+        let obj = {};
+        let currentline=lines[i].split(",");
+        for(var j=0;j<headers.length;j++){
+          obj[headers[j]] = currentline[j];
+        }
+        result.push(obj);
+      }
+      //return result; //JavaScript object
+      result= JSON.stringify(result); //JSON
+      console.log(result);
+      Riders = result;
+        uploadRiders({ Riders });
+
+    };
+    reader.readAsText(this.state.selectedFile);
+    /*
+    data.append('file', this.state.selectedFile);
+    reader.readAsArrayBuffer(this.state.selectedFile);
+    reader.onload =function(e){
+      Riders = e.target.result;
+      console.log(Riders);
+    }
+     */
+    //console.log(this.state.selectedFile);
+    //reader.readAsText(this.state.selectedFile);
+    //await uploadRiders({ Riders });
+  };
 
   renderDetailPanel = rowData => {
     const { ridersShuttles, shuttles } = this.state;
@@ -221,11 +263,19 @@ class Riders extends React.Component {
     link.href = document.getElementById('qr-code-canvas').toDataURL();
     link.click();
   };
-
+  onChangeHandler=event=>{
+    this.setState({
+      selectedFile: event.target.files[0],
+      loaded: 0,
+    });
+  }
   render() {
+
     const { riders, isInfoAlertShown } = this.state;
     return (
       <div>
+        <input type="file" name="file" style={{display: 'flex', justifyContent:'center', alignItems:'center'}} onChange={this.onChangeHandler} accept=".csv"/>
+        <button type="button" className="btn btn-success btn-block" onClick={this.onClickHandler1}>Upload</button>
         <InfoAlert
           isOpen={isInfoAlertShown}
           onClose={this.handleCloseInfoAlert}

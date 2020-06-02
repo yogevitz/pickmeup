@@ -6,6 +6,7 @@ let randtoken = require('rand-token')
 let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];
 secret = "PickMeUp";
+var csv = require("csvtojson");
 var refreshTokens = {};
 let IDs = [];
 
@@ -831,27 +832,53 @@ app.post("/createShuttle",verifyToken, (req, res) => {
 
 
 //------//
-app.post("/createRiders",verifyToken, (req, res) => {
+app.post("/createRiders",verifyToken,async (req, res) => {
     console.log("got new post request");
-    for ( var i = 0 ; i < req.body.length; i = i + 1) {
+    //console.log(req.body.Riders);
+    let data1 = {};
+    data1 = JSON.parse(req.body.Riders);;
+    //console.log(data1);
+    let i = 0;
+    let Riders =[];
+
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+    data1.forEach(function(item)  {
+        //let item = data1[i];
+        console.log(item);
+        console.log('////////////////\n');
         var Rider = {
-            riderID: req.body[i].riderID,
-            name: req.body[i].name,
-            parentName: req.body[i].parentName,
-            parentEmail: req.body[i].parentEmail,
-            class: req.body[i].class,
-            teacher: req.body[i].teacher,
-            parentPhone: req[i].body.parentPhone
+            riderID: item.riderID,
+            name: item.name,
+            parentName: item.parentName,
+            parentEmail: item.parentEmail,
+            class: item.class,
+            teacher: item.teacher,
+            parentPhone: item.parentPhone
         };
-        var toReturn;
-        toReturn = createUser(Rider);
-        if(toReturn === 0 && i ===req.body.length - 1){
-            res.status(200).send("All riders been uploaded");
+        assert.equal(null, err);
+        if( i < data1.length -1)
+            Riders[i] = Rider;
+        i++;
+    });
+    //console.log(Riders);
+        let db = client.db('PickMeUp');
+        // Find some documents in our collection
+        try{
+            db.collection('Riders').insertMany(Riders);
+        }catch(e){
+            res.status(400).send("Error found! ")
         }
-        if(toReturn !== 0 && i===req.body.length - 1){
-            res.sendStatus(400);
-        }
-    }
+        // Print the documents returned
+        console.log("New Riders created");
+        res.status(200).send("Riders Created");
+        // Close the DB
+
+        // Declare success
+    }) ;
+    client.close();
+    console.log("Called find()");
+
 
 });
 
@@ -1734,6 +1761,7 @@ function createUser(Rider){
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
         assert.equal(null, err);
+        console.log(Rider);
         console.log("Successfully connected to server");
         let db = client.db('PickMeUp');
         // Find some documents in our collection

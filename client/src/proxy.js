@@ -44,7 +44,6 @@ export async function getShuttle(shuttleID) {
 }
 
 export async function uploadRiders(body) {
-
   const { data } = await client.post(`/createRiders`, body);
   return data;
 }

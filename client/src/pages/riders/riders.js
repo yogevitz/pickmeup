@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, tableIcons } from "../../components/Table";
 import { InfoAlert, INFO_ALERT_SEVERITY, INFO_ALERT_TEXT } from "../../components/InfoAlert";
+import { withTranslation } from "react-i18next";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -12,19 +13,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import QRCode from 'qrcode.react';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider , uploadRiders} from '../../proxy';
 let csv = require("csvtojson");
-
-const columns = [
-  { title: 'ID', field: 'riderID' },
-  { title: 'Name', field: 'name' },
-  { title: 'Teacher', field: 'teacher' },
-  { title: 'Class', field: 'class' },
-  { title: 'Parent Name', field: 'parentName' },
-  { title: 'Parent Phone', field: 'parentPhone' },
-  {
-    title: 'Parent Email',
-    field: 'parentEmail',
-  },
-];
 
 class Riders extends React.Component {
   constructor(props) {
@@ -137,47 +125,48 @@ class Riders extends React.Component {
       isInfoAlertShown: false,
     });
   };
-  onClickHandler1=async ()=> {
+
+  onClickImport = async () => {
     const data = new FormData();
-    let Riders = {};
+    let riders = {};
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = async function(event) {
       // The file's text will be printed here
-      console.log(event.target.result)
+      console.log(event.target.result);
       let csv = reader.result;
       let lines = csv.split("\n");
       let result = [];
-      let headers=lines[0].split(",");
-      for(let i=1;i<lines.length;i++){
+      let headers = lines[0].split(",");
+      for (let i = 1; i < lines.length; i++) {
         let obj = {};
-        let currentline=lines[i].split(",");
-        for(var j=0;j<headers.length;j++){
+        let currentline = lines[i].split(",");
+        for (let j = 0; j < headers.length; j++) {
           obj[headers[j]] = currentline[j];
         }
         result.push(obj);
       }
       //return result; //JavaScript object
-      result= JSON.stringify(result); //JSON
+      result = JSON.stringify(result); //JSON
       console.log(result);
-      Riders = result;
-        uploadRiders({ Riders });
-
+      riders = result;
+      await uploadRiders({ riders });
     };
     reader.readAsText(this.state.selectedFile);
     /*
     data.append('file', this.state.selectedFile);
     reader.readAsArrayBuffer(this.state.selectedFile);
     reader.onload =function(e){
-      Riders = e.target.result;
-      console.log(Riders);
+      riders = e.target.result;
+      console.log(riders);
     }
      */
     //console.log(this.state.selectedFile);
     //reader.readAsText(this.state.selectedFile);
-    //await uploadRiders({ Riders });
+    //await uploadriders({ riders });
   };
 
   renderDetailPanel = rowData => {
+    const { t } = this.props;
     const { ridersShuttles, shuttles } = this.state;
     const riderID = rowData.riderID;
     const riderName = rowData.name;
@@ -221,7 +210,7 @@ class Riders extends React.Component {
           </DialogActions>
         </Dialog>
         <Table
-          title={`${riderName}'s Shuttles`}
+          title={`${t('riders.rider.title.shuttles-of')} ${riderName}`}
           actions={[
             {
               icon: tableIcons.Add,
@@ -232,12 +221,14 @@ class Riders extends React.Component {
           ]}
           columns={[
             {
-              title: 'Name',
+              title: t('riders.rider.table.shuttle-name'),
               field: 'shuttleName',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
             },
             {
-              title: 'Shuttle ID',
+              title: t('riders.rider.table.shuttle-id'),
               field: 'shuttleID',
+              headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
             },
           ]}
           options={{
@@ -263,19 +254,63 @@ class Riders extends React.Component {
     link.href = document.getElementById('qr-code-canvas').toDataURL();
     link.click();
   };
-  onChangeHandler=event=>{
+
+  onChangeFile = event => {
     this.setState({
       selectedFile: event.target.files[0],
       loaded: 0,
     });
-  }
-  render() {
+  };
 
+  render() {
+    const { t } = this.props;
     const { riders, isInfoAlertShown } = this.state;
+    const columns = [
+      {
+        title: t('riders.table.ID'), field: 'riderID',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.name'), field: 'name',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.teacher'), field: 'teacher',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.class'), field: 'class',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-name'), field: 'parentName',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-phone'), field: 'parentPhone',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+      {
+        title: t('riders.table.parent-email'), field: 'parentEmail',
+        headerStyle: { textAlign: 'right' }, cellStyle: { textAlign: 'right' },
+      },
+    ];
     return (
       <div>
-        <input type="file" name="file" style={{display: 'flex', justifyContent:'center', alignItems:'center'}} onChange={this.onChangeHandler} accept=".csv"/>
-        <button type="button" className="btn btn-success btn-block" onClick={this.onClickHandler1}>Upload</button>
+        <input
+          type="file"
+          name="file"
+          style={{display: 'flex', justifyContent:'center', alignItems:'center'}}
+          onChange={this.onChangeFile}
+          accept=".csv"
+        />
+        <button
+          type="button"
+          className="btn btn-success btn-block"
+          onClick={this.onClickImport}
+        >
+          Upload
+        </button>
         <InfoAlert
           isOpen={isInfoAlertShown}
           onClose={this.handleCloseInfoAlert}
@@ -323,4 +358,4 @@ class Riders extends React.Component {
   }
 }
 
-export default Riders;
+export default withTranslation()(Riders);

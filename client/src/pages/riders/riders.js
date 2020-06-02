@@ -354,7 +354,7 @@ class Riders extends React.Component {
           actions={[
             {
               icon: tableIcons.CropFree,
-              tooltip: t('common.create-qr-code'),
+              tooltip: t('toolbar.create-qr-code'),
               onClick: this.openQRCodeDialog
             }
           ]}

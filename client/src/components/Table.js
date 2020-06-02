@@ -94,15 +94,28 @@ class Table extends React.Component {
             addTooltip: t('common.add'),
             deleteTooltip: t('common.delete'),
             editTooltip: t('common.edit'),
+            editRow: {
+              saveTooltip: t('common.done'),
+              cancelTooltip: t('common.cancel'),
+              deleteText: t('toolbar.are-you-sure'),
+            }
           },
           toolbar: {
             searchPlaceholder: t('common.search'),
             searchTooltip: t('common.search'),
             exportTitle: t('common.export'),
-            showColumnsTitle: t('common.columns-title')
+            showColumnsTitle: t('toolbar.columns-title'),
+            addRemoveColumns: t('toolbar.add-or-remove-columns')
           },
           header: {
             actions: t('common.actions')
+          },
+          pagination: {
+            firstTooltip: t('pagination.first'),
+            nextTooltip: t('pagination.next'),
+            previousTooltip: t('pagination.previous'),
+            lastTooltip: t('pagination.last'),
+            labelRowsSelect: t('pagination.rows'),
           }
         }}
         options={{

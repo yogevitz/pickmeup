@@ -4,6 +4,7 @@
   "common.edit": "Edit",
   "common.cancel": "Cancel",
   "common.save": "Save",
+  "common.update": "Update",
   "common.done": "Done",
   "common.search": "Search",
   "common.export": "Export",
@@ -32,6 +33,9 @@
   "attendance.shuttle.table.rider-id": "ID",
   "attendance.shuttle.table.parent-name": "Parent",
   "attendance.shuttle.table.parent-phone": "Phone",
+  "attendance.shuttle.dialog.title.set-attendance-for": "Set the attendance for:",
+  "attendance.shuttle.dialog.title.in-the shuttle": "in the shuttle:",
+  "attendance.shuttle.dialog.mark": "Mark",
   "shuttles.title": "Shuttles",
   "shuttles.table.name": "Name",
   "shuttles.table.contact-name": "Contact Name",
@@ -68,5 +72,6 @@
   "pagination.next": "Next Page",
   "pagination.previous": "Previous Page",
   "pagination.last": "Last Page",
-  "pagination.rows": "rows"
+  "pagination.rows": "rows",
+  "pagination.from-to-of-count": "{from}-{to} of {count}"
 }

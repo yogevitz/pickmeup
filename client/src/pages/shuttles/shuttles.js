@@ -134,17 +134,19 @@ class Shuttles extends React.Component {
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Dialog fullWidth open={this.state.isAddRiderDialogOpen} onClose={this.closeAddRiderDialog} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">{`Add Rider`}</DialogTitle>
+          <DialogTitle id="form-dialog-title">{t('shuttles.shuttle.dialog.title')}</DialogTitle>
           <DialogContent>
             <DialogContentText style={{ paddingBottom: '5px' }}>
-              {`Choose a rider to add to ${shuttleName}`}
+              {`${t('shuttles.shuttle.dialog.choose-rider-to-add')} ${shuttleName}`}
             </DialogContentText>
             <Autocomplete
               id="add-shuttle-rider"
               autoComplete={true}
               openOnFocus={true}
               options={riders}
-              getOptionLabel={(option) => `${option.name}  (ID: ${option.riderID}, Class: ${option.class})`}
+              getOptionLabel={(option) => `${option.name}, 
+                ${t('shuttles.shuttle.dialog.rider-id')} ${option.riderID},
+                ${t('shuttles.shuttle.dialog.rider-class')} ${option.class}`}
               style={{ width: 500, paddingBottom: '20px' }}
               onChange={(event, newValue) => {
                 if (newValue) {
@@ -152,18 +154,18 @@ class Shuttles extends React.Component {
                   riderName = newValue.name;
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Rider" />}
+              renderInput={(params) => <TextField {...params} label={t('common.rider')} />}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeAddRiderDialog} color="primary">
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={async () =>
                 this.handleAddShuttleRider(shuttleID, shuttleName, riderID, riderName)}
               color="primary">
-              Add
+              {t('common.add')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -172,7 +174,7 @@ class Shuttles extends React.Component {
           actions={[
             {
               icon: tableIcons.Add,
-              tooltip: 'Add Rider',
+              tooltip: t('shuttles.shuttle.actions.add-rider'),
               isFreeAction: true,
               onClick: this.openAddRiderDialog,
             }

@@ -178,10 +178,10 @@ class Riders extends React.Component {
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Dialog fullWidth open={this.state.isAddShuttleDialogOpen} onClose={this.closeAddShuttleDialog} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">{`Add Shuttle`}</DialogTitle>
+          <DialogTitle id="form-dialog-title">{t('riders.rider.dialog.title')}</DialogTitle>
           <DialogContent>
             <DialogContentText style={{ paddingBottom: '5px' }}>
-              {`Choose a shuttle to add to ${riderName}'s shuttles`}
+              {`${t('riders.rider.dialog.choose-shuttle-to-add')} ${riderName}`}
             </DialogContentText>
             <Autocomplete
               id="add-rider-shuttle"
@@ -196,18 +196,18 @@ class Riders extends React.Component {
                   shuttleName = newValue.name;
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Shuttle" />}
+              renderInput={(params) => <TextField {...params} label={t('common.shuttle')} />}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeAddShuttleDialog} color="primary">
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={async () =>
                 this.handleAddRiderShuttle(riderID, riderName, shuttleID, shuttleName)}
               color="primary">
-              Add
+              {t('common.add')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -216,7 +216,7 @@ class Riders extends React.Component {
           actions={[
             {
               icon: tableIcons.Add,
-              tooltip: 'Add Shuttle',
+              tooltip: t('riders.rider.actions.add-shuttle'),
               isFreeAction: true,
               onClick: this.openAddShuttleDialog,
             }
@@ -330,12 +330,12 @@ class Riders extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeQRCodeDialog} color="primary">
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={this.downloadQR}
               color="primary">
-              Export
+              {t('common.export')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -354,7 +354,7 @@ class Riders extends React.Component {
           actions={[
             {
               icon: tableIcons.CropFree,
-              tooltip: 'Create QR Code',
+              tooltip: t('common.create-qr-code'),
               onClick: this.openQRCodeDialog
             }
           ]}

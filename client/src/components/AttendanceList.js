@@ -32,11 +32,19 @@ function AttendanceList(props) {
         position: 'row',
       }]}
       localization={{
-        header: {
-          actions: <SupervisorAccountIcon />
+        body: {
+          addTooltip: t('common.add'),
+          deleteTooltip: t('common.delete'),
+          editTooltip: t('common.edit'),
         },
         toolbar: {
-          searchPlaceholder: t('common.search')
+          searchPlaceholder: t('common.search'),
+          searchTooltip: t('common.search'),
+          exportTitle: t('common.export'),
+          showColumnsTitle: t('common.columns-title')
+        },
+        header: {
+          actions: <SupervisorAccountIcon />
         }
       }}
       components={{

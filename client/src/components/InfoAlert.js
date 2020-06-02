@@ -3,9 +3,9 @@ import MuiAlert from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 
 export const INFO_ALERT_TEXT = {
-  add: 'Successfully Added :)',
-  delete: 'Successfully Deleted!',
-  update: 'Successfully Updated :)',
+  add: 'נוסף בהצלחה',
+  delete: 'נמחק בהצלחה',
+  update: 'עודכן בהצלחה',
 };
 
 export const INFO_ALERT_SEVERITY = {

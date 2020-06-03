@@ -110,6 +110,7 @@ class Attendance extends React.Component {
       const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
       const numOfApprovedRiders = riders.filter(rider => rider.mark === '2').length;
       const numOfMovedRiders = riders.filter(rider => rider.mark === '3').length;
+      const numOfAddedRiders = riders.filter(rider => rider.mark === '4').length;
       const numOfRiders = riders.length;
       return ({
         shuttleID,
@@ -122,6 +123,7 @@ class Attendance extends React.Component {
         numOfMissingRiders,
         numOfApprovedRiders,
         numOfMovedRiders,
+        numOfAddedRiders,
         numOfRiders,
       })
     }));
@@ -340,10 +342,17 @@ class Attendance extends React.Component {
               />
               <ProgressBar
                 animated
+                variant="warning"
+                label={`${rowData.numOfAddedRiders}`}
+                now={100 * rowData.numOfAddedRiders / rowData.numOfRiders}
+                key={4}
+              />
+              <ProgressBar
+                animated
                 variant="danger"
                 label={`${rowData.numOfMissingRiders}`}
                 now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
-                key={4}
+                key={5}
               />
             </ProgressBar>
           )}

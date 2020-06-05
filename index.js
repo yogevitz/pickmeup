@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const jwt = require("jsonwebtoken");
-let randtoken = require('rand-token')
+let randtoken = require('rand-token');
 let assert = require('assert');
 usernames = [ { id: 0, name: "user0" } ];
 secret = "PickMeUp";
@@ -48,7 +48,7 @@ app.use("/restorePassword",(req,res)=> {
         db.collection('Users').find({userID:userID,answer:answer,question:question}).toArray(function(err, docs) {
             // Print the documents returned
             if (docs.length === 0)
-                res.status(403).send("Error, no such Q&A assigned to this userID")
+                res.status(403).send("Error, no such Q&A assigned to this userID");
             else{
                 docs.forEach(function (doc) {
                     res.status(200).send(doc.password)
@@ -658,15 +658,22 @@ app.post("/createSupervisor",verifyToken, (req, res) => {
         console.log("Successfully connected to server");
         let db = client.db('PickMeUp');
         // Find some documents in our collection
-        try{
-            db.collection('Supervisors').insertOne(Supervisor);
-        }catch(e){
-            res.status(400).send(e)
-        }
-        // Print the documents returned
-        res.status(200).send(" Supervisor Created!");
-        // Close the DB
-        client.close();
+        db.collection('Supervisors').find({supervisorID:Supervisor.supervisorID}).toArray(function(err, docs) {
+            if(docs.length===0){
+                try{
+                    db.collection('Supervisors').insertOne(Supervisor);
+                }catch(e){
+                    res.status(400).send(e)
+                }
+                // Print the documents returned
+                res.status(200).send(" Supervisor Created!");
+                // Close the DB
+                client.close();
+            }
+            else {
+                res.status(400).send("The Supervisor is already exist !")
+            }
+        });
     });
     // Declare success
     console.log("Called find()");
@@ -715,6 +722,7 @@ app.post("/createLiftRider",verifyToken, (req, res) => {
         riderName:req.body.riderName,
         parentName:req.body.parentName,
         parentPhone:req.body.parentPhone,
+        note:"",
         mark:"0"
     };
     console.log(LiftRider)
@@ -896,23 +904,35 @@ app.post("/createRider",verifyToken, (req, res) => {
   };
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
-    assert.equal(null, err);
-    console.log("Successfully connected to server");
-    let db = client.db('PickMeUp');
-    // Find some documents in our collection
-    try{
-      db.collection('Riders').insertOne(Rider);
-    }catch(e){
-      res.status(400).send(e)
-    }
-    // Print the documents returned
-    res.status(200).send(" Rider Created!");
-    // Close the DB
-    client.close();
-  });
+      let db = client.db('PickMeUp');
+      db.collection('Riders').find({riderID:Rider.riderID}).toArray(function(err, docs) {
+          if(docs.length===0) {
+              assert.equal(null, err);
+              console.log("Successfully connected to server");
+              // Find some documents in our collection
+              try {
+                  db.collection('Riders').insertOne(Rider);
+              } catch (e) {
+                  res.status(400).send(e)
+              }
+              // Print the documents returned
+              res.status(200).send(" Rider Created!");
+              // Close the D
+          }
+          else {
+              res.status(200).send("rider already exist !")
+          }
+      });
+
+
   // Declare success
   console.log("Called find()");
 });
+    client.close();
+
+});
+
+
 
 
 //------//
@@ -932,16 +952,25 @@ app.post("/createUser",verifyToken, (req, res) => {
         assert.equal(null, err);
         console.log("Successfully connected to server");
         let db = client.db('PickMeUp');
-        // Find some documents in our collection
-        try{
-            db.collection('Users').insertOne(User);
-        }catch(e){
-            res.status(400).send(e)
-        }
-        // Print the documents returned
-        res.status(200).send(" User Created!");
-        // Close the DB
-        client.close();
+        db.collection('Users').find({userID:User.userID}).toArray(function(err, docs) {
+            if(docs.length===0) {
+                // Find some documents in our collection
+                try {
+                    db.collection('Users').insertOne(User);
+                } catch (e) {
+                    res.status(400).send(e)
+                }
+                // Print the documents returned
+                res.status(200).send(" User Created!");
+                client.close();
+                // Close the DB
+            }
+            else {
+            res.status(200).send("User already exist! ");
+            client.close();
+            }
+        });
+
     });
     // Declare success
     console.log("Called find()");
@@ -1226,9 +1255,52 @@ app.post("/setLiftRiderMark",verifyToken, (req, res) => {
         shuttleID: req.body.shuttleID,
         riderID: req.body.riderID,
         date: req.body.date,
-        mark:req.body.mark
+        mark:req.body.mark,
+        note:req.body.note,
+        riderName:req.body.riderName,
+        parentName:req.body.parentName,
+        parentPhone:req.body.parentPhone,
+    };
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        console.log(shuttle.shuttleID);
+        // Find some documents in our collection
+        try{
+            db.collection('LiftRiders').updateOne(
+                {"shuttleID" : shuttle.shuttleID,"riderID":shuttle.riderID,"date":shuttle.date},
+
+                { $set:
+                    shuttle
+                }
+            );
+        }catch(e){
+            res.status(400).send(e)
+        }
+        // Print the documents returned
+        res.status(200).send(" Lift Changed!");
+        // Close the DB
+        client.close();
+    });
+    // Declare success
+    console.log("Called find()");
+});
 
 
+//------//
+app.post("/setLiftRiderNote",verifyToken, (req, res) => {
+    console.log("got new post request");
+    const shuttle = {
+        shuttleID: req.body.shuttleID,
+        riderID: req.body.riderID,
+        date: req.body.date,
+        mark:req.body.mark,
+        note:req.body.note,
+        riderName:req.body.riderName,
+        parentName:req.body.parentName,
+        parentPhone:req.body.parentPhone,
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
@@ -1826,6 +1898,7 @@ async function createLiftRidersForCall(shuttleID, date){
                      riderName: rider.name,
                      parentName: rider.parentName,
                      parentPhone: rider.parentPhone,
+                     note:"",
                      mark: "0"
                  };
                  try {

@@ -4,6 +4,7 @@
   "common.edit": "עריכה",
   "common.cancel": "ביטול",
   "common.save": "שמירה",
+  "common.update": "עדכן",
   "common.done": "סיום",
   "common.search": "חיפוש",
   "common.export": "ייצוא",
@@ -32,6 +33,9 @@
   "attendance.shuttle.table.rider-id": "תעודת זהות",
   "attendance.shuttle.table.parent-name": "הורה",
   "attendance.shuttle.table.parent-phone": "טלפון",
+  "attendance.shuttle.dialog.title.set-attendance-for": "קביעת הנוכחות עבור",
+  "attendance.shuttle.dialog.title.in-the-shuttle": "בהסעה",
+  "attendance.shuttle.dialog.mark": "נוכחות",
   "shuttles.title": "הסעות",
   "shuttles.table.name": "שם",
   "shuttles.table.contact-name": "איש קשר",
@@ -68,5 +72,6 @@
   "pagination.next": "עמוד הבא",
   "pagination.previous": "עמוד הקודם",
   "pagination.last": "עמוד אחרון",
-  "pagination.rows": "שורות"
+  "pagination.rows": "שורות",
+  "pagination.from-to-of-count": "{from}-{to} מתוך {count}"
 }

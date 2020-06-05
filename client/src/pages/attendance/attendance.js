@@ -110,6 +110,7 @@ class Attendance extends React.Component {
       const numOfPresentRiders = riders.filter(rider => rider.mark === '1').length;
       const numOfApprovedRiders = riders.filter(rider => rider.mark === '2').length;
       const numOfMovedRiders = riders.filter(rider => rider.mark === '3').length;
+      const numOfAddedRiders = riders.filter(rider => rider.mark === '4').length;
       const numOfRiders = riders.length;
       return ({
         shuttleID,
@@ -122,6 +123,7 @@ class Attendance extends React.Component {
         numOfMissingRiders,
         numOfApprovedRiders,
         numOfMovedRiders,
+        numOfAddedRiders,
         numOfRiders,
       })
     }));
@@ -243,7 +245,12 @@ class Attendance extends React.Component {
     return (
       <div style={{ backgroundColor: 'WhiteSmoke', padding: '30px 50px 30px 50px' }}>
         <Dialog fullWidth open={this.state.isSetRiderMarkDialogOpen} onClose={this.closeAddRiderDialog} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">{`Set ${this.riderMarkDialogData.riderName}'s Attendance for ${shuttleName}`}</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            {
+              `${t('attendance.shuttle.dialog.title.set-attendance-for')} ${this.riderMarkDialogData.riderName},
+              ${t('attendance.shuttle.dialog.title.in-the-shuttle')} ${shuttleName}`
+            }
+          </DialogTitle>
           <DialogContent>
             <Autocomplete
               id="set-rider-mark"
@@ -255,18 +262,18 @@ class Attendance extends React.Component {
               onChange={(event, newValue) => {
                 this.riderMarkDialogData.mark = newValue.id;
               }}
-              renderInput={(params) => <TextField {...params} label="Mark" />}
+              renderInput={(params) => <TextField {...params} label={t('attendance.shuttle.dialog.mark')} />}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => this.setState({ isSetRiderMarkDialogOpen: false })} color="primary">
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={async () =>
                 this.onSetMark(this.riderMarkDialogData.mark)}
               color="primary">
-              Update
+              {t('common.update')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -335,10 +342,17 @@ class Attendance extends React.Component {
               />
               <ProgressBar
                 animated
+                variant="warning"
+                label={`${rowData.numOfAddedRiders}`}
+                now={100 * rowData.numOfAddedRiders / rowData.numOfRiders}
+                key={4}
+              />
+              <ProgressBar
+                animated
                 variant="danger"
                 label={`${rowData.numOfMissingRiders}`}
                 now={100 * rowData.numOfMissingRiders / rowData.numOfRiders}
-                key={4}
+                key={5}
               />
             </ProgressBar>
           )}

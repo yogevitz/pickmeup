@@ -58,6 +58,7 @@ function AttendanceList(props) {
           previousTooltip: t('pagination.previous'),
           lastTooltip: t('pagination.last'),
           labelRowsSelect: t('pagination.rows'),
+          labelDisplayedRows: t('pagination.from-to-of-count'),
         }
       }}
       components={{

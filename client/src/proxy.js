@@ -1,9 +1,10 @@
 const client = require('./client');
 
+let token = '';
+
 export async function login(body) {
-
   const { data } = await client.post(`/login`, body);
-
+  token = data.token;
   return data;
 }
 
@@ -14,7 +15,15 @@ export async function restorePassword(body) {
 
 
 export async function getAllShuttles() {
-  const { data } = await client.get( `/getAllShuttles`);
+  const config = {
+    headers: {
+      'x-auth-token': token,
+      'Access-Control-Allow-Origin': "*",
+      'Access-Control-Allow-Methods': "GET,HEAD,OPTIONS,POST,PUT",
+      'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    }
+  };
+  const { data } = await client.get(`/getAllShuttles`, config);
   return data;
 }
 

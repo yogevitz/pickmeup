@@ -22,6 +22,7 @@ import Schedule from "./pages/schedule";
 import Settings from "./pages/settings";
 import { login } from './proxy';
 import Grid from "@material-ui/core/Grid";
+import logo from "./assets/logo.png";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -100,24 +101,28 @@ function NavTabs({ t }) {
               <Login onLogin={handleLogin} />)
             : (
               <div>
-                <Grid container justify="center">
-                  <CardHeader title={t('page.title')} />
-                </Grid>
-                <AppBar position="static">
-                  <Tabs
-                    variant="fullWidth"
-                    value={value}
-                    onChange={handleChange}
-                    aria-label={t('page.title')}
-                  >
-                    <LinkTab label={t('tabs.attendance')} href="/" {...a11yProps(0)} style={linkTabStyle} />
-                    <LinkTab label={t('tabs.shuttles')} href="/shuttles" {...a11yProps(1)} style={linkTabStyle} />
-                    <LinkTab label={t('tabs.riders')} href="/riders" {...a11yProps(2)} style={linkTabStyle} />
-                    <LinkTab label={t('tabs.supervisors')} href="/supervisors" {...a11yProps(3)} style={linkTabStyle} />
-                    <LinkTab label={t('tabs.schedule')} href="/schedule" {...a11yProps(4)} style={linkTabStyle} />
-                    <LinkTab label={t('tabs.settings')} href="/settings" {...a11yProps(5)} style={linkTabStyle} />
-                  </Tabs>
-                </AppBar>
+                <div>
+                  <Grid container justify="center">
+                    {/*<CardHeader title={t('page.title')} />*/}
+                    <img src={logo} height="130px" style={{ marginTop: "10px", marginBottom: "10px" }}/>
+                  </Grid>
+                  <AppBar position="static">
+                    <Tabs
+                      variant="fullWidth"
+                      value={value}
+                      onChange={handleChange}
+                      aria-label={t('page.title')}
+                    >
+                      <LinkTab label={t('tabs.attendance')} href="/" {...a11yProps(0)} style={linkTabStyle} />
+                      <LinkTab label={t('tabs.shuttles')} href="/shuttles" {...a11yProps(1)} style={linkTabStyle} />
+                      <LinkTab label={t('tabs.riders')} href="/riders" {...a11yProps(2)} style={linkTabStyle} />
+                      <LinkTab label={t('tabs.supervisors')} href="/supervisors" {...a11yProps(3)} style={linkTabStyle} />
+                      <LinkTab label={t('tabs.schedule')} href="/schedule" {...a11yProps(4)} style={linkTabStyle} />
+                      <LinkTab label={t('tabs.settings')} href="/settings" {...a11yProps(5)} style={linkTabStyle} />
+                    </Tabs>
+                  </AppBar>
+                </div>
+                <div>
                 <TabPanel value={value} index={0}>
                   <Attendance/>
                 </TabPanel>
@@ -136,6 +141,7 @@ function NavTabs({ t }) {
                 <TabPanel value={value} index={5}>
                   <Settings/>
                 </TabPanel>
+                </div>
               </div>
             )}
           </div>

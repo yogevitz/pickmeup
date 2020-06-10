@@ -1,3 +1,5 @@
+import {tableIcons} from "./client/src/utils";
+
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -351,8 +353,9 @@ app.get("/getShuttle/:shuttleID",verifyToken, (req, res) => {
 
 
 //------//
-app.get("/getAllSupervisors", (req, res) => {
+app.get("/getAllSupervisors",verifyToken, (req, res) => {
   console.log("Got GET Request");
+  console.log(req);
   MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
   {
     assert.equal(null, err);
@@ -933,6 +936,46 @@ app.post("/createRider",verifyToken, (req, res) => {
 });
 
 
+//------//
+app.post("/createTeacher",verifyToken, (req, res) => {
+    console.log("got new post request");
+    const teacher = {
+        teacherID:  req.body.teacherID,
+        teacherName: req.body.teacherName,
+        teacherPhone: req.body.teacherPhone,
+        class: req.body.class,
+
+    };
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        let db = client.db('PickMeUp');
+        db.collection('Teachers').find({teacherID:teacher.teacherID}).toArray(function(err, docs) {
+            if(docs.length===0) {
+                assert.equal(null, err);
+                console.log("Successfully connected to server");
+                // Find some documents in our collection
+                try {
+                    db.collection('Teachers').insertOne(teacher);
+                } catch (e) {
+                    res.status(400).send(e)
+                }
+                // Print the documents returned
+                res.status(200).send(" Teacher Created!");
+                // Close the D
+            }
+            else {
+                res.status(200).send("Teacher already exist !")
+            }
+        });
+
+
+        // Declare success
+        console.log("Called find()");
+    });
+    client.close();
+
+});
+
 
 
 //------//
@@ -1120,6 +1163,54 @@ app.post("/updatePassword",verifyToken, (req, res) => {
   });
   // Declare success
   console.log("Called find()");
+
+
+});
+
+
+//------//
+app.post("/updateTeacher",verifyToken, (req, res) => {
+    console.log("got new post request");
+
+    const teacher = {
+        teacherID: req.body.teacherID,
+        class: req.body.class,
+        teacherName: req.body.teacherName,
+        teacherPhone: req.body.teacherPhone,
+    };
+    MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
+    {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        let db = client.db('PickMeUp');
+        try{
+            db.collection('Teachers').findOne(
+                {"teacherID" : teacher.teacherID}
+            );
+        }catch(e){
+            res.status(400).send(e)
+        }
+        // Find some documents in our collection
+        try{
+            db.collection('Teachers').updateOne(
+                {"teacherID" : teacher.teacherID},
+
+                { $set:
+                        {"teacherName": teacher.teacherName,
+                        "teacherPhone":teacher.teacherPhone,
+                        "class":teacher.class}
+                }
+            );
+        }catch(e){
+            res.status(400).send(e)
+        }
+        // Print the documents returned
+        res.status(200).send(" Password Changed!");
+        // Close the DB
+        client.close();
+    });
+    // Declare success
+    console.log("Called find()");
 
 
 });
@@ -1627,6 +1718,36 @@ app.post("/deleteShuttle",verifyToken, (req, res) => {
     console.log("Called find()");
 });
 
+
+
+//------//
+app.post("/deleteTeacher",verifyToken, (req, res) => {
+    console.log("got new post request");
+    console.log(req.body.length)
+
+    MongoClient.connect(uri, {useNewUrlParser: true}, function (err, client) {
+        assert.equal(null, err);
+        console.log("Successfully connected to server");
+        var db = client.db('PickMeUp');
+
+        // Find some documents in our collection
+        try {
+            db.collection('Teachers').deleteOne(
+                {
+                    "teacherID":req.body.teacherID}
+            );
+        } catch (e) {
+            res.status(400).send(e)
+        }
+        client.close();
+    });
+    res.status(200).send("Teacher been deleted!");
+    // Declare success
+    console.log("Called find()");
+});
+
+
+
 //------//
 app.post("/deleteShuttleRider",verifyToken, (req, res) => {
     console.log("got new post request");
@@ -1801,10 +1922,12 @@ app.listen(port, () => {
 
 
 
-/*
+
 async function verifyToken(req, res, next) {
     // Get auth header value
-    const token = req.header("x-auth-token");
+    //console.log(req);
+    const token = req.config.headers["x-auth-token"];
+    console.log(token);
     const bearerHeader = req.headers['authorization'];
     // Check if bearer is undefined
     if(typeof token !== 'undefined') {
@@ -1823,11 +1946,13 @@ async function verifyToken(req, res, next) {
         res.sendStatus(403);
     }
 }
-*/
 
+/*
 function verifyToken(req, res, next) {
   next();
 }
+
+ */
 
 function createUser(Rider){
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)

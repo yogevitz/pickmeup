@@ -14,7 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from "@material-ui/core/Typography";
 import QRCode from 'qrcode.react';
 import { getAllRiders, getAllShuttles, getAllShuttlesRiders, createShuttleRider, deleteShuttleRider, createRider, deleteRider, setRider , uploadRiders} from '../../proxy';
-let csv = require("csvtojson");
+//let csv = require("csvtojson");
 
 class Riders extends React.Component {
   constructor(props) {

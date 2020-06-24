@@ -1348,10 +1348,6 @@ app.post("/setLiftRiderMark",verifyToken, (req, res) => {
         riderID: req.body.riderID,
         date: req.body.date,
         mark:req.body.mark,
-        note:req.body.note,
-        riderName:req.body.riderName,
-        parentName:req.body.parentName,
-        parentPhone:req.body.parentPhone,
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {
@@ -1388,11 +1384,7 @@ app.post("/setLiftRiderNote",verifyToken, (req, res) => {
         shuttleID: req.body.shuttleID,
         riderID: req.body.riderID,
         date: req.body.date,
-        mark:req.body.mark,
         note:req.body.note,
-        riderName:req.body.riderName,
-        parentName:req.body.parentName,
-        parentPhone:req.body.parentPhone,
     };
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)
     {

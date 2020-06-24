@@ -23,7 +23,8 @@ const uri =  "mongodb://localhost:27017/PickMeUp'";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 // Connect to the db
@@ -1922,37 +1923,32 @@ app.listen(port, () => {
 
 
 
+// async function verifyToken(req, res, next) {
+//     // // Get auth header value
+//     const token = req.header("x-auth-token");
+//     const bearerHeader = req.headers['authorization'];
+//     // // Check if bearer is undefined
+//     if(typeof token !== 'undefined') {
+//         // // Split at the space
+//         req.token = token;
+//         // // Next middleware
+//         jwt.verify(token, secret, (err, authData) => {
+//         if(err) {
+//             res.sendStatus(403);
+//         } else {
+//             next();
+//          }
+//         });
+//     } else {
+//         // // Forbidden
+//         res.sendStatus(403);
+//     }
+// }
 
-async function verifyToken(req, res, next) {
-    // Get auth header value
-    //console.log(req);
-    const token = req.config.headers["x-auth-token"];
-    console.log(token);
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if(typeof token !== 'undefined') {
-        // Split at the space
-        req.token = token;
-        // Next middleware
-        jwt.verify(token, secret, (err, authData) => {
-        if(err) {
-            res.sendStatus(403);
-        } else {
-            next();
-         }
-        });
-    } else {
-        // Forbidden
-        res.sendStatus(403);
-    }
-}
 
-/*
 function verifyToken(req, res, next) {
   next();
 }
-
- */
 
 function createUser(Rider){
     MongoClient.connect(uri,{ useNewUrlParser: true }, function(err, client)

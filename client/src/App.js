@@ -88,7 +88,7 @@ function NavTabs({ t }) {
 
   const isRTL = true;
 
-  const showCreditFooter = false;
+  const showCreditFooter = true;
   const linkTabStyle = { color: 'inherit', textDecoration: 'none' };
 
   return (
@@ -96,7 +96,7 @@ function NavTabs({ t }) {
       <Container fixed style={{ paddingBottom: "15px" }}>
         <Card style={{ marginBottom: "15px", minHeight: "1200px", backgroundColor: "OldLace", height: '100%' }}>
           <div dir={isRTL ? 'rtl' : 'ltr'}>
-          {!isConnected
+          {isConnected
             ? (
               <Login onLogin={handleLogin} />)
             : (
@@ -147,7 +147,7 @@ function NavTabs({ t }) {
           </div>
         </Card>
         {showCreditFooter && <div style={{ fontSize: "11px", textAlign: "center" }}>
-          Powered by PickMeUp.com
+          Powered by Aliti.app
         </div>}
       </Container>
     </div>

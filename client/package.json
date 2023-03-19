@@ -20,7 +20,7 @@
     "bootstrap": "^4.4.1",
     "clsx": "^1.0.4",
     "http-proxy-middleware": "^0.20.0",
-    "i": "^0.3.6",
+    "i": "^0.3.7",
     "i18next": "^19.4.4",
     "material-table": "^1.54.2",
     "moment": "^2.24.0",
